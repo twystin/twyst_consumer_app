@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/gradient_shape"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_shape"
+        android:orientation="vertical"
+        android:scrollbarAlwaysDrawVerticalTrack="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:background="#323232"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+               android:layout_marginLeft="15dp"
+                android:src="@drawable/checked_inrecently_error_icon"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:padding="15dp"
+                android:text="Check&#45;in Error "
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/dialog_header_text" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fafafa"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+
+            <TextView
+                android:id="@+id/message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="5dp"
+                android:gravity="bottom"
+                android:textColor="#7d7d7d"
+                android:textSize="@dimen/dialog_content_text" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="15dp"
+                android:gravity="end|right">
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    android:id="@+id/redeemCancelBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="14dp"
+                    android:layout_toLeftOf="@+id/redeemConfirmBtn"
+                    android:layout_toStartOf="@+id/redeemConfirmBtn"
+                    app:mrl_rippleOverlay="true">
+
+                    <TextView
+                        android:id="@+id/cancelExtendBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="34dp"
+                        android:background="#fafafa"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Dismiss"
+                        android:textAllCaps="true"
+                        android:textColor="#959595"
+                        android:textSize="@dimen/dialog_button_text" />
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    android:id="@+id/redeemConfirmBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    app:mrl_rippleOverlay="true">
+
+                    <Button
+                        android:id="@+id/extendBtn"
+                        android:layout_width="80dp"
+                        android:layout_height="34dp"
+                        android:background="@drawable/button_red"
+                        android:text="Try Later"
+                        android:textAllCaps="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/dialog_button_text" />
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

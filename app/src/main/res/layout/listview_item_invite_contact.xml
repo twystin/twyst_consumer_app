@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="@dimen/invite_friend_padding">
+
+    <ImageView
+        android:id="@+id/contactPic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/invite_friend_padding"
+        android:src="@drawable/icon_phone_user_default" />
+
+    <TextView
+        android:id="@+id/contactName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text="Jonathan Rhys Meyeers"
+        android:textColor="#555"
+        android:textSize="@dimen/invite_friend_list_text"
+        android:paddingLeft="@dimen/invite_friend_list_padding" />
+
+</LinearLayout>

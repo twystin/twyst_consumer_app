@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/tutorial_bg"/>
+
+    <ImageView
+        android:id="@+id/tutorial_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/tutorial_imageview_margin_top"
+        android:src="@drawable/tutorial_logo"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tutorial_logo"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:weightSum="1">
+
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="@dimen/phone_verification_text_margin_top"
+            android:gravity="center"
+            android:text="Please enter your mobile number"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/phone_verification_textsize"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginBottom="@dimen/phone_verification_margin_bottom"
+            android:layout_marginTop="@dimen/phone_verification_margin_top"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="33dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:enabled="false"
+                android:text="+91"
+                android:gravity="center"
+                android:textSize="@dimen/phone_verification_edittext_size"
+                android:focusable="false"
+                android:background="@drawable/border_bottom_white"
+                android:textColor="@android:color/white"/>
+
+            <EditText
+                android:id="@+id/phone"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_mobile"
+                android:inputType="number"
+                android:maxLength="10"
+                android:singleLine="true"
+                android:gravity="center"
+                android:textSize="@dimen/phone_verification_edittext_size"
+                android:background="@drawable/border_bottom_white"
+                android:textColor="@android:color/white"
+                android:textColorHint="#8c8c8c"
+                android:layout_marginLeft="10dp" />
+
+            <fr.castorflex.android.circularprogressbar.CircularProgressBar
+                android:id="@+id/circularProgressBar"
+                android:visibility="invisible"
+                android:layout_marginLeft="10dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:indeterminate="true"
+                app:cpb_color="#F79421"
+                app:cpb_rotation_speed="1.0"
+                app:cpb_sweep_speed="1.0"
+                app:cpb_stroke_width="2dp"
+                app:cpb_min_sweep_angle="10"
+                app:cpb_max_sweep_angle="300" />
+
+        </LinearLayout>
+
+
+        <com.balysv.materialripple.MaterialRippleLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:mrl_rippleOverlay="true">
+
+            <Button
+                android:id="@+id/continueBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_orange"
+                android:text="Continue"
+                android:textColor="@android:color/white" />
+
+        </com.balysv.materialripple.MaterialRippleLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="By proceeding further you agree to our"
+            android:textColor="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/terms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="terms of use"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

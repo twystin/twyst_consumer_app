@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/gradient_shape"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_shape"
+        android:orientation="vertical"
+        android:scrollbarAlwaysDrawVerticalTrack="true" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fc6e51"
+            android:padding="16dp"
+            android:text="Grab offer!"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#fafafa"
+            android:padding="15dp">
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Smart move! This coupon will now be transferred to your wallet for your use."
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="7dp"
+                android:gravity="bottom"
+                android:textSize="14sp"
+                android:textColor="#7d7d7d"/>
+            <TextView
+                android:id="@+id/grabText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="You need 100 Twysts to grab this coupon. Proceed?"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="7dp"
+                android:gravity="bottom"
+                android:textSize="14sp"
+                android:textColor="#7d7d7d"/>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="end|right">
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    android:id="@+id/cancelGrabCoupon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="14dp"
+                    android:layout_toLeftOf="@+id/grabCouponBtn"
+                    android:layout_toStartOf="@+id/grabCouponBtn"
+                    app:mrl_rippleOverlay="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:background="#fafafa"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="NOT NOW"
+                        android:textColor="#959595"
+                        android:textSize="12sp" />
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    android:id="@+id/grabCouponBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    app:mrl_rippleOverlay="true">
+
+                    <Button
+                        android:layout_width="85dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/button_green"
+                        android:text="YES I'M SURE"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp" />
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

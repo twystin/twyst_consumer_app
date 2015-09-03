@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/notification_bg">
+
+        <include
+            android:id="@+id/toolbarWrapper"
+            layout="@layout/toolbar_wrapper" />
+
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/notifyRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_below="@+id/toolbarWrapper"
+            android:overScrollMode="never" />
+        <RelativeLayout
+            android:id="@+id/obstructor"
+            android:visibility="invisible"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:alpha="0.70"
+            android:background="@android:color/black"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/fabMenu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            fab:fab_addButtonColorNormal="#f85439"
+            fab:fab_addButtonColorPressed="#F66C57"
+            fab:fab_addButtonPlusIconColor="#ffffff"
+            fab:fab_labelStyle="@style/menu_labels_style"
+            android:visibility="invisible">
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/checkinFab"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                fab:fab_icon="@drawable/discover_checkin_fab_icon"
+                app:fab_colorNormal="#f6931e"
+                fab:fab_colorPressed="#F6A74D"
+                fab:fab_title="Check-in"
+                app:fab_size="normal"/>
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/submitFab"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                fab:fab_icon="@drawable/discover_submit_fab_icon"
+                app:fab_colorNormal="#058c7e"
+                fab:fab_colorPressed="#288E83"
+                fab:fab_title="Submit an offer"/>
+
+
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+        <include
+            android:id="@+id/circularProgressBar"
+            layout="@layout/twyst_progress_hud" />
+        <RelativeLayout
+            android:id="@+id/checkinObstructor2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.75"
+            android:background="@android:color/black"
+            android:clickable="true"
+            android:padding="30dp"
+            android:visibility="gone">
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/checkinObstructor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:padding="40dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    android:id="@+id/scanBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:mrl_rippleOverlay="true">
+
+                    <Button
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_orange"
+                        android:drawableLeft="@drawable/icon_button_scan_qr"
+                        android:drawablePadding="20dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="30dp"
+                        android:paddingRight="30dp"
+                        android:paddingTop="10dp"
+                        android:text="Scan QR"
+                        android:textColor="@android:color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <TextView
+                    android:id="@+id/orText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="30dp"
+                    android:text="OR"
+                    android:textColor="@android:color/white"
+                    android:textSize="24sp"
+                    android:layout_gravity="center_horizontal" />
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    android:id="@+id/uploadBillBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:mrl_rippleOverlay="true">
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_orange"
+                        android:drawableLeft="@drawable/icon_button_upload_bill"
+                        android:drawablePadding="20dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="30dp"
+                        android:paddingRight="30dp"
+                        android:paddingTop="10dp"
+                        android:text="Upload Bill"
+                        android:textColor="@android:color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                </com.balysv.materialripple.MaterialRippleLayout>
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <include
+        android:id="@+id/drawer_list"
+        layout="@layout/drawer_list" />
+</android.support.v4.widget.DrawerLayout>

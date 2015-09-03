@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/outlet_card_height">
+                <RelativeLayout
+                    android:id="@+id/outlet_layout"
+                    android:layout_width="@dimen/outlet_info_width"
+                    android:layout_height="@dimen/outlet_card_height">
+                    <ImageView
+                        android:id="@+id/outletImage"
+                        android:layout_width="@dimen/outlet_info_width"
+                        android:layout_height="@dimen/outlet_card_height"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/outlet"/>
+
+                    <RelativeLayout
+                        android:layout_width="@dimen/outlet_info_width"
+                        android:layout_height="@dimen/outlet_card_height"
+                        android:background="#7e000000">
+
+                        <TextView
+                            android:id="@+id/outletName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:text="Striker Pub &amp; Brewery"
+                            android:textColor="@android:color/white"
+                            android:maxLines="2"
+                            android:ellipsize="end"
+                            android:textSize="@dimen/outlet_offer_header_textsize"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/outletName"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginTop="15dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/locImage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="2dp"
+                                android:layout_marginTop="0.5dp"
+                                android:src="@drawable/icon_discover_location"/>
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="2dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/outletAddress"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:text="Sector 15, Gurgaon"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="10sp"/>
+
+                                <TextView
+                                    android:id="@+id/distance"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="15.3 km"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="10sp"/>
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/outlet_info_bottom_height"
+                            android:layout_alignParentBottom="true"
+                            android:background="#9b000000"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <ImageView
+                                android:id="@+id/callOutletBtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="false"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerVertical="true"
+                                android:padding="8dp"
+                                android:src="@drawable/icon_discover_call_outlet"/>
+
+                            <ImageView
+                                android:id="@+id/followOutletBtn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:padding="8dp"
+                                android:src="@drawable/icon_discover_follow_outlet_no"/>
+
+                        </RelativeLayout>
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/coupon_bg"
+                    android:layout_toRightOf="@+id/outlet_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/outlet_card_height">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/outlet_card_height">
+                            <ImageView
+                                android:id="@+id/clock"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/outlet_details_coupon_margin_left"
+                                android:layout_marginTop="13dp"
+                                android:src="@drawable/icon_outlet_detail_clock_greyd" />
+
+                            <TextView
+                                android:id="@+id/valid_txt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="13dp"
+                                android:layout_toRightOf="@+id/clock"
+                                android:text="6 days left"
+                                android:textColor="@color/outlet_txt_color_grey_dark"
+                                android:textSize="@dimen/outlet_details_card_vld_txt" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="@dimen/outlet_details_coupon_margin_right"
+                                android:layout_marginTop="5dp"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/coupon_user_card"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/icon_outlet_detail_creditcard"
+                                    android:visibility="invisible" />
+
+
+                                <TextView
+                                    android:id="@+id/card_user_details"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:text="ICICI bank credit card"
+                                    android:textColor="@color/outlet_txt_color_grey_dark"
+                                    android:textSize="@dimen/outlet_details_card_user_txt"
+                                    android:visibility="invisible" />
+                            </LinearLayout>
+
+
+                            <TextView
+                                android:id="@+id/type_offer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="56dp"
+                                android:layout_below="@+id/clock"
+                                android:layout_marginLeft="@dimen/outlet_details_coupon_margin_left"
+                                android:layout_marginRight="15dp"
+                                android:layout_marginTop="5dp"
+                                android:text="free"
+                                android:textColor="@color/offer_color_red"
+                                android:gravity="center"
+                                android:singleLine="true"
+                                android:textStyle="bold"
+                                android:textSize="45sp" />
+
+                            <TextView
+                                android:id="@+id/coupon_text1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="on veg/chicken starters"
+                                android:textColor="@color/offer_color_red"
+                                android:layout_below="@+id/type_offer"
+                                android:layout_marginLeft="@dimen/outlet_details_coupon_margin_left"
+                                android:layout_centerVertical="true"
+                                android:textSize="@dimen/outlet_details_coupon_txt" />
+
+                            <TextView
+                                android:id="@+id/coupon_text2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="selected items only"
+                                android:textColor="@color/offer_color_red"
+                                android:layout_marginLeft="@dimen/outlet_details_coupon_margin_left"
+                                android:layout_below="@+id/coupon_text1"
+                                android:textSize="@dimen/outlet_details_coupon_txt" />
+
+
+
+
+                            <ImageView
+                                android:id="@+id/tc_img"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_above="@+id/coupon_btn"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="@dimen/outlet_details_coupon_margin_right"
+                                android:layout_marginTop="20dp"
+                                android:src="@drawable/outlet_detail_tnc" />
+
+                            <RelativeLayout
+                                android:id="@+id/coupon_btn"
+                                android:layout_width="match_parent"
+                                android:gravity="bottom"
+                                android:layout_height="40dp"
+                                android:layout_below="@+id/coupon_text2"
+                                android:layout_marginTop="6dp">
+
+                                <ImageView
+                                    android:id="@+id/footer_bckgrd"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="37dp"
+                                    android:background="#636363" />
+
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:layout_centerVertical="true">
+
+                                    <ImageView
+                                        android:id="@+id/coupon_img_icon"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
+                                        android:src="@drawable/icon_outlet_detail_coupon_forma" />
+
+                                    <TextView
+                                        android:id="@+id/outlet_500"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:visibility="gone"
+                                        android:layout_centerVertical="true"
+                                        android:gravity="center"
+                                        android:layout_marginLeft="6dp"
+                                        android:text="500"
+                                        android:textSize="6sp"
+                                        android:textColor="#ffffff"
+                                        />
+
+                                    <TextView
+                                        android:id="@+id/coupon__btn_txt"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_toRightOf="@+id/coupon_img_icon"
+                                        android:layout_centerVertical="true"
+                                        android:gravity="center"
+                                        android:text="use coupon"
+                                        android:textColor="@color/abc_primary_text_disable_only_material_dark"
+                                        android:textSize="@dimen/outlet_details_coupon_btn_txt" />
+                                </RelativeLayout>
+                            </RelativeLayout>
+                        </RelativeLayout>
+
+
+
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/line"
+                    android:layout_alignLeft="@+id/coupon_bg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/wallet_vertical_grey_divider" />
+            </RelativeLayout>
+
+
+    </LinearLayout>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Custom spinner item layout -->
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/buttonShowDropDown"
+    style="@style/spinner_style"
+    android:layout_width="130dp"
+    android:layout_height="30dp"
+    android:singleLine="true"
+    android:padding="5dp"
+    android:textSize="12sp"
+    android:background="#fafafa"
+    android:textColor="#7d7d7d"
+    android:layout_centerVertical="true"
+    android:layout_alignParentRight="true"
+    android:gravity="left|center_vertical"
+    android:drawablePadding="5dp"
+    android:drawableRight="@drawable/feedback_dropdown_icon"
+    />

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/emptyLayout"
+    android:layout_width="@dimen/outlet_offer_width"
+    android:layout_height="@dimen/outlet_offer_height"
+    android:layout_toRightOf="@+id/offerRecyclerView"
+    android:background="@drawable/card_empty">
+
+    <TextView
+        android:id="@+id/footerText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="#e9573f"
+        android:textSize="@dimen/offer_all_size"
+        android:padding="15dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:lineSpacingExtra="-5sp" />
+</RelativeLayout>

@@ -1,0 +1,33 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="navigation_drawer_width">290dp</dimen>
+    <dimen name="navigation_drawer_item_margin">16dp</dimen>
+
+    <dimen name="outlet_card_height">160dp</dimen>
+
+    <dimen name="outlet_info_width">125dp</dimen>
+
+    <dimen name="outlet_info_bottom_height">35dp</dimen>
+
+    <dimen name="outlet_offer_width">186dp</dimen>
+    <dimen name="outlet_offer_height">160dp</dimen>
+
+    <dimen name="outlet_details_shop_card_height">200dp</dimen>
+    <dimen name="outlet_details_shop_bar_height">55dp</dimen>
+    <dimen name="outlet_details_card_bg_height">160dp</dimen>
+    <dimen name="outlet_details_card_vld_txt">9sp</dimen>
+    <dimen name="outlet_details_card_offer_txt">50sp</dimen>
+    <dimen name="outlet_details_card_user_txt">8sp</dimen>
+    <dimen name="outlet_details_coupon_txt">12sp</dimen>
+    <dimen name="outlet_details_coupon_btn_height">45dp</dimen>
+    <dimen name="outlet_details_coupon_btn_txt">12sp</dimen>
+    <dimen name="outlet_details_coupon_margin_left">15dp</dimen>
+    <dimen name="outlet_details_coupon_margin_right">15dp</dimen>
+    <dimen name="outlet_details_coupon_margin_top">10dp</dimen>
+
+
+
+</resources>

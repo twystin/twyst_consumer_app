@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/gradient_shape"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_shape"
+        android:orientation="vertical"
+        android:scrollbarAlwaysDrawVerticalTrack="true" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fc6e51"
+            android:padding="15dp"
+            android:text="Suggest an outlet"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#fafafa"
+            android:padding="15dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Outlet Name"
+                android:layout_marginBottom="5dp"
+                android:singleLine="true"
+                android:gravity="bottom"
+                android:textSize="14sp"
+                android:textColor="#7c7c7c"/>
+
+            <EditText
+                android:id="@+id/outletNameET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_shape"
+                android:textSize="14sp"
+                android:padding="4dp"
+                android:gravity="top"
+                android:textColorHint="#2E2E2E"
+                android:textColor="#2E2E2E"
+                android:singleLine="false"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="5dp"
+                android:singleLine="true"
+                android:gravity="bottom"
+                android:textSize="14sp"
+                android:textColor="#7c7c7c"/>
+
+            <EditText
+                android:id="@+id/outletLocET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_shape"
+                android:textSize="14sp"
+                android:padding="4dp"
+                android:gravity="top"
+                android:textColorHint="#2E2E2E"
+                android:textColor="#2E2E2E"
+                android:singleLine="false"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comments"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:singleLine="true"
+                android:gravity="bottom"
+                android:textSize="14sp"
+                android:textColor="#7c7c7c"/>
+
+            <EditText
+                android:id="@+id/commentEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_shape"
+                android:textSize="14sp"
+                android:padding="4dp"
+                android:gravity="top"
+                android:textColorHint="#2E2E2E"
+                android:textColor="#2E2E2E"
+                android:singleLine="false"
+                android:maxLines="3"
+                android:lines="3"/>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="end|right">
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    android:id="@+id/suggestCancelBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/suggestOfferBtn"
+                    android:layout_toStartOf="@+id/suggestOfferBtn"
+                    app:mrl_rippleOverlay="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:background="#fafafa"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="CANCEL"
+                        android:textColor="#959595"
+                        android:textSize="12sp" />
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    android:id="@+id/suggestOfferBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    app:mrl_rippleOverlay="true">
+
+                    <Button
+                        android:layout_width="70dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/button_green"
+                        android:text="SUBMIT"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp" />
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

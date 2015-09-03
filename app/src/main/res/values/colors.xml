@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="app_bg_color">#f7f7f3</color>
+
+    <color name="colorPrimary">#e9573f</color>
+    <color name="colorPrimaryDark">#000</color>
+
+    <color name="textColorPrimary">#212121</color>
+    <color name="textColorSecondary">#727272</color>
+
+    <color name="drawer_item_color">#d9000000</color>
+    <color name="drawer_item_icon_color">#ffffff</color>
+    <color name="drawer_item_section_color">#8C000000</color>
+
+    <color name="app_accent_color">#727272</color>
+    <color name="app_accent_color_transparent">#c8f47c20</color>
+
+    <color name="pager_active">#007AFF</color>
+    <color name="pager_not_active">#99CCFF</color>
+
+    <color name="button_disabled">#7d7d7d</color>
+    <color name="button_orange">#f79421</color>
+    <color name="button_green">#009688</color>
+
+    <color name="offer_color_gray">#636363</color>
+    <color name="offer_color_red">#e9573f</color>
+    <color name="offer_color_yellow">#f6bb42</color>
+    <color name="offer_color_green">#00aca5</color>
+    <color name="offer_color_blue">#3bafda</color>
+
+    <color name="outlet_color_green">#00aca5</color>
+    <color name="outlet_txt_color_grey">#c2c2c2</color>
+    <color name="outlet_txt_color_blue">#3bafda</color>
+    <color name="outlet_txt_color_grey_dark">#7d7d7d</color>
+    <color name="outlet_coupon_bg_color_grey">#ebebeb</color>
+    <color name="outlet_coupon_bg_color_white">#ffffff</color>
+    <color name="wallet_background_color">#f7f7f3</color>
+
+    <!-- Fab colors-->
+    <color name="black_semi_transparent">#ffffff</color>
+    <color name="background">#e5e5e5</color>
+    <color name="half_black">#808080</color>
+    <color name="white">#fafafa</color>
+    <color name="white_pressed">#f1f1f1</color>
+    <color name="pink">#e91e63</color>
+    <color name="pink_pressed">#ec407a</color>
+    <color name="blue_semi_transparent">#805677fc</color>
+    <color name="blue_semi_transparent_pressed">#80738ffe</color>
+    <color name="fab_label_color">#646464</color>
+
+    <!-- For Notification-->
+    <color name="notification_bg">#e9e9da</color>
+    <color name="notification_text_gray">#7d7d7d</color>
+    <color name="notification_card">#f5f5e4</color>
+    <color name="notification_green">#00aca5</color>
+    <color name="notification_dark_gray">#636363</color>
+    <color name="notification_purple">#673d75</color>
+    <color name="notification_blue">#7986cb</color>
+    <color name="notification_light_green">#4db6ac</color>
+    <color name="notification_orange">#ff8a65</color>
+    <color name="notification_yellow">#f6bb42</color>
+    <color name="notification_light_gray">#c2c2c2</color>
+    <color name="notification_light_red">#e57373</color>
+    <color name="notification_pink">#f06292</color>
+    <color name="notification_red">#e9573f</color>
+
+    <color name="tabs_bg">#323232</color>
+
+    <color name="snackbar_bg">#e6e57373</color>
+    <color name="snackbar_bg2">#f084d2f6</color>
+    <color name="refresh_nw">#ffffa439</color>
+
+    <color name="filterbar">#191b1f</color>
+    <color name="filterbg">#292b31</color>
+
+    <integer-array name="progress_colors">
+        <item>@color/progress3</item>
+        <item>@color/progress1</item>
+        <item>@color/progress2</item>
+        <item>@color/progress4</item>
+    </integer-array>
+
+    <color name="progress1">#039be5</color>
+    <color name="progress2">#F44A29</color>
+    <color name="progress3">#FFD926</color>
+    <color name="progress4">#589D3E</color>
+
+    <integer-array name="horizontal_progress_colors">
+        <item>@color/horizontal_progress_color_1</item>
+        <item>@color/horizontal_progress_color_2</item>
+        <item>@color/horizontal_progress_color_3</item>
+        <item>@color/horizontal_progress_color_4</item>
+        <item>@color/horizontal_progress_color_5</item>
+    </integer-array>
+
+    <color name="horizontal_progress_color_1">#993065</color>
+    <color name="horizontal_progress_color_2">#e49219</color>
+    <color name="horizontal_progress_color_3">#009ed9</color>
+    <color name="horizontal_progress_color_4">#519039</color>
+    <color name="horizontal_progress_color_5">#e4701b</color>
+
+
+    <!-- For Google Places Bar -->
+    <color name="primary">@color/colorPrimary</color>
+    <color name="primary_dark">@color/colorPrimaryDark</color>
+
+</resources>

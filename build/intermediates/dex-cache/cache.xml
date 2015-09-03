@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.github.gabrielemariotti.cards/cardslib-cards/2.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="9ec1d846000db2b979dac2159584f027195a8174">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-7f34d1bfb6a104e241912e810c0071abbc669848.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="6836d188602ec5382d1967c58b00960eb8ff8773">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-7f3964e434c7162a33bfb1b75227114f87716ea2.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="1e98ef3f124bb7a11f8575f9ff5dfea330b61b6f">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-87727a73184e6345300f772eb7f9bd8024368a72.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="a1372c17fccacca753d3951d3ad820571cbce075">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-e7d71ec302d32742eb43dc6c4b69f9cc6bba2164.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-e62bff812cd35958cb6a0e732239ed053c445ce0.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.github.gabrielemariotti.cards/cardslib-core/2.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="8190861e323934dad89d5e6b830ea66878c11970">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-d378dcb8b23664379d568e5cd135e3896eef7b59.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.getbase/floatingactionbutton/1.10.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="078cad8ebaa25b1eb1790bd622b3a8ae27c9cc7a">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-9e3cc8383168c99da4558313fc4871c76d5eaf91.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library-circular/1.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="92b3f2b3c9174fc475de2f7c509e874e633e1937">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-c1e308d41419bd8409c93419dfe7661362ad59a0.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.nispok/snackbar/2.10.10/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="6d913edb6690b87ab8bb1499e0836bf9e160ca0a">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-87a7fdc060ab0ceef46c8615003ed270cf6d2fa7.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="6440e5e5cfe368f9bff3c537fb8988048069cb33">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-0e853270576ae76ca1e451ed0a1ba2ea2363445e.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="f44d03c138cb6488fdbaa65e3a7e5878861a56d8">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-a3dc8f2ec7012ed7b67ebda95ad221908139d3cf.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-950cb175c7fa2ec68697eb8a647dd0a495084909.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="54732a25e1d3eb1a88dfc4f969eff4f3d4476f2c">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-f2529df6caa35a09cd312e0ab94e6da77c6d6071.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.balysv/material-ripple/1.0.2/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="c733e9d1b065d940a08f2fca0ff920dfc08d94cc">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-0aabd8a0c6103d4f69c306ceed904a4c9250bcd5.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="272bc5d7063f24bc3a33ea1d318cde8f31f5ec4c">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-19665edff3d66ee08be129de1770b148e91a1dde.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit/retrofit/1.9.0/a681c044244d9fc375198588297a39ba78028423/retrofit-1.9.0.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="a681c044244d9fc375198588297a39ba78028423">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/retrofit-1.9.0-08436d1fb48ce6f1cf6a6429650aa466beb75e6f.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="e7b35244f50663b3f8d150714bca9ecd7a290da1">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-1ac90b9e5d7082548e8c1e3f291dc2823c61fc29.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="ba207be21987c11b37d9f8faa08ed6e722569f30">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-0a805c012b1b5eb96b26d462bb68cee4e3efffbd.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="a172852a35ff919e85b9b7f14bbc15c5bee25520">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-fce37ef4a13cb894e10e12bfd24943abba022097.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appinvite/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="63ec6e9f4fe5482a7447d0f3091b8e543a02554c">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-4f232775acc0da6eef52ba83514a9f9f6d48399d.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-be8b51b584ef4b7f1585ba9e263714f200bfe40e.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/.gradle/caches/modules-2/files-2.1/com.joanzapata.android/android-iconify/1.0.10/ce73e8cf3d33ce453a7ed34002baa55bde7f6370/android-iconify-1.0.10.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="ce73e8cf3d33ce453a7ed34002baa55bde7f6370">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/android-iconify-1.0.10-3c6454c6f06810cc2e6b02ca394fcc35c3476d48.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library/1.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="1b42b57cacd24838e3341d5f3cd2035226ef2867">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-73b1096dcaf6605c95f2d4d46802fa9889afaf4b.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="69dd177337ead693c408c8dddc9546bb6f1244fa">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-88bff4ec2740a37879783417f892e07a98d9db57.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.4.0/5b72bf48563ea8410e650de14aa33ff69a3e8c35/okio-1.4.0.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="5b72bf48563ea8410e650de14aa33ff69a3e8c35">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/okio-1.4.0-f5379ff872dc1777a4a84a1ece2ae384fc41cf6d.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="8d736fefa22d896e84a268354b3ed48a42663150">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-421d9da31307481be6085ad1d0488adb9fd0401d.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.0.0/jars/libs/internal_impl-22.0.0.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="ba3df4eb0a630d7de294f0e48d3f9267d279b784">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/internal_impl-22.0.0-3153ae8d9282075652b08c39a46a4f5b19642d9a.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="8e3a972f28b8bae817e382257ba177a31bcadbbc">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-0ef111b8beee88e7a1b5039c546fff8d82c60554.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/.gradle/caches/modules-2/files-2.1/org.simpleframework/simple-xml/2.7.1/dd91fb744c2ff921407475cb29a1e3fee397d411/simple-xml-2.7.1.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="dd91fb744c2ff921407475cb29a1e3fee397d411">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/simple-xml-2.7.1-c45e174bdb27f376ec5631f6c6ed0a4a1bac1357.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.3.1/ecb6e1f8e4b0e84c4b886c2f14a1500caf309757/gson-2.3.1.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/gson-2.3.1-55be0607196fd9202ab21838ea7ffa4616e18769.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/libs/internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-4e0d5a43cc0998573f912623a403cb3755915f7c.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit/converter-simplexml/1.6.1/44a1b22f8f3a27109d6cefc355ecfbfed98f1917/converter-simplexml-1.6.1.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="44a1b22f8f3a27109d6cefc355ecfbfed98f1917">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/converter-simplexml-1.6.1-40d54a82160ee0e60b00e6b638ff9c850f251e1c.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/libs/android-query-full.0.26.8.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="5ab405d9f4eaf5ddd615967cd35650657b758d40">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/android-query-full.0.26.8-3cc3a71c841a616a20a7eca0c914da15643da088.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="a78183f30e769a98ab4820794f597763088d3065">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-5f563378d3180debe9459300ca78df956fcc5279.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="29ebc7e04d877062317c8cc0e68b20f0c1fcda66">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-ece79a34c4d9c44a72a84763ec0553daf7de6bfd.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="02bac2dc792d78241077861566f2c82da955e7fa">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-ec9d5e4f5cc8479b68730ce1629ae32d6f3ee661.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp/2.4.0/40340c0748190fe897baf7bffbc1b282734294e5/okhttp-2.4.0.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="40340c0748190fe897baf7bffbc1b282734294e5">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/okhttp-2.4.0-4e935ca747b19d76493586ec70ffe0bfe43d614c.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="d405025c600055237c171a0bbabaa49d69696573">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-52f9c43eaccfe5c6e6ac348e85bb42a1b6e0f3b2.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/.gradle/caches/modules-2/files-2.1/com.google.zxing/android-integration/3.2.0/790720750cfe1e04510d0cb37ca8e8eff2beeed3/android-integration-3.2.0.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="790720750cfe1e04510d0cb37ca8e8eff2beeed3">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/android-integration-3.2.0-be6c202b024bf6f85a3e58c728a4a30b8475f7b4.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="f02127a85abd52a2cd526d4c2409f21969f80ee8">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-22ace218c4bb9bda1e5c0c2b0ccca63b7e80af47.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/22.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="c6d79137693d494dee16372d3921f919eb724ced">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-59890adc762fca60e9ab08f957afc9bbb7dee924.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appstate/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="68c140702c7242d914655bcb3164d9e8c45b84cb">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-f7f323e060e79ad0ec3339cf419c4f6c855a1cd0.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="06a42becc33232ec0ee125161da68c1829c9f8fd">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-8fc073bda389417e889643e8e247c720f9fc64eb.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp-urlconnection/2.4.0/a0c195f14cefc7597e0bebf22c3e7b43920dcf4/okhttp-urlconnection-2.4.0.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="0a0c195f14cefc7597e0bebf22c3e7b43920dcf4">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/okhttp-urlconnection-2.4.0-fbf457cb3b15adb281963a746a05f3aa96d067aa.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.5.2/7446d06ec8d4f7ffcc53f1da37c95f200dcb9387/picasso-2.5.2.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/picasso-2.5.2-daea64c1706e1c45e102b9961835671bd19d8af6.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-android/1.2.0/6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd/bolts-android-1.2.0.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/bolts-android-1.2.0-66204b545846afd28478bbeaca16eba8100b1425.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/22.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="22886d910315028a2b34b1ba068c265534ade87a">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-506db162675dd4d230e31ccf03ef82764594fba9.jar" />
+    </item>
+    <item
+        jar="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="1a6411087ab88ce5542f593e63a2752b6b0d6f1a">
+        <dex dex="/home/rahuls/Documents/Workspace/Twyst/svn/repos/twyst/app/build/intermediates/pre-dexed/debug/classes-f85de12f67b09f30ae7633a82f51bcad3273b53a.jar" />
+    </item>
+
+</items>

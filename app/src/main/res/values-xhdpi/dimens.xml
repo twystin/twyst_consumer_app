@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_horizontal_margin">64dp</dimen>
+
+    <dimen name="navigation_drawer_width">350dp</dimen>
+    <dimen name="navigation_drawer_item_margin">20dp</dimen>
+
+    <dimen name="outlet_card_height">160dp</dimen>
+    <dimen name="outlet_info_width">125dp</dimen>
+    <dimen name="outlet_info_bottom_height">35dp</dimen>
+    <dimen name="outlet_offer_width">186dp</dimen>
+    <dimen name="outlet_offer_height">160dp</dimen>
+    <dimen name="outlet_offer_header_textsize">17sp</dimen>
+    <dimen name="offer_padding_left">15dp</dimen>
+    <dimen name="offer_padding_right">8dp</dimen>
+    <dimen name="offer_flatoff_size">25sp</dimen>
+    <dimen name="offer_buffet_size">35sp</dimen>
+    <dimen name="offer_custom_size">20sp</dimen>
+    <dimen name="offer_all_size">35sp</dimen>
+    <dimen name="offer_reduced_size">25sp</dimen>
+    <dimen name="offer_detail_size">12sp</dimen>
+    <dimen name="offer_date_size">8sp</dimen>
+    <dimen name="discover_plan_ahead_size">14sp</dimen>
+    <dimen name="discover_plan_ahead_padding">10dp</dimen>
+    <dimen name="discover_plan_ahead_text_size">12sp</dimen>
+
+
+    <dimen name="outlet_details_shop_card_height">200dp</dimen>
+    <dimen name="outlet_details_shop_bar_height">55dp</dimen>
+    <dimen name="outlet_details_card_bg_height">160dp</dimen>
+    <dimen name="outlet_details_card_vld_txt">9sp</dimen>
+    <dimen name="outlet_details_card_offer_txt">50sp</dimen>
+    <dimen name="outlet_details_card_user_txt">8sp</dimen>
+    <dimen name="outlet_details_coupon_txt">12sp</dimen>
+    <dimen name="outlet_details_coupon_btn_height">45dp</dimen>
+    <dimen name="outlet_details_coupon_btn_txt">12sp</dimen>
+    <dimen name="outlet_details_coupon_margin_left">15dp</dimen>
+    <dimen name="outlet_details_coupon_margin_right">15dp</dimen>
+    <dimen name="outlet_details_coupon_margin_top">10dp</dimen>
+
+    <dimen name="outlet_detail_name_text">26sp</dimen>
+    <dimen name="outlet_detail_padding_left">15dp</dimen>
+    <dimen name="outlet_detail_padding_right">10dp</dimen>
+    <dimen name="outlet_detail_address">13sp</dimen>
+    <dimen name="outlet_detail_distance">12sp</dimen>
+    <dimen name="outlet_detail_button">11sp</dimen>
+    <dimen name="outlet_detail_header_type1_text">45sp</dimen>
+    <dimen name="outlet_detail_header_type2_text">30sp</dimen>
+    <dimen name="outlet_detail_image_height">185dp</dimen>
+    <dimen name="outlet_detail_feedback_padding">15dp</dimen>
+    <dimen name="margin_outlet">10dp</dimen>
+    <dimen name="margin_outlet2">12dp</dimen>
+    <dimen name="feedback_info_text">11sp</dimen>
+
+    <dimen name="offer_detail_name_text">24sp</dimen>
+    <dimen name="offer_detail_padding">20dp</dimen>
+    <dimen name="offer_detail_header">36sp</dimen>
+    <dimen name="offer_detail_padding2">16dp</dimen>
+    <dimen name="offer_detail_text1">14sp</dimen>
+    <dimen name="offer_detail_like_margin">19dp</dimen>
+    <dimen name="offer_detail_button_size">47dp</dimen>
+    <dimen name="offer_detail_button_text">18sp</dimen>
+    <dimen name="offer_detail_margin_top">10dp</dimen>
+    <dimen name="offer_detail_iamge_height">75dp</dimen>
+    <dimen name="offer_detail_report_padding_bottom">10dp</dimen>
+    <dimen name="offer_detail_report_padding_top">8dp</dimen>
+    <dimen name="offer_detail_text2">18sp</dimen>
+    <dimen name="offer_detail_text3">16sp</dimen>
+    <dimen name="feedback_image_height">60dp</dimen>
+    <dimen name="feedback_image_width">45dp</dimen>
+    <dimen name="redeem_padding">8dp</dimen>
+    <dimen name="redeem_button_width">60dp</dimen>
+    <dimen name="redeem_button_height">30dp</dimen>
+    <dimen name="redeem_button_text">15sp</dimen>
+
+
+    <dimen name="tutorial_imageview_margin_top">70dp</dimen>
+    <dimen name="tutorial_viewpager_margin_bottom">30dp</dimen>
+    <dimen name="tutorial_viewpager_margin_top">20dp</dimen>
+    <dimen name="tutorial_centerlogo_margin_top">55dp</dimen>
+    <dimen name="tutorial_padding">30dp</dimen>
+    <dimen name="tutorial_text_margin_top">40dp</dimen>
+    <dimen name="tutorial_text1_size">20sp</dimen>
+    <dimen name="tutorial_text2_size">16sp</dimen>
+    <dimen name="phone_verification_text_margin_top">60dp</dimen>
+    <dimen name="phone_verification_margin_top">110dp</dimen>
+    <dimen name="phone_verification_margin_bottom">80dp</dimen>
+    <dimen name="phone_verification_textsize">20sp</dimen>
+    <dimen name="login_margin_top">45sp</dimen>
+    <dimen name="login_margin_top2">50sp</dimen>
+    <dimen name="login_margin_left">55sp</dimen>
+    <dimen name="dialog_button_text">14sp</dimen>
+    <dimen name="dialog_header_text">16sp</dimen>
+    <dimen name="dialog_content_text">14sp</dimen>
+    <dimen name="discover_offer_padding_right">20dp</dimen>
+    <dimen name="phone_verification_edittext_size">16sp</dimen>
+    <dimen name="notification_item_height">110dp</dimen>
+
+    <dimen name="invite_friend_text">14sp</dimen>
+    <dimen name="invite_friend_padding">10dp</dimen>
+    <dimen name="invite_friend_button_width">260dp</dimen>
+    <dimen name="invite_friend_button_text">18sp</dimen>
+    <dimen name="invite_friend_button_height">45dp</dimen>
+    <dimen name="invite_friend_list_text">16sp</dimen>
+    <dimen name="invite_friend_list_padding">20dp</dimen>
+
+    <dimen name="submit_offer_padding">14dp</dimen>
+    <dimen name="submit_offer_margin">10dp</dimen>
+    <dimen name="submit_offer_margin_bottom">7dp</dimen>
+    <dimen name="submit_offer_margin_top">20dp</dimen>
+    <dimen name="submit_offer_image_height">80dp</dimen>
+    <dimen name="submit_offer_image_width">65dp</dimen>
+
+
+</resources>

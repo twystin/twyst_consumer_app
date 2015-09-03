@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:src="@drawable/tutorial_bg"/>
+
+    <ImageView
+        android:id="@+id/tutorial_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/phone_verification_text_margin_top"
+        android:src="@drawable/tutorial_logo"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tutorial_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/login_margin_left"
+        android:layout_marginRight="@dimen/login_margin_left"
+        android:layout_marginTop="@dimen/login_margin_top"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Complete your sign up!"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/phone_verification_textsize"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp">
+
+
+            <ImageView
+                android:id="@+id/icon_login_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_login_email"
+                android:paddingBottom="3dp"
+                android:paddingTop="3dp"/>
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/icon_login_user"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/icon_login_user"
+                android:layout_toRightOf="@+id/icon_login_user"
+                android:background="@null"
+                android:ems="10"
+                android:paddingBottom="1dp"
+                android:paddingTop="3dp"
+                android:hint="@string/hint_email"
+                android:inputType="textEmailAddress"
+                android:paddingLeft="10dp"
+                android:textColor="@android:color/white"
+                android:textColorHint="#8c8c8c"/>
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/white"
+            android:textColor="@android:color/white"/>
+
+        <com.balysv.materialripple.MaterialRippleLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/login_margin_top2"
+            app:mrl_rippleOverlay="true">
+
+            <Button
+                android:id="@+id/loginBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_orange"
+                android:text="Sign up"
+                android:textColor="@android:color/white"/>
+        </com.balysv.materialripple.MaterialRippleLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/login_margin_top2"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/divider1"
+                android:layout_width="70dp"
+                android:layout_height="1dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:background="@android:color/white"
+                android:textColor="@android:color/white"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/divider2"
+                android:layout_toRightOf="@+id/divider1"
+                android:layout_toStartOf="@+id/divider2"
+                android:fontFamily="sans-serif-light"
+                android:gravity="center_horizontal"
+                android:text="or sign in with "
+                android:textColor="@android:color/white"
+                android:textStyle="italic"/>
+
+            <TextView
+                android:id="@+id/divider2"
+                android:layout_width="70dp"
+                android:layout_height="1dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="0dp"
+                android:background="@android:color/white"
+                android:textColor="@android:color/white"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:orientation="horizontal">
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:mrl_rippleOverlay="true">
+
+                <ImageView
+                    android:id="@+id/fbLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_facebook"/>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                app:mrl_rippleOverlay="true">
+
+                <ImageView
+                    android:id="@+id/gPlusLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_google_plus"/>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">Twyst</string>
+   <!-- <string name="APP_ID">763534923659747</string>-->
+    <string name="APP_ID">905551729519598</string>
+    <string name="action_search">Search</string>
+    <string name="action_notifications">Notifications</string>
+    <string name="action_wallet">Wallet</string>
+    <string name="action_home">Home</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="hint_mobile"><small><i>10 digit mobile number</i></small></string>
+    <string name="hint_otp_code"><small><i>Enter 4-digit code</i></small></string>
+    <string name="hint_email"><small><i>Enter your email id</i></small></string>
+    <string name="call">call</string>
+    <string name="follow">follow</string>
+    <string name="map">map</string>
+    <string name="feedback">feedback</string>
+    <string name="discover">Discover</string>
+    <string name="wallet">My Wallet</string>
+    <string name="outlet_detail">Outlet Detail</string>
+    <string name="offer_detail">Offer Detail</string>
+    <string name="notification">Notifications</string>
+    <string name="invite">Invite Friends</string>
+    <string name="upload_bill">Upload Bill</string>
+    <string name="write_to_us">Write to us</string>
+    <string name="submit_offer">Submit Offer</string>
+    <string name="suggest_outlet">Suggest an outlet</string>
+    <string name="faq">FAQs</string>
+
+
+
+    <string name="action_deep_link">twyst</string>
+
+    <string name="invites">Send invitations!</string>
+    <string name="welcome">App Invite\nQuickstart</string>
+    <string name="referrer_hint">Deep link not provided</string>
+    <string name="deep_link_default">Deep link not set</string>
+    <string name="invitation_id_default">Invitation ID not set</string>
+    <string name="invite_friends">Invite Friends</string>
+
+    <string name="invitation_title">Send App Invite Quickstart Invitation</string>
+    <string name="invitation_message">This app is terrific, give it a try!</string>
+    <string name="invitation_deep_link">demo://</string>
+
+    <string name="deep_link_fmt">Deep Link: %s</string>
+    <string name="invitation_id_fmt">Invitation ID: %s</string>
+
+    <string name="sent_invitations_fmt">Sent %d invitations</string>
+    <string name="send_failed">Sending invitations failed</string>
+    <string name="invite_dialog_title">You got an invitation!</string>
+    <string name="checkin">Check-in Success!</string>
+
+</resources>

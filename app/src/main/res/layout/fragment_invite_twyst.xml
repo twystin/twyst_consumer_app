@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f7f7f3">
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Share rewards! Use offers your friends unlock (and vice versa). Get 100 Twysts for each friend you add to Twyst."
+        android:textColor="#555" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/textView1"
+        android:background="#88cccccc" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:background="@android:color/white"
+        android:padding="10dp"
+        android:text="Sharing rewards with"
+        android:textColor="#555"
+        android:textStyle="bold" />
+
+    <ListView
+        android:id="@+id/inviteTwystList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/textView3"
+        android:background="@android:color/white"
+        android:divider="#88cccccc"
+        android:choiceMode="singleChoice"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:dividerHeight="1dp" />
+</RelativeLayout>

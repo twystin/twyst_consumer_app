@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_shape"
+        android:orientation="vertical"
+        android:scrollbarAlwaysDrawVerticalTrack="true" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fc6e51"
+            android:padding="15dp"
+            android:text="Found an offer that you don't see on Twyst? Let us know, and win some Twyst goodies!"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#fafafa"
+            android:padding="15dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Outlet Name"
+                android:layout_marginBottom="5dp"
+                android:singleLine="true"
+                android:gravity="bottom"
+                android:textSize="14sp"
+                android:textColor="#7c7c7c"/>
+
+            <EditText
+                android:id="@+id/outletNameET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_shape"
+                android:textSize="14sp"
+                android:padding="4dp"
+                android:gravity="top"
+                android:textColorHint="#2E2E2E"
+                android:textColor="#2E2E2E"
+                android:singleLine="false"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="5dp"
+                android:singleLine="true"
+                android:gravity="bottom"
+                android:textSize="14sp"
+                android:textColor="#7c7c7c"/>
+
+            <EditText
+                android:id="@+id/outletLocET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_shape"
+                android:textSize="14sp"
+                android:padding="4dp"
+                android:gravity="top"
+                android:textColorHint="#2E2E2E"
+                android:textColor="#2E2E2E"
+                android:singleLine="false"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="What's the offer?"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:singleLine="true"
+                android:gravity="bottom"
+                android:textSize="14sp"
+                android:textColor="#7c7c7c"/>
+
+            <EditText
+                android:id="@+id/offerET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_shape"
+                android:textSize="14sp"
+                android:padding="4dp"
+                android:gravity="top"
+                android:textColorHint="#2E2E2E"
+                android:textColor="#2E2E2E"
+                android:singleLine="false"
+                android:maxLines="3"
+                android:lines="3"/>
+
+
+            <TextView
+                android:id="@+id/photoTextview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Attach photo (optional)"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_marginTop="10dp"
+                android:singleLine="true"
+                android:drawablePadding="15dp"
+                android:gravity="bottom"
+                android:textSize="14sp"
+                android:drawableRight="@drawable/icon_attach_photo"
+                android:textColor="#7c7c7c"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="end|right">
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    android:id="@+id/submitCancelBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/submitOfferBtn"
+                    android:layout_toStartOf="@+id/submitOfferBtn"
+                    app:mrl_rippleOverlay="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:background="#fafafa"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="CANCEL"
+                        android:textColor="#959595"
+                        android:textSize="12sp" />
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    android:id="@+id/submitOfferBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    app:mrl_rippleOverlay="true">
+
+                    <Button
+                        android:layout_width="70dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/button_green"
+                        android:text="SUBMIT"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp" />
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="(Once verified, this offer will be on Twyst soon, all thanks to you!)"
+                android:layout_marginTop="8dp"
+                android:singleLine="false"
+                android:gravity="bottom"
+                android:textSize="11sp"
+                android:textColor="#fc6e51"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

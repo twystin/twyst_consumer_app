@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/tutorial_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/tutorial_imageview_margin_top"
+        android:id="@+id/tutorial_logo"
+        android:visibility="invisible"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/tutorial_padding"
+        android:paddingRight="@dimen/tutorial_padding"
+        android:weightSum="1"
+        android:layout_below="@+id/tutorial_logo"
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:id="@+id/centerLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/tutorial_centerlogo_margin_top"
+            android:src="@drawable/tutorial_center_logo_1"/>
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/tutorial_text_margin_top"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/tutorial_text1_size"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="55dp"
+            android:layout_marginLeft="22dp"
+            android:layout_marginRight="22dp"
+            android:layout_marginTop="45dp"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/tutorial_text2_size"/>
+
+
+        <Button
+            android:id="@+id/letsTwystBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/button_lets_twyst"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

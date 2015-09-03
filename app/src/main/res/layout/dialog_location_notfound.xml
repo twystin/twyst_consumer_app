@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fafafa"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fc6e51"
+        android:padding="15dp"
+        android:text="Oops, we can't find your location!\nPlease enter your location below (or choose the one closest to you), to see the best dining offers around you."
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/dialog_header_text" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fc6e51"
+        android:paddingBottom="2dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="20dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/customLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fafafa"
+            android:hint="enter your location"
+            android:singleLine="true"
+            android:textSize="@dimen/dialog_content_text"
+            android:textColorHint="#ccc"
+            android:paddingBottom="3dp" />
+
+    </LinearLayout>
+
+    <com.balysv.materialripple.MaterialRippleLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="15dp"
+        app:mrl_rippleOverlay="true">
+
+        <Button
+            android:id="@+id/customLocationSubmitBtn"
+            android:layout_width="80dp"
+            android:layout_height="37dp"
+            android:background="@drawable/button_red"
+            android:text="SUBMIT"
+            android:textSize="@dimen/dialog_button_text"
+            android:textColor="@android:color/white" />
+    </com.balysv.materialripple.MaterialRippleLayout>
+
+</LinearLayout>

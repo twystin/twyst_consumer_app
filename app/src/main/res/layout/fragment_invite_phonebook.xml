@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f7f7f3">
+
+    <RelativeLayout
+        android:id="@+id/topLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Invite phonebook friends."
+            android:textColor="#555"
+            android:textStyle="bold"
+            android:layout_centerVertical="true" />
+
+        <ImageView
+            android:id="@+id/whatsappIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/icon_whatsapp"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/topLayout"
+        android:background="#88cccccc" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:background="@android:color/white"
+        android:padding="10dp"
+        android:text="Sharing rewards with"
+        android:textColor="#555"
+        android:textStyle="bold" />
+
+    <ListView
+        android:id="@+id/inviteTwystList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/textView3"
+        android:background="@android:color/white"
+        android:choiceMode="singleChoice"
+        android:divider="#88cccccc"
+        android:dividerHeight="1dp"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
+</RelativeLayout>

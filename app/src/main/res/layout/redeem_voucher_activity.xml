@@ -1,0 +1,657 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/notification_bg"
+    android:fitsSystemWindows="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+            <RelativeLayout
+                android:id="@+id/contentView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="?actionBarSize">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/offer_detail_bg_top"
+                    android:orientation="vertical"
+                    android:id="@+id/linearLayout4" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:src="@drawable/offer_detail_bg_center"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    android:layout_above="@+id/linearLayout5"
+                    android:layout_below="@+id/linearLayout4"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/linearLayout4"
+                    android:layout_above="@+id/linearLayout5"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="9dp">
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/offer_detail_iamge_height">
+
+                        <ImageView
+                            android:id="@+id/outletImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="#80000000"
+                            android:layout_alignTop="@+id/outletImage">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:weightSum="1"
+                                android:paddingLeft="@dimen/offer_detail_padding"
+                                android:paddingRight="@dimen/offer_detail_padding"
+                                android:layout_marginTop="5dp">
+
+                                <TextView
+                                    android:id="@+id/outletName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentTop="false"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginLeft="0dp"
+                                    android:layout_marginTop="0dp"
+                                    android:layout_weight=".9"
+                                    android:lines="1"
+                                    android:ellipsize="end"
+                                    android:text="Striker Pub &amp; Brewery"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="@dimen/offer_detail_name_text" />
+
+                                <ImageView
+                                    android:id="@+id/outletShare"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="false"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentTop="false"
+                                    android:layout_centerVertical="true"
+                                    android:layout_gravity="right"
+                                    android:layout_marginLeft="0dp"
+                                    android:layout_marginTop="0dp"
+                                    android:layout_weight=".1"
+                                    android:src="@drawable/icon_outlet_detail_share" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="bottom"
+                                android:layout_alignParentBottom="true"
+                                android:orientation="horizontal"
+                                android:paddingBottom="10dp"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp">
+
+                                <TextView
+                                    android:id="@+id/outletDistance"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:drawableLeft="@drawable/offer_detail_location_icon"
+                                    android:drawablePadding="5dp"
+                                    android:text="15.3 km"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="@dimen/outlet_detail_distance" />
+
+
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_below="@+id/relativeLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp"
+                        android:id="@+id/relativeLayout2">
+
+                        <RelativeLayout
+                            android:id="@+id/layoutofferDetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="3dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true">
+
+                            <TextView
+                                android:id="@+id/textView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:textColor="#7d7d7d"
+                                android:textSize="9sp"
+                                android:text="Your voucher code"/>
+
+                            <TextView
+                                android:id="@+id/voucherCodetext"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@android:color/black"
+                                android:layout_below="@+id/textView"
+                                android:gravity="center_horizontal"
+                                android:layout_marginTop="@dimen/redeem_padding"
+                                android:textSize="@dimen/offer_detail_text2"
+                                android:textStyle="bold"
+                                android:text="RBBMGL"/>
+
+                            <TextView
+                                android:id="@+id/textView2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:textColor="#7d7d7d"
+                                android:layout_marginTop="@dimen/redeem_padding"
+                                android:layout_below="@+id/voucherCodetext"
+                                android:textSize="@dimen/outlet_detail_distance"
+                                android:text="Please present the code to the outlet\nin the next 60  in to avail the offer"/>
+
+                            <LinearLayout
+                                android:id="@+id/redshapeLayout"
+                                android:layout_below="@+id/textView2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/shape_redeem_button"
+                                android:orientation="horizontal"
+                                android:layout_marginTop="@dimen/redeem_padding"
+                                android:layout_marginBottom="@dimen/redeem_padding">
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginLeft="10dp">
+
+
+                                    <TextView
+                                        android:id="@+id/outlet_500"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:visibility="visible"
+                                        android:layout_centerVertical="true"
+                                        android:layout_centerHorizontal="true"
+                                        android:gravity="center"
+                                        android:text="1"
+                                        android:textSize="6sp"
+                                        android:background="@drawable/redeem_voucher_coin_icon"
+                                        android:textColor="@color/colorPrimary"
+                                        />
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/redeem_voucher_buck_icon"/>
+                                </RelativeLayout>
+                                <TextView
+                                    android:id="@+id/text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="7dp"
+                                    android:layout_marginRight="7dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:gravity="center"
+                                    android:text="Upload your bill and\nget 500 Twyst bucks"
+                                    android:textColor="@color/abc_primary_text_disable_only_material_dark"
+                                    android:textSize="@dimen/offer_detail_text1" />
+
+                                <com.balysv.materialripple.MaterialRippleLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="7dp"
+                                    android:layout_marginRight="7dp"
+                                    app:mrl_rippleOverlay="true"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:id="@+id/view1">
+                                    <Button
+                                        android:id="@+id/btnNow"
+                                        android:layout_width="@dimen/redeem_button_width"
+                                        android:layout_height="@dimen/redeem_button_height"
+                                        android:background="@drawable/button_white"
+                                        android:textSize="@dimen/redeem_button_text"
+                                        android:text="Now"
+                                        android:textAllCaps="false"
+                                        android:textColor="@color/colorPrimary"
+
+                                        />
+                                </com.balysv.materialripple.MaterialRippleLayout>
+                                <com.balysv.materialripple.MaterialRippleLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="7dp"
+                                    android:layout_marginRight="7dp"
+                                    app:mrl_rippleOverlay="true"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:id="@+id/view2">
+                                    <Button
+                                        android:id="@+id/btnLater"
+                                        android:layout_width="@dimen/redeem_button_width"
+                                        android:layout_height="@dimen/redeem_button_height"
+                                        android:background="@drawable/button_white"
+                                        android:textSize="@dimen/redeem_button_text"
+                                        android:text="Later"
+                                        android:textAllCaps="false"
+                                        android:textColor="@color/colorPrimary"
+
+                                        />
+                                </com.balysv.materialripple.MaterialRippleLayout>
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/free"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:textColor="#7d7d7d"
+                                android:layout_marginTop="5dp"
+                                android:layout_below="@+id/redshapeLayout"
+                                android:textSize="@dimen/offer_detail_text3"
+                                android:text="free"/>
+                            <TextView
+                                android:id="@+id/offerDetail1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:textColor="#7d7d7d"
+                                android:layout_below="@+id/free"
+                                android:textSize="@dimen/offer_detail_text1"
+                                android:text="Glass of ouse blew"/>
+                            <TextView
+                                android:id="@+id/offerDetail2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:textColor="#7d7d7d"
+                                android:layout_below="@+id/offerDetail1"
+                                android:textSize="@dimen/offer_detail_text1"
+                                android:layout_marginBottom="10dp"
+                                android:text="Glass of ouse blew"/>
+
+
+                        </RelativeLayout>
+
+
+
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/termsConditionLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:visibility="visible"
+                        android:layout_below="@+id/relativeLayout2"
+                        android:layout_centerHorizontal="true">
+
+
+
+                        <TextView
+                            android:id="@+id/termsCondition"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="* Terms &amp; Conditions"
+                            android:textColor="@color/outlet_txt_color_grey_dark"
+                            android:layout_alignParentTop="true"
+                            android:gravity="center"
+                            android:singleLine="true"
+                            android:paddingTop="@dimen/redeem_padding"
+                            android:layout_margin="5dp"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/offer_detail_text1" />
+
+                        <TextView
+                            android:id="@+id/text1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/outlet_txt_color_grey_dark"
+                            android:text="Minimum bill value must be Rs 500/-"
+                            android:textSize="@dimen/outlet_detail_distance"
+                            android:layout_margin="1dp"
+                            android:paddingLeft="15dp"
+                            android:layout_below="@+id/termsCondition"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true" />
+
+
+
+                        <TextView
+                            android:id="@+id/text2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/outlet_txt_color_grey_dark"
+                            android:text="House brew subject availability"
+                            android:textSize="@dimen/outlet_detail_distance"
+                            android:layout_margin="1dp"
+                            android:paddingLeft="15dp"
+                            android:layout_below="@+id/text1"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true" />
+
+                        <TextView
+                            android:id="@+id/text3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/outlet_txt_color_grey_dark"
+                            android:text="Offer available sunday- thursday"
+                            android:textSize="@dimen/outlet_detail_distance"
+                            android:layout_margin="3dp"
+                            android:paddingLeft="15dp"
+                            android:visibility="gone"
+                            android:layout_below="@+id/text2"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true" />
+
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.8dp"
+                            android:background="#78797a"
+                            android:id="@+id/line1"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_toRightOf="@+id/text3"
+                            android:layout_toEndOf="@+id/text3" />
+
+
+                        <TextView
+                            android:id="@+id/viewMore"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/outlet_txt_color_grey_dark"
+                            android:drawablePadding="5dp"
+                            android:textStyle="bold"
+                            android:text="view more"
+                            android:textSize="12sp"
+                            android:visibility="invisible"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true" />
+
+                    </RelativeLayout>
+
+
+                </RelativeLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/offer_detail_bg_bottom"
+                    android:orientation="vertical"
+                    android:layout_above="@+id/reportText"
+                    android:id="@+id/linearLayout5">
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/reportText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="20dp"
+                    android:drawableLeft="@drawable/icon_offer_detail_report"
+                    android:drawablePadding="5dp"
+                    android:gravity="left|center"
+                    android:paddingBottom="@dimen/offer_detail_report_padding_bottom"
+                    android:paddingTop="2dp"
+                    android:text="Report a problem"
+                    android:textAllCaps="true"
+                    android:textColor="@color/offer_color_red"
+                    android:textSize="@dimen/outlet_detail_distance" />
+            </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/obstructor"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:alpha="0.70"
+            android:background="@android:color/black"
+            android:clickable="true"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/obstructor2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:alpha="0"
+            android:background="@android:color/black"
+            android:clickable="true"
+            android:visibility="gone"
+            android:layout_above="@+id/reportProblemLayout" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#fff"
+            android:orientation="vertical"
+            android:id="@+id/reportProblemLayout"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#f85439"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                android:text="Report a problem"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+
+            <RelativeLayout
+                android:id="@+id/report1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="4dp">
+
+                <TextView
+                    android:id="@+id/textReport1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Offer rejected by outlet" />
+
+                <ImageView
+                    android:id="@+id/imageReport1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/icon_check_unchecked"
+                    android:layout_centerVertical="true" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/report2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="4dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="4dp">
+
+                <TextView
+                    android:id="@+id/textReport2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Invalid or expired offer" />
+
+                <ImageView
+                    android:id="@+id/imageReport2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/icon_check_unchecked" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/report3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="4dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="4dp">
+
+                <TextView
+                    android:id="@+id/textReport3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Offer details incorrect" />
+
+                <ImageView
+                    android:id="@+id/imageReport3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/icon_check_unchecked" />
+            </RelativeLayout>
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="4dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="4dp"
+                android:text="Any other reasons and comments?" />
+
+            <EditText
+                android:id="@+id/feedbackET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/edittext_shape"
+                android:gravity="top"
+                android:lines="4"
+                android:maxLines="4"
+                android:padding="5dp"
+                android:singleLine="false"
+                android:textColor="#2E2E2E"
+                android:textColorHint="#c2c2c2"
+                android:textSize="14sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="15dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="15dp">
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    android:id="@+id/cancelBtn"
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/sendReportBtn"
+                    android:layout_toStartOf="@+id/sendReportBtn"
+                    app:mrl_rippleOverlay="true">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="40dp"
+                        android:background="#fff"
+                        android:gravity="center"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="CANCEL"
+                        android:textColor="#959595"
+                        android:textSize="12sp" />
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    android:id="@+id/sendReportBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    app:mrl_rippleOverlay="true">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:background="@drawable/button_red"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:text="SEND"
+                        android:enabled="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </com.balysv.materialripple.MaterialRippleLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
+        <include
+            android:id="@+id/circularProgressBar"
+            layout="@layout/circular_progress_bar"/>
+
+        <include
+        android:id="@+id/toolbarWrapper"
+        layout="@layout/toolbar_wrapper" />
+
+    </RelativeLayout>
+
+
+    <include
+        android:id="@+id/drawer_list"
+        layout="@layout/drawer_list" />
+
+</android.support.v4.widget.DrawerLayout>
