@@ -627,6 +627,12 @@ public abstract class BaseActivity extends ActionBarActivity
         if (autoCompleteTextView != null) {
             autoCompleteTextView.setDropDownBackgroundDrawable(getResources().getDrawable(R.drawable.abc_popup_background_mtrl_mult));
         }
+        View searchPlate = searchView.findViewById(android.support.v7.appcompat.R.id.search_plate);
+
+        if (searchPlate != null) {
+            searchPlate.setBackgroundResource(R.drawable.textfield_searchview_holo_light);
+        }
+
 
         return true;
 
