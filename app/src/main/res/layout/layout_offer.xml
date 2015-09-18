@@ -7,27 +7,28 @@
     android:background="@drawable/card_red">
 
     <LinearLayout
+        android:id="@+id/parentView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="100"
         android:paddingLeft="@dimen/offer_padding_left"
         android:paddingRight="@dimen/offer_padding_right"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="top"
         android:layout_marginTop="8dp"
-        android:gravity="center_vertical">
+        android:gravity="top">
 
         <LinearLayout
             android:id="@+id/availabilityLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="top"
             android:layout_marginRight="5dp"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|top"
+                android:layout_gravity="top"
                 android:src="@drawable/icon_discover_offer_clock" />
 
             <TextView
@@ -53,7 +54,7 @@
                 android:id="@+id/detailIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|top"
+                android:layout_gravity="top"
                 android:src="@drawable/icon_discover_offer_bank_creditcard_grey" />
 
             <TextView
@@ -62,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:textSize="@dimen/offer_date_size"
+                android:text="state bank of india"
                 android:gravity="center_vertical"
                 android:layout_gravity="center_vertical" />
         </LinearLayout>

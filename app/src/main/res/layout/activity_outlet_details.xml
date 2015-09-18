@@ -351,6 +351,7 @@
                     android:lines="4"
                     android:maxLines="4"
                     android:padding="5dp"
+                    android:textCursorDrawable="@null"
                     android:singleLine="false"
                     android:textColor="#2E2E2E"
                     android:textColorHint="#c2c2c2"
@@ -374,6 +375,7 @@
                     app:mrl_rippleOverlay="true">
 
                     <LinearLayout
+                        android:id="@+id/attachImageLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_red"
@@ -416,6 +418,7 @@
                     app:mrl_rippleOverlay="true">
 
                     <LinearLayout
+                        android:id="@+id/takePhotoLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_red"
@@ -466,12 +469,13 @@
 
 
                 <TextView
+                    android:id="@+id/editImgButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Edit"
                     android:layout_marginLeft="15dp"
+                    android:layout_alignBottom="@+id/attachImage"
                     android:visibility="gone"
-                    android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/attachImage"
                     android:textSize="16sp"
                     android:textColor="#7c7c7c"/>
@@ -514,6 +518,7 @@
                         app:mrl_rippleOverlay="true">
 
                         <Button
+                            android:id="@+id/submitBtn"
                             android:layout_width="70dp"
                             android:layout_height="30dp"
                             android:background="@drawable/button_grey"

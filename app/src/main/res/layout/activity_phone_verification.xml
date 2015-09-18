@@ -73,6 +73,7 @@
                 android:singleLine="true"
                 android:gravity="center"
                 android:textSize="@dimen/phone_verification_edittext_size"
+                android:textCursorDrawable="@null"
                 android:background="@drawable/border_bottom_white"
                 android:textColor="@android:color/white"
                 android:textColorHint="#8c8c8c"

@@ -11,11 +11,13 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,9 +36,11 @@ import android.view.animation.Transformation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -54,6 +58,9 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -76,20 +83,17 @@ import retrofit.client.Response;
 
 
 public class DiscoverActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<LocationSettingsResult> {
+
     private GoogleApiClient mGoogleApiClient;
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private static final int PLACE_PICKER_REQUEST = 2;
-
     private ArrayAdapter<LocationData> mAdapter;
-
     private boolean fetchingOutlets;
     private boolean outletsNotFound;
     private DiscoverOutletAdapter discoverAdapter;
-
     private String placeNameSelected;
     private String latitudeStrSelected;
     private String longitudeStrSelected;
-
     private String placeNameSelectedAndUsed;
     private String latitudeStrSelectedAndUsed;
     private String longitudeStrSelectedAndUsed;
@@ -105,18 +109,22 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
     private View planAheadContent;
     private String date;
     private String time;
+    private boolean dateSelected;
     TextView planAheadTime;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private boolean firstLoad;
     int autoCompleteFlag ;
-
-    Bitmap bitmap;
+    private String searchedItem;
+    protected boolean search;
     private Date selectedDate;
     private ArrayList<LocationData> locations = new ArrayList<>(0);
     private LocationData selectedLocation;
-    BroadcastReceiver broadcastReceiver;
-    private static final int REQUEST_INVITE = 98;
+	TextView day1;
+	private boolean clearDateTime, planAheadChanged;
+    private ImageView closeBtn;
+    private TextView planAheadLocation;
+    private String lat,lng;
 
     @Override
     protected String getTagName() {
@@ -145,32 +153,39 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(getIntent().getAction().equalsIgnoreCase("setChildYes")){
+            setupAsChild = true;
+        }else {
+            setupAsChild = false;
+        }
         super.onCreate(savedInstanceState);
-        HttpService.getInstance().getLocations(new Callback<BaseResponse<ArrayList<LocationData>>>() {
-            @Override
-            public void success(BaseResponse<ArrayList<LocationData>> arrayListBaseResponse, Response response) {
+        if(!search) {
+            HttpService.getInstance().getLocations(new Callback<BaseResponse<ArrayList<LocationData>>>() {
+                @Override
+                public void success(BaseResponse<ArrayList<LocationData>> arrayListBaseResponse, Response response) {
 
-                locations = arrayListBaseResponse.getData();
+                    locations = arrayListBaseResponse.getData();
 
-                mGoogleApiClient = new GoogleApiClient.Builder(DiscoverActivity.this)
-                        .addConnectionCallbacks(DiscoverActivity.this)
-                        .addOnConnectionFailedListener(DiscoverActivity.this)
-                        .addApi(Places.GEO_DATA_API)
-                        .addApi(Places.PLACE_DETECTION_API)
-                        .addApi(LocationServices.API)
-                        .build();
+                    mGoogleApiClient = new GoogleApiClient.Builder(DiscoverActivity.this)
+                            .addConnectionCallbacks(DiscoverActivity.this)
+                            .addOnConnectionFailedListener(DiscoverActivity.this)
+                            .addApi(Places.GEO_DATA_API)
+                            .addApi(Places.PLACE_DETECTION_API)
+                            .addApi(LocationServices.API)
+                            .build();
 
-                if (mGoogleApiClient != null) {
-                    mGoogleApiClient.connect();
+                    if (mGoogleApiClient != null) {
+                        mGoogleApiClient.connect();
+                    }
                 }
-            }
 
-            @Override
-            public void failure(RetrofitError error) {
-                hideProgressHUDInLayout();
-                handleRetrofitError(error);
-            }
-        });
+                @Override
+                public void failure(RetrofitError error) {
+                    hideProgressHUDInLayout();
+                    handleRetrofitError(error);
+                }
+            });
+        }
 
         mRecyclerView = (RecyclerView) findViewById(R.id.outletRecyclerView);
         mRecyclerView.setHasFixedSize(true);
@@ -181,28 +196,15 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         locationText =(TextView)findViewById(R.id.locationText);
         planAheadContent = findViewById(R.id.planAheadContent);
         editTextView =(TextView)findViewById(R.id.editTextView);
-        final TextView planAheadLocation = (TextView) findViewById(R.id.planAheadLocation);
+        closeBtn = (ImageView)findViewById(R.id.closeBtn);
+        planAheadLocation = (TextView) findViewById(R.id.planAheadLocation);
         fabMenu = (FloatingActionsMenu) findViewById(R.id.fabMenu);
         obstructor = (RelativeLayout) findViewById(R.id.obstructor);
         planAheadObstructor = (RelativeLayout) findViewById(R.id.planAheadObstructor);
         planAheadObstructor2 = (RelativeLayout) findViewById(R.id.planAheadObstructor2);
-
+		day1 = (TextView) findViewById(R.id.day1);
         submitFab = (FloatingActionButton)findViewById(R.id.submitFab);
         checkinFab = (FloatingActionButton)findViewById(R.id.checkinFab);
-
-        planAheadObstructor2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                togglePlanAhead();
-            }
-        });
-
-        findViewById(R.id.planAhead).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                togglePlanAhead();
-            }
-        });
 
         findViewById(R.id.changeOnMapBtn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,89 +222,155 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         mSwipeRefreshLayout.setEnabled(false);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Refresh items
-                if (TextUtils.isEmpty(date) && TextUtils.isEmpty(time)) {
-                    fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, null, null, true);
-                } else {
-                    fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
-                }
-            }
-        });
+			@Override
+			public void onRefresh() {
+				if (search) {
+					fetchSearchedOutlets();
+				} else {
+					if (TextUtils.isEmpty(date) && TextUtils.isEmpty(time)) {
+						fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, null, null, true);
+					} else {
+						fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
+					}
+				}
+			}
+		});
 
         findViewById(R.id.planAheadSubmitBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (!TextUtils.isEmpty(placeNameSelected) || !TextUtils.isEmpty(latitudeStrSelected) || !TextUtils.isEmpty(longitudeStrSelected)) {
-                    placeNameSelectedAndUsed = placeNameSelected;
-                    latitudeStrSelectedAndUsed = latitudeStrSelected;
-                    longitudeStrSelectedAndUsed = longitudeStrSelected;
-                }
-
+			@Override
+			public void onClick(View view) {
                 selectedLocationTxt.setVisibility(View.VISIBLE);
-                selectedLocationTxt.setText(placeNameSelectedAndUsed);
+				if(planAheadChanged){
+                    closeBtn.setVisibility(View.VISIBLE);
+                    editTextView.setVisibility(View.GONE);
+                    clearDateTime = true;
+                    SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+                    placeNameSelectedAndUsed = prefs.getString(AppConstants.PREFERENCE_CHANGE_LOCATION_NAME, "");
+                    latitudeStrSelectedAndUsed = prefs.getString(AppConstants.PREFERENCE_CHANGE_LOCATION_LATITUDE, "");
+                    longitudeStrSelectedAndUsed = prefs.getString(AppConstants.PREFERENCE_CHANGE_LOCATION_LONGITUDE, "");
 
-                collapse(planAheadContent);
-                locationText.setVisibility(View.GONE);
-                editTextView.setVisibility(View.VISIBLE);
-                fabMenu.setVisibility(View.VISIBLE);
-                fabMenu.setEnabled(true);
+				}else {
+					editTextView.setVisibility(View.VISIBLE);
+                    closeBtn.setVisibility(View.GONE);
 
-                findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
-                Log.i("selected date", "= " + date + " time " + time);
+                    if (!TextUtils.isEmpty(placeNameSelected) || !TextUtils.isEmpty(latitudeStrSelected) || !TextUtils.isEmpty(longitudeStrSelected)) {
+                        placeNameSelectedAndUsed = placeNameSelected;
+                        latitudeStrSelectedAndUsed = latitudeStrSelected;
+                        longitudeStrSelectedAndUsed = longitudeStrSelected;
+                    }
 
+				}
 
-                if(TextUtils.isEmpty(date) && TextUtils.isEmpty(time)){
-                    fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, null, null, true);
-                }else{
-                    fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
+                if(planAheadLocation.getText().toString().contains("(current)")) {
+                    selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
+                }else {
+                    selectedLocationTxt.setText(placeNameSelectedAndUsed);
                 }
+				collapse(planAheadContent);
+				locationText.setVisibility(View.GONE);
+				fabMenu.setVisibility(View.VISIBLE);
+				fabMenu.setEnabled(true);
 
-            }
-        });
+				findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
+				Log.i("selected date", "= " + date + " time " + time);
+
+				if (TextUtils.isEmpty(date) && TextUtils.isEmpty(time)) {
+					fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, null, null, true);
+				} else {
+					fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
+				}
+
+			}
+		});
+
+
 
         findViewById(R.id.planAheadCancelBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 collapse(planAheadContent);
-                editTextView.setVisibility(View.VISIBLE);
+                if(clearDateTime){
+                    closeBtn.setVisibility(View.VISIBLE);
+                    editTextView.setVisibility(View.GONE);
+                }else {
+                    editTextView.setVisibility(View.VISIBLE);
+                    closeBtn.setVisibility(View.GONE);
+                }
+                if(planAheadChanged){
+                    refreshDateTimeLoc();
+                }
                 locationText.setVisibility(View.GONE);
                 selectedLocationTxt.setVisibility(View.VISIBLE);
 
                 fabMenu.setVisibility(View.VISIBLE);
                 fabMenu.setEnabled(true);
+                if(planAheadLocation.getText().toString().contains("(current)")) {
+                    selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
+                }else {
+                    selectedLocationTxt.setText(placeNameSelectedAndUsed);
+                }
 
-                planAheadLocation.setText(placeNameSelectedAndUsed);
-                fabMenu.setEnabled(true);
             }
         });
 
         discoverAdapter = new DiscoverOutletAdapter();
 
         mRecyclerView.setAdapter(discoverAdapter);
-        discoverAdapter.setOnViewHolderListener(new DiscoverOutletAdapter.OnViewHolderListener() {
-            @Override
-            public void onRequestedLastItem() {
-                if (!fetchingOutlets && !outletsNotFound) {
-                    List<Outlet> outlets = discoverAdapter.getItems();
-                    Log.d(getTagName(), "fetching more outlets, current size: " + outlets.size());
-                    if (!TextUtils.isEmpty(date) && !TextUtils.isEmpty(time)) {
-                        fetchOutlets(outlets.size() + 1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, false);
-                    } else if (TextUtils.isEmpty(date) && !TextUtils.isEmpty(time)) {
-                        fetchOutlets(outlets.size() + 1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, null, time, false);
-                    } else if (!TextUtils.isEmpty(date) && TextUtils.isEmpty(time)) {
-                        fetchOutlets(outlets.size() + 1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, null, false);
-                    } else {
-                        fetchOutlets(outlets.size() + 1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, null, null, false);
+
+        if(search){
+            editTextView.setText("");
+            editTextView.setVisibility(View.VISIBLE);
+            locationText.setText("");
+            selectedLocationTxt.setCompoundDrawables(null, null, null, null);
+			fetchSearchedOutlets();
+
+        }else {
+            planAheadObstructor2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    togglePlanAhead();
+                }
+            });
+
+            findViewById(R.id.planAhead).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    togglePlanAhead();
+                }
+            });
+
+            discoverAdapter.setOnViewHolderListener(new DiscoverOutletAdapter.OnViewHolderListener() {
+                @Override
+                public void onRequestedLastItem() {
+                    if (!fetchingOutlets && !outletsNotFound) {
+                        List<Outlet> outlets = discoverAdapter.getItems();
+
+                        if (!TextUtils.isEmpty(date) && !TextUtils.isEmpty(time)) {
+                            fetchOutlets(outlets.size() + 1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, false);
+                        } else {
+                            fetchOutlets(outlets.size() + 1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, null, null, true);
+                        }
+
                     }
                 }
-            }
-        });
+            });
+            setupAsPlanAheadView();
+        }
 
-        setupAsPlanAheadView();
+		closeBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(planAheadChanged){
+                    findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
+                    editTextView.setVisibility(View.VISIBLE);
+                    closeBtn.setVisibility(View.GONE);
 
+                    refreshDateTimeLoc();
+                    fetchOutlets(1,lat,lng,date,time,true);
+
+				}
+			}
+		});
 
         fabMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
             @Override
@@ -323,19 +391,10 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
             }
         });
 
-//        planAheadObstructor.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                Log.d(getTagName(), "planAheadObstructor clicked .... ");
-//                togglePlanAhead();
-//            }
-//        });
 
         obstructor.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Log.d(getTagName(), "fab menu obstructor clicked .... ");
 
                 if (obstructor.getVisibility() == View.VISIBLE) {
                     fabMenu.collapse();
@@ -414,13 +473,10 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 }
             }
         });
-
-        //fetchOutlets(1, "28.446398", "77.04344", false);
     }
 
     void onItemsLoadComplete() {
 
-        // Stop refresh animation
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
@@ -428,7 +484,15 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         if (planAheadContent.getVisibility() == View.VISIBLE) {
 
             collapse(planAheadContent);
-            editTextView.setVisibility(View.VISIBLE);
+
+            if(clearDateTime){
+                closeBtn.setVisibility(View.VISIBLE);
+                editTextView.setVisibility(View.GONE);
+            }else {
+                editTextView.setVisibility(View.VISIBLE);
+                closeBtn.setVisibility(View.GONE);
+            }
+
             locationText.setVisibility(View.GONE);
             selectedLocationTxt.setVisibility(View.VISIBLE);
 
@@ -436,12 +500,10 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
 
         } else {
             expand(planAheadContent);
-
-            editTextView.setVisibility(View.GONE);
+            closeBtn.setVisibility(View.GONE);
+            editTextView.setVisibility(View.INVISIBLE);
             locationText.setVisibility(View.VISIBLE);
             selectedLocationTxt.setVisibility(View.GONE);
-
-
             fabMenu.setVisibility(View.GONE);
         }
     }
@@ -451,12 +513,10 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         int dayOfWeekInt = calendar.get(Calendar.DAY_OF_WEEK);
 
         planAheadTime = (TextView) findViewById(R.id.planAheadTime);
-
-        final TextView day1 = (TextView) findViewById(R.id.day1);
         day1.setText("today");
         final Date currentDateTime = calendar.getTime();
         day1.setTag(currentDateTime);
-        date = (String) DateFormat.format("dd-MM-yyyy",currentDateTime );
+        date = (String) DateFormat.format("MM-dd-yyyy", currentDateTime);
         selectedDate = currentDateTime;
 
         day1.setOnClickListener(new View.OnClickListener() {
@@ -465,9 +525,10 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 deselectDays();
                 day1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 day1.setTextColor(Color.WHITE);
-                Log.d(getTagName(), "selected date: " + day1.getTag());
-                date = (String) DateFormat.format("dd-MM-yyyy", currentDateTime);
+                date = (String) DateFormat.format("MM-dd-yyyy", currentDateTime);
+                dateSelected = true;
                 selectedDate = (Date) day1.getTag();
+                planAheadChanged = true;
             }
         });
 
@@ -481,9 +542,10 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 deselectDays();
                 day2.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 day2.setTextColor(Color.WHITE);
-                date = (String) DateFormat.format("dd-MM-yyyy",(Date) day2.getTag() );
-                Log.d(getTagName(), "selected date: " + day2.getTag()+" = "+date);
+                date = (String) DateFormat.format("MM-dd-yyyy",(Date) day2.getTag());
+                dateSelected = true;
                 selectedDate = (Date) day2.getTag();
+                planAheadChanged = true;
             }
         });
 
@@ -497,8 +559,9 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 deselectDays();
                 day3.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 day3.setTextColor(Color.WHITE);
-                date = (String) DateFormat.format("dd-MM-yyyy",(Date) day3.getTag() );
-                Log.d(getTagName(), "selected date: " + day3.getTag()+" = "+date);
+                date = (String) DateFormat.format("MM-dd-yyyy",(Date) day3.getTag());
+                dateSelected = true;
+                planAheadChanged = true;
                 selectedDate = (Date) day3.getTag();
             }
         });
@@ -508,16 +571,17 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         day4.setText(dayOfWeek(++dayOfWeekInt % 7));
         day4.setTag(calendar.getTime());
         day4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deselectDays();
-                day4.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                day4.setTextColor(Color.WHITE);
-                date = (String) DateFormat.format("dd-MM-yyyy",(Date) day4.getTag() );
-                Log.d(getTagName(), "selected date: " + day4.getTag()+" = "+date);
-                selectedDate = (Date) day4.getTag();
-            }
-        });
+			@Override
+			public void onClick(View view) {
+				deselectDays();
+				day4.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+				day4.setTextColor(Color.WHITE);
+				date = (String) DateFormat.format("MM-dd-yyyy", (Date) day4.getTag());
+				dateSelected = true;
+				selectedDate = (Date) day4.getTag();
+                planAheadChanged = true;
+			}
+		});
 
         calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + 1);
         final TextView day5 = (TextView) findViewById(R.id.day5);
@@ -529,9 +593,10 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 deselectDays();
                 day5.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 day5.setTextColor(Color.WHITE);
-                date = (String) DateFormat.format("dd-MM-yyyy",(Date) day5.getTag() );
-                Log.d(getTagName(), "selected date: " + day5.getTag()+" = "+date);
+                date = (String) DateFormat.format("MM-dd-yyyy",(Date) day5.getTag());
+                dateSelected = true;
                 selectedDate = (Date) day5.getTag();
+                planAheadChanged = true;
             }
         });
 
@@ -545,9 +610,10 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 deselectDays();
                 day6.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 day6.setTextColor(Color.WHITE);
-                date = (String) DateFormat.format("dd-MM-yyyy",(Date) day6.getTag() );
-                Log.d(getTagName(), "selected date: " + day6.getTag()+" = "+date);
+                date = (String) DateFormat.format("MM-dd-yyyy",(Date) day6.getTag() );
+                dateSelected = true;
                 selectedDate = (Date) day6.getTag();
+                planAheadChanged = true;
             }
         });
 
@@ -561,23 +627,21 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 deselectDays();
                 day7.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 day7.setTextColor(Color.WHITE);
-                date = (String) DateFormat.format("dd-MM-yyyy",(Date) day7.getTag() );
-                Log.d(getTagName(), "selected date: " + day7.getTag()+" = "+date);
+                date = (String) DateFormat.format("MM-dd-yyyy",(Date) day7.getTag());
+                dateSelected = true;
                 selectedDate = (Date) day7.getTag();
+                planAheadChanged = true;
             }
         });
 
         int hours = calendar.get(Calendar.HOUR);
         int minutes = calendar.get(Calendar.MINUTE);
 
-        if (minutes > 30) {
-            calendar.add(Calendar.HOUR, 1);
-            hours = calendar.get(Calendar.HOUR);
-        }
+        int hoursIn = calendar.get(Calendar.HOUR_OF_DAY);
 
         int ampm = calendar.get(Calendar.AM_PM);
 
-        time = convertHoursToString(hours) + ":" + convertMinutesToString(minutes);
+        time = convertHoursToString(hoursIn) + ":" + convertMinutesToString(minutes);
 
         planAheadTime.setText(convertHoursToString(hours) + ":" + convertMinutesToString((minutes > 30) ? 0 : 30) + ((ampm == 0) ? "am" : "pm"));
 
@@ -587,30 +651,36 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         seekBar.setProgress(progress);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
 
-                if (progress == 0 || progress == 48)
-                    return;
+				if (progress == 0 || progress == 48)
+					return;
 
-                int hours = progress / 2;
-                int minutes = (progress % 2) * 30;
+				int hours = progress / 2;
+				int minutes = (progress % 2) * 30;
 
-                time = convertHoursToString(hours) + ":" + convertMinutesToString(minutes);
-                Log.d(getTagName(), "selected time: hour: " + hours + ", minutes: " + minutes + ", final: " + convertHoursToString(hours) + ":" + convertMinutesToString(minutes));
-                planAheadTime.setText(convertHoursToString(((hours <= 12) ? hours : (hours % 12))) + ":" + convertMinutesToString(minutes) + ((hours < 12) ? "am" : "pm"));
-            }
+				time = convertHoursToString(hours) + ":" + convertMinutesToString(minutes);
+				if (!dateSelected) {
+					selectedDate = (Date) day1.getTag();
+					dateSelected = true;
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+				}
+                planAheadChanged = true;
+				Log.d(getTagName(), "selected time: hour: " + hours + ", minutes: " + minutes + ", final: " + convertHoursToString(hours) + ":" + convertMinutesToString(minutes));
+				planAheadTime.setText(convertHoursToString(((hours <= 12) ? hours : (hours % 12))) + ":" + convertMinutesToString(minutes) + ((hours < 12) ? "am" : "pm"));
+			}
 
-            }
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+			}
 
-            }
-        });
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+
+			}
+		});
     }
 
 
@@ -690,15 +760,6 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         return "";
     }
 
-    private void showPlacesPicker() {
-
-        try {
-            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-            startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     private void askLocationFromUser() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -731,30 +792,27 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
             @Override
             public void onClick(View view) {
 
-                if(autoCompleteFlag == 1) {
+                if (autoCompleteFlag == 1) {
 
                     placeNameSelectedAndUsed = selectedLocation.toString();
                     latitudeStrSelectedAndUsed = selectedLocation.getLat();
                     longitudeStrSelectedAndUsed = selectedLocation.getLng();
 
-                    SharedPreferences sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, latitudeStrSelectedAndUsed);
-                    editor.putString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, longitudeStrSelectedAndUsed);
-                    editor.putString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, placeNameSelectedAndUsed);
-                    editor.commit();
+                    sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, latitudeStrSelectedAndUsed);
+                    sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, longitudeStrSelectedAndUsed);
+                    sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, placeNameSelectedAndUsed);
+                    sharedPreferences.commit();
 
                     selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
 
-                    TextView planAheadLocation = (TextView) findViewById(R.id.planAheadLocation);
                     planAheadLocation.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#636363\">(current)</font></b>"));
 
                     findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
-                    fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelected, null, null, true);
+                    fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelected, date, time, true);
 
 
                     dialog.dismiss();
-                }else {
+                } else {
                     mAutocompleteView.setError("Address required");
                 }
             }
@@ -773,14 +831,15 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
 
                 ArrayList<Outlet> outlets = arrayListBaseResponse.getData().getOutlets();
                 String twystBucks = arrayListBaseResponse.getData().getTwystBucks();
+                if (!TextUtils.isEmpty(twystBucks)) {
 
-                if(!TextUtils.isEmpty(twystBucks)) {
-                    SharedPreferences.Editor sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
                     sharedPreferences.putInt(AppConstants.PREFERENCE_LAST_TWYST_BUCK, Integer.parseInt(twystBucks));
-                    sharedPreferences.commit();
+                    sharedPreferences.apply();
                 }
 
-                if(outlets!=null) {
+                sharedPreferences.putString(AppConstants.PREFERENCE_CHECK_FIRST_LAUNCH, "Yes");
+                sharedPreferences.apply();
+                if (outlets != null) {
                     if (outlets.isEmpty()) {
                         outletsNotFound = true;
                         discoverAdapter.setOutletsNotFound(true);
@@ -806,9 +865,9 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 onItemsLoadComplete();
                 hideProgressHUDInLayout();
 
-                if(planAheadContent.getVisibility()==View.VISIBLE){
+                if (planAheadContent.getVisibility() == View.VISIBLE) {
                     fabMenu.setVisibility(View.GONE);
-                }else {
+                } else {
                     fabMenu.setVisibility(View.VISIBLE);
                 }
 
@@ -829,9 +888,75 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
 
     }
 
-    private String getUserToken() {
-        SharedPreferences prefs = this.getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return prefs.getString(AppConstants.PREFERENCE_USER_TOKEN, "");
+    public void fetchSearchedOutlets() {
+        mSwipeRefreshLayout.setEnabled(true);
+        SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        searchedItem = prefs.getString(AppConstants.PREFERENCE_PARAM_SEARCH_QUERY, "");
+        String lat = prefs.getString(AppConstants.PREFERENCE_CURRENT_LAT, "");
+        String lng = prefs.getString(AppConstants.PREFERENCE_CURRENT_LNG, "");
+        selectedLocationTxt.setText("Showing results for '" + searchedItem + "'");
+
+        Calendar calendar = Calendar.getInstance();
+        Date currentDateTime = calendar.getTime();
+        String date = (String) DateFormat.format("MM-dd-yyyy",currentDateTime );
+        int hoursIn = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutes = calendar.get(Calendar.MINUTE);
+        String time = convertHoursToString(hoursIn) + ":" + convertMinutesToString(minutes);
+
+        if(!TextUtils.isEmpty(searchedItem)) {
+            HttpService.getInstance().searchOffer(getUserToken(),searchedItem,lat,lng,date,time, new Callback<BaseResponse<DiscoverData>>() {
+                @Override
+                public void success(BaseResponse<DiscoverData> discoverDataBaseResponse, Response response) {
+
+					if(discoverDataBaseResponse.isResponse()){
+
+						ArrayList<Outlet> outlets = discoverDataBaseResponse.getData().getOutlets();
+						String twystBucks = discoverDataBaseResponse.getData().getTwystBucks();
+
+						if (!TextUtils.isEmpty(twystBucks)) {
+							sharedPreferences.putInt(AppConstants.PREFERENCE_LAST_TWYST_BUCK, Integer.parseInt(twystBucks));
+							sharedPreferences.commit();
+						}
+
+						if (outlets != null) {
+							if (outlets.isEmpty()) {
+								outletsNotFound = true;
+								discoverAdapter.setOutletsNotFound(true);
+							} else {
+								discoverAdapter.getItems().clear();
+
+								if (outlets.size() < AppConstants.DISCOVER_LIST_PAGESIZE) {
+									outletsNotFound = true;
+									discoverAdapter.setOutletsNotFound(true);
+								} else {
+									outletsNotFound = false;
+									discoverAdapter.setOutletsNotFound(false);
+								}
+
+								discoverAdapter.getItems().addAll(outlets);
+								discoverAdapter.notifyDataSetChanged();
+							}
+						}
+
+						onItemsLoadComplete();
+						hideProgressHUDInLayout();
+
+						fabMenu.setVisibility(View.VISIBLE);
+						findViewById(R.id.planAhead).setVisibility(View.VISIBLE);
+
+					}else {
+						Toast.makeText(DiscoverActivity.this, discoverDataBaseResponse.getMessage(), Toast.LENGTH_SHORT).show();
+					}
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+
+                    hideProgressHUDInLayout();
+                    handleRetrofitError(error);
+                }
+            });
+        }
 
     }
 
@@ -874,23 +999,18 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
             latitudeStrSelectedAndUsed = String.valueOf(latitude);
             longitudeStrSelectedAndUsed = String.valueOf(longitude);
 
+            sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, latitudeStrSelectedAndUsed);
+            sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, longitudeStrSelectedAndUsed);
+            sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, placeNameSelectedAndUsed);
+            sharedPreferences.commit();
 
-            SharedPreferences sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, latitudeStrSelectedAndUsed);
-            editor.putString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, longitudeStrSelectedAndUsed);
-            editor.putString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, placeNameSelectedAndUsed);
-            editor.commit();
+            selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
 
-            TextView selectedLocationTxt = (TextView) findViewById(R.id.selectedLocationTxt);
-            selectedLocationTxt.setText(placeNameSelectedAndUsed);
-
-            TextView planAheadLocation = (TextView) findViewById(R.id.planAheadLocation);
             planAheadLocation.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#636363\">(current)</font></b>"));
 
             findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
             if(firstLoad){
-                fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed,null, null, true);
+                fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed,date, time, true);
             }
 
         } else {
@@ -904,18 +1024,14 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         for (LocationData locationData : locations2) {
             double distance = Utils.distance(latitude, longitude, Double.valueOf(locationData.getLat()), Double.valueOf(locationData.getLng()), 'K');
             locationData.setDistance(distance);
-            Log.d(getTagName(), "findNearestOutlet: distance: " + distance);
         }
 
-
-        Log.d(getTagName(), "findNearestOutlet: before sort: " + locations2);
         Collections.sort(locations2, new Comparator<LocationData>() {
             @Override
             public int compare(LocationData locationData1, LocationData locationData2) {
                 return Double.valueOf(locationData1.getDistance()).compareTo(Double.valueOf(locationData2.getDistance()));
             }
         });
-        Log.d(getTagName(), "findNearestOutlet: after sort: " + locations2);
 
         LocationData minLocation = locations2.get(0);
         return minLocation;
@@ -947,8 +1063,20 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
 
                 Log.d(getTagName(), "onActivityResult.. places picker: placeName: " + locationName);
 
-                TextView planAheadLocation = (TextView) findViewById(R.id.planAheadLocation);
-                planAheadLocation.setText(locationName);
+                SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+                searchedItem = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, "");
+                if(searchedItem.equalsIgnoreCase(locationName)) {
+                    planAheadLocation.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#636363\">(current)</font></b>"));
+                    planAheadChanged = false;
+                }else {
+                    planAheadLocation.setText(locationName);
+                    placeNameSelectedAndUsed = locationName;
+                    sharedPreferences.putString(AppConstants.PREFERENCE_CHANGE_LOCATION_LATITUDE, latitudeStrSelected);
+                    sharedPreferences.putString(AppConstants.PREFERENCE_CHANGE_LOCATION_LONGITUDE, longitudeStrSelected);
+                    sharedPreferences.putString(AppConstants.PREFERENCE_CHANGE_LOCATION_NAME, placeNameSelectedAndUsed);
+                    sharedPreferences.commit();
+                    planAheadChanged = true;
+                }
             }
         }
 
@@ -980,7 +1108,11 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         switch (status.getStatusCode()) {
             case LocationSettingsStatusCodes.SUCCESS:
                 Log.i(getTagName(), "All location settings are satisfied.");
-                retrieveLocation();
+                if(!search){
+                    retrieveLocation();
+                    break;
+                }
+
                 break;
             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                 Log.i(getTagName(), "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
@@ -1000,38 +1132,26 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         }
     }
 
-   /* @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK))
-        {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Are you sure you want to exit ?")
-                    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            finish();
-                        }
-                    })
-                    .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // User cancelled the dialog
-                        }
-                    });
-            builder.create().show();
-
-        }
-        return super.onKeyDown(keyCode, event);
-
-    }*/
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(firstLoad) {
-            fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
+
+        if(search){
+            if (firstLoad) {
+                fetchSearchedOutlets();
+            } else {
+                firstLoad = true;
+            }
+
         }else {
-            firstLoad = true;
+            if (firstLoad) {
+                if (!TextUtils.isEmpty(date) && !TextUtils.isEmpty(time)) {
+                    fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
+                }
+            } else {
+                firstLoad = true;
+            }
         }
     }
 
@@ -1114,7 +1234,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
             findViewById(R.id.checkinObstructor2).setVisibility(View.GONE);
 
         } else if (drawerOpened) {
-            drawerLayout.closeDrawer(Gravity.LEFT);
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Are you sure you want to exit ?")
@@ -1132,6 +1252,85 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                     });
             builder.create().show();
         }
+
+    }
+
+    public void refreshDateTimeLoc(){
+        SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        searchedItem = prefs.getString(AppConstants.PREFERENCE_PARAM_SEARCH_QUERY, "");
+        lat = prefs.getString(AppConstants.PREFERENCE_CURRENT_LAT, "");
+        lng = prefs.getString(AppConstants.PREFERENCE_CURRENT_LNG, "");
+        Calendar calendar = Calendar.getInstance();
+        Date currentDateTime = calendar.getTime();
+        date = (String) DateFormat.format("MM-dd-yyyy",currentDateTime );
+        int hoursIn = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutes = calendar.get(Calendar.MINUTE);
+        time = convertHoursToString(hoursIn) + ":" + convertMinutesToString(minutes);
+        planAheadChanged = false;
+        clearDateTime = false;
+        deselectDays();
+        day1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        day1.setTextColor(Color.WHITE);
+        dateSelected = true;
+
+        Double latitude = Double.valueOf(lat);
+        Double longitude = Double.valueOf(lng);
+        placeNameSelectedAndUsed = findNearestOutletName(latitude, longitude);
+        latitudeStrSelectedAndUsed = String.valueOf(latitude);
+        longitudeStrSelectedAndUsed = String.valueOf(longitude);
+        placeNameSelected = placeNameSelectedAndUsed;
+        latitudeStrSelected = latitudeStrSelectedAndUsed;
+        longitudeStrSelected = longitudeStrSelectedAndUsed;
+
+        sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, latitudeStrSelectedAndUsed);
+        sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, longitudeStrSelectedAndUsed);
+        sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, placeNameSelectedAndUsed);
+        sharedPreferences.commit();
+
+        selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
+
+        planAheadLocation.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#636363\">(current)</font></b>"));
+
+
+        selectedDate = (Date) day1.getTag();
+
+        int hours = calendar.get(Calendar.HOUR);
+
+        int ampm = calendar.get(Calendar.AM_PM);
+        int progress = ((ampm == 0) ? hours : hours + 12) * 2 + ((minutes > 30) ? 1 : 0);
+
+        SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
+        seekBar.setProgress(progress);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+
+                if (progress == 0 || progress == 48)
+                    return;
+
+                int hours = progress / 2;
+                int minutes = (progress % 2) * 30;
+
+                time = convertHoursToString(hours) + ":" + convertMinutesToString(minutes);
+                if (!dateSelected) {
+                    selectedDate = (Date) day1.getTag();
+                    dateSelected = true;
+
+                }
+                planAheadTime.setText(convertHoursToString(((hours <= 12) ? hours : (hours % 12))) + ":" + convertMinutesToString(minutes) + ((hours < 12) ? "am" : "pm"));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
     }
 }

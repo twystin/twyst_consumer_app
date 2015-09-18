@@ -34,7 +34,7 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
     private double latitude, longitude;
     private String outletName;
     LatLng latlng;
-    private static final long MIN_TIME = 400;
+    private static final long MIN_TIME = 40;
     private static final float MIN_DISTANCE = 1000;
 
     @Override

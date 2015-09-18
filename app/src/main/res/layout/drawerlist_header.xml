@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -39,7 +40,7 @@
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -69,14 +70,18 @@
                     android:src="@drawable/icon_discover_location" />
 
                 <TextView
+                    android:id="@+id/localityDrawer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="GURGAON"
+                     android:textAllCaps="true"
                     android:textColor="#d0452e"
                     android:textSize="14sp" />
             </LinearLayout>
 
             <TextView
+                android:id="@+id/editProfile"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Edit profile"

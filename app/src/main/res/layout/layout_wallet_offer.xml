@@ -18,8 +18,7 @@
                         android:layout_height="@dimen/outlet_card_height"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/outlet"/>
+                        android:scaleType="centerCrop"/>
 
                     <RelativeLayout
                         android:layout_width="@dimen/outlet_info_width"
@@ -140,7 +139,6 @@
                                 android:layout_marginLeft="5dp"
                                 android:layout_marginTop="13dp"
                                 android:layout_toRightOf="@+id/clock"
-                                android:text="6 days left"
                                 android:textColor="@color/outlet_txt_color_grey_dark"
                                 android:textSize="@dimen/outlet_details_card_vld_txt" />
 
@@ -180,7 +178,6 @@
                                 android:layout_marginLeft="@dimen/outlet_details_coupon_margin_left"
                                 android:layout_marginRight="15dp"
                                 android:layout_marginTop="5dp"
-                                android:text="free"
                                 android:textColor="@color/offer_color_red"
                                 android:gravity="center"
                                 android:singleLine="true"
@@ -191,7 +188,6 @@
                                 android:id="@+id/coupon_text1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="on veg/chicken starters"
                                 android:textColor="@color/offer_color_red"
                                 android:layout_below="@+id/type_offer"
                                 android:layout_marginLeft="@dimen/outlet_details_coupon_margin_left"
@@ -202,7 +198,6 @@
                                 android:id="@+id/coupon_text2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="selected items only"
                                 android:textColor="@color/offer_color_red"
                                 android:layout_marginLeft="@dimen/outlet_details_coupon_margin_left"
                                 android:layout_below="@+id/coupon_text1"

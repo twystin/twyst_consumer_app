@@ -42,11 +42,11 @@ public class CheckInSuccessActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
 
-        String outletId=getIntent().getStringExtra(AppConstants.INTENT_PARAM_CHECKIN_OUTLET_NAME);
+        final String outletname=getIntent().getStringExtra(AppConstants.INTENT_PARAM_CHECKIN_OUTLET_NAME);
+        final String outletId=getIntent().getStringExtra(AppConstants.INTENT_PARAM_CHECKIN_OUTLET_ID);
         String checkInHeader=getIntent().getStringExtra(AppConstants.INTENT_PARAM_CHECKIN_HEADER);
         String checkInLine1=getIntent().getStringExtra(AppConstants.INTENT_PARAM_CHECKIN_LINE1);
         String checkInLine2=getIntent().getStringExtra(AppConstants.INTENT_PARAM_CHECKIN_LINE2);
-        double  checkBucks= getIntent().getDoubleExtra(AppConstants.INTENT_PARAM_CHECKIN_BUCKS, 0.0);
         String  checkInCode=getIntent().getStringExtra(AppConstants.INTENT_PARAM_CHECKIN_CODE);
 
         if (checkInLine2==null){
@@ -58,7 +58,7 @@ public class CheckInSuccessActivity extends BaseActivity {
         checkInOutletName = (TextView) findViewById(R.id.checkInOutletName);
         checkInTextHeader = (TextView) findViewById(R.id.checkInTextHeader);
         checkInBucks = (TextView) findViewById(R.id.checkInBucks);
-        checkInBucks.setText("You have earned "+(int) checkBucks+" Tywst bucks for this!");
+        checkInBucks.setText("You have earned 50 Tywst bucks for this!");
 
         String walletText = "Your voucher will be available in your"
                 + " <font color='"
@@ -77,7 +77,7 @@ public class CheckInSuccessActivity extends BaseActivity {
 
         final String outletName = "You have checked in at "
                 + " <font color='"
-                + getResources().getColor(R.color.colorPrimaryDark) + "'><b>" + outletId
+                + getResources().getColor(R.color.colorPrimaryDark) + "'><b>" + outletname
                 + "</b></font>"
                 + " and unlock a reward!";
         checkInOutletName.setText(Html.fromHtml(outletName),
@@ -87,9 +87,22 @@ public class CheckInSuccessActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 String text2 = "https://play.google.com/store/apps/details?id="+getApplication().getPackageName()+"&ah=-smMDxRK7pmXEK32N7mSNcbZ2ZM";
-                String text = "Hey Checkout the offers being offered by " + outletName + " outlet on \"Twyst\" app.\n" + "Download Now:"+text2;
+                String text = "Hey Checkout the offers being offered by " + outletname + " outlet on \"Twyst\" app.\n" + "Download Now:"+text2;
                 showShareIntents("Share using", text);
 
+                ShareOutlet shareOutlet = new ShareOutlet();
+                shareOutlet.setOutletId(outletId);
+                HttpService.getInstance().shareOutlet(getUserToken(), shareOutlet, new Callback<BaseResponse>() {
+                    @Override
+                    public void success(BaseResponse baseResponse, Response response) {
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        handleRetrofitError(error);
+                    }
+                });
             }
         });
 

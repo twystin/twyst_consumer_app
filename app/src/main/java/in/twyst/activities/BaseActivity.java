@@ -9,6 +9,7 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -19,6 +20,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,10 +44,15 @@ import java.util.List;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 import in.twyst.R;
 import in.twyst.adapters.DrawerListAdapter;
+import in.twyst.model.BaseResponse;
+import in.twyst.model.DiscoverData;
 import in.twyst.model.DrawerItem;
+import in.twyst.service.HttpService;
 import in.twyst.util.AppConstants;
 import in.twyst.util.RoundedTransformation;
+import retrofit.Callback;
 import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by satish on 04/12/14.
@@ -62,11 +69,11 @@ public abstract class BaseActivity extends ActionBarActivity
     private ArrayList<DrawerItem> drawerItems;
     private ListView drawerList;
     protected DrawerLayout drawerLayout;
-
     private CircularProgressBar circularProgressBar;
     protected boolean setupAsChild;
-
     protected boolean drawerOpened;
+    private DrawerItem invite,faq,bill,wallet,notifications,submitOffer,suggestOutlet,write,rate;
+    protected SharedPreferences.Editor sharedPreferences;
 
     protected abstract String getTagName();
 
@@ -88,7 +95,7 @@ public abstract class BaseActivity extends ActionBarActivity
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
         // Set an OnMenuItemClickListener to handle menu item clicks
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -121,6 +128,16 @@ public abstract class BaseActivity extends ActionBarActivity
             public void onDrawerClosed(View view) {
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
                 supportInvalidateOptionsMenu();
+                invite.setSelected(false);
+                rate.setSelected(false);
+                faq.setSelected(false);
+                notifications.setSelected(false);
+                bill.setSelected(false);
+                wallet.setSelected(false);
+                submitOffer.setSelected(false);
+                suggestOutlet.setSelected(false);
+                write.setSelected(false);
+                rate.setSelected(false);
                 drawerOpened = false;
             }
 
@@ -128,6 +145,16 @@ public abstract class BaseActivity extends ActionBarActivity
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
                 supportInvalidateOptionsMenu();
                 getSupportActionBar().setTitle(mTitle);
+                invite.setSelected(false);
+                rate.setSelected(false);
+                faq.setSelected(false);
+                notifications.setSelected(false);
+                bill.setSelected(false);
+                wallet.setSelected(false);
+                submitOffer.setSelected(false);
+                suggestOutlet.setSelected(false);
+                write.setSelected(false);
+                rate.setSelected(false);
                 drawerOpened = true;
             }
         };
@@ -141,13 +168,16 @@ public abstract class BaseActivity extends ActionBarActivity
         SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
         String name = prefs.getString(AppConstants.PREFERENCE_USER_NAME, "");
         String pic = prefs.getString(AppConstants.PREFERENCE_USER_PIC, "");
-
-        TextView userName = (TextView)list_header.findViewById(R.id.userName);
-        ImageView backImage = (ImageView)list_header.findViewById(R.id.backImage);
-        ImageView userImage = (ImageView)list_header.findViewById(R.id.userImage);
+        String locality = prefs.getString(AppConstants.PREFERENCE_LOCALITY_SHOWN_DRAWER, "");
+        TextView userName = (TextView) list_header.findViewById(R.id.userName);
+        ImageView backImage = (ImageView) list_header.findViewById(R.id.backImage);
+        ImageView userImage = (ImageView) list_header.findViewById(R.id.userImage);
+        TextView editProfile = (TextView) list_header.findViewById(R.id.editProfile);
+        TextView localityDrawer = (TextView) list_header.findViewById(R.id.localityDrawer);
+        localityDrawer.setText(locality);
         userName.setText(name);
 
-        if(!TextUtils.isEmpty(pic)){
+        if (!TextUtils.isEmpty(pic)) {
             backImage.setVisibility(View.VISIBLE);
             userImage.setVisibility(View.VISIBLE);
             Picasso picasso = Picasso.with(this);
@@ -156,15 +186,33 @@ public abstract class BaseActivity extends ActionBarActivity
             picasso.load(pic)
                     .noFade()
                     .centerCrop()
-                    .resize(200,200)
+                    .resize(200, 200)
                     .transform(new RoundedTransformation(100, 0))
                     .into(userImage);
 
-        }else {
+        } else {
             backImage.setVisibility(View.GONE);
             userImage.setVisibility(View.VISIBLE);
         }
 
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (drawerOpened) {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(getBaseContext(), EditProfileActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        intent.putExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, true);
+                        startActivity(intent);
+                    }
+                }, 40);
+
+            }
+        });
 
 
         drawerList.addHeaderView(list_header);
@@ -187,15 +235,33 @@ public abstract class BaseActivity extends ActionBarActivity
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(getLayoutResource() == R.layout.activity_outlet_details || getLayoutResource() == R.layout.redeem_voucher_activity){
-                        Intent intent = new Intent(getBaseContext(),DiscoverActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                    }else {
-                        finish();
-                    }
+                    onBackPressed();
                 }
             });
+        }
+
+        if(drawerOpened){
+            invite.setSelected(false);
+            rate.setSelected(false);
+            faq.setSelected(false);
+            notifications.setSelected(false);
+            bill.setSelected(false);
+            wallet.setSelected(false);
+            submitOffer.setSelected(false);
+            suggestOutlet.setSelected(false);
+            write.setSelected(false);
+            rate.setSelected(false);
+        }else {
+            invite.setSelected(false);
+            rate.setSelected(false);
+            faq.setSelected(false);
+            notifications.setSelected(false);
+            bill.setSelected(false);
+            wallet.setSelected(false);
+            submitOffer.setSelected(false);
+            suggestOutlet.setSelected(false);
+            write.setSelected(false);
+            rate.setSelected(false);
         }
 
         setTitle(mTitle);
@@ -204,66 +270,66 @@ public abstract class BaseActivity extends ActionBarActivity
     private ArrayList<DrawerItem> getDrawerItems(int pos) {
         ArrayList<DrawerItem> drawerItems = new ArrayList<>();
 
-        DrawerItem invite = new DrawerItem();
+        invite = new DrawerItem();
         invite.setTitle("INVITE FRIENDS");
         invite.setIcon(R.drawable.drawer_item_icon_invite_friends);
         invite.setSelectedIcon(R.drawable.drawer_item_icon_invite_friends_selected);
         drawerItems.add(invite);
 
-        DrawerItem faq = new DrawerItem();
+        faq = new DrawerItem();
         faq.setTitle("FAQs");
         faq.setIcon(R.drawable.drawer_item_icon_faqs);
         faq.setSelectedIcon(R.drawable.drawer_item_icon_faqs_selected);
         drawerItems.add(faq);
 
-        DrawerItem wallet = new DrawerItem();
+        wallet = new DrawerItem();
         wallet.setTitle("MY WALLET");
         wallet.setIcon(R.drawable.drawer_item_icon_wallet);
         wallet.setSelectedIcon(R.drawable.drawer_item_icon_wallet_selected);
         drawerItems.add(wallet);
 
-        DrawerItem bill = new DrawerItem();
+        bill = new DrawerItem();
         bill.setTitle("UPLOAD BILL");
         bill.setIcon(R.drawable.drawer_item_icon_upload_bill);
         bill.setSelectedIcon(R.drawable.drawer_item_icon_upload_bill_selected);
         drawerItems.add(bill);
 
-        DrawerItem notifications = new DrawerItem();
+        notifications = new DrawerItem();
         notifications.setTitle("NOTIFICATIONS");
         notifications.setIcon(R.drawable.drawer_item_icon_notifications);
         notifications.setSelectedIcon(R.drawable.drawer_item_icon_notifications_selected);
         drawerItems.add(notifications);
 
-        DrawerItem submitOffer = new DrawerItem();
+        submitOffer = new DrawerItem();
         submitOffer.setTitle("SUBMIT AN OFFER");
         submitOffer.setIcon(R.drawable.drawer_item_icon_submit_offer);
         submitOffer.setSelectedIcon(R.drawable.drawer_item_icon_submit_offer_selected);
         drawerItems.add(submitOffer);
 
-        DrawerItem suggestOutlet = new DrawerItem();
+        suggestOutlet = new DrawerItem();
         suggestOutlet.setTitle("SUGGEST AN OUTLET");
         suggestOutlet.setIcon(R.drawable.drawer_item_icon_suggest_outlet);
         suggestOutlet.setSelectedIcon(R.drawable.drawer_item_icon_suggest_outlet_selected);
         drawerItems.add(suggestOutlet);
 
-        DrawerItem write = new DrawerItem();
+        write = new DrawerItem();
         write.setTitle("WRITE TO US");
         write.setIcon(R.drawable.drawer_item_icon_write_to_us);
         write.setSelectedIcon(R.drawable.drawer_item_icon_write_to_us_selected);
         drawerItems.add(write);
 
-        DrawerItem rate = new DrawerItem();
+        rate = new DrawerItem();
         rate.setTitle("RATE TWYST");
         rate.setIcon(R.drawable.drawer_item_icon_rate);
         rate.setSelectedIcon(R.drawable.drawer_item_icon_rate_selected);
         drawerItems.add(rate);
 
-        for(DrawerItem drawerItem : drawerItems){
-            if(pos == drawerItems.indexOf(drawerItem)){
+        for (DrawerItem drawerItem : drawerItems) {
+            if (pos == drawerItems.indexOf(drawerItem)) {
                 drawerItem.setSelected(false);
             }
         }
-        if(pos>-1) {
+        if (pos > -1) {
             DrawerItem drawerItem = drawerItems.get(pos);
             drawerItem.setSelected(true);
         }
@@ -277,20 +343,22 @@ public abstract class BaseActivity extends ActionBarActivity
 
     private void showNotifications() {
 
-        Intent intent = new Intent(this , NotificationActivity.class);
+        Intent intent = new Intent(this, NotificationActivity.class);
         startActivity(intent);
     }
 
     private void showWallet() {
 
-        Intent intent = new Intent(this , WalletActivity.class);
+        Intent intent = new Intent(this, WalletActivity.class);
         startActivity(intent);
     }
 
     private void showHome() {
 
-        Intent intent = new Intent(this , DiscoverActivity.class);
+        Intent intent = new Intent(this, DiscoverActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("Search", false);
+        intent.setAction("setChildNo");
         startActivity(intent);
     }
 
@@ -302,7 +370,7 @@ public abstract class BaseActivity extends ActionBarActivity
 
 
     @Override
-    public boolean onQueryTextSubmit(String s) {
+    public boolean onQueryTextSubmit(final String s) {
         Log.d(BaseActivity.class.getSimpleName(), "onQueryTextSubmit q= " + s);
 
         searchView.setQuery("", true);
@@ -310,13 +378,17 @@ public abstract class BaseActivity extends ActionBarActivity
         searchView.clearFocus();
         searchView.setSuggestionsAdapter(null);
 
-        if (s.length() < 3) {
+       /* if (s.length() < 3) {
             return true;
-        }
-
-//        Intent intent = new Intent(getBaseContext(), ProductListActivity.class);
-//        intent.putExtra(AppConstants.INTENT_PARAM_SEARCH_QUERY, s);
-//        startActivity(intent);
+        }*/
+        SharedPreferences.Editor sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
+        sharedPreferences.putString(AppConstants.PREFERENCE_PARAM_SEARCH_QUERY, s);
+        sharedPreferences.commit();
+        Intent intent = new Intent(getBaseContext(), SearchActivity.class);
+        intent.putExtra("Search", true);
+        intent.setAction("setChildYes");
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
 
         return true;
     }
@@ -330,58 +402,12 @@ public abstract class BaseActivity extends ActionBarActivity
             return true;
         }
 
-
-//        HttpService.getInstance().searchProductsByText(s, new Callback<List<ProductJson>>() {
-//            @Override
-//            public void success(List<ProductJson> result, Response response) {
-//                Log.d(getTagName(), "result " + result.size());
-//
-//                String[] columns = new String[]{"_id", "text"};
-//                Object[] temp = new Object[]{0, "default"};
-//
-//                MatrixCursor cursor = new MatrixCursor(columns);
-//                for (int i = 0; i < result.size(); i++) {
-//                    temp[0] = i;
-//                    temp[1] = result.get(i).getPname();
-//
-//                    cursor.addRow(temp);
-//
-//                }
-//
-//                CursorAdapter suggestionsAdapter = searchView.getSuggestionsAdapter();
-//                if (suggestionsAdapter != null) {
-//                    suggestionsAdapter.notifyDataSetChanged();
-//                }
-//
-//                SearchCursorAdapter searchCursorAdapter = new SearchCursorAdapter(getBaseContext(), cursor, result);
-//                searchView.setSuggestionsAdapter(searchCursorAdapter);
-//
-//            }
-//
-//            @Override
-//            public void failure(RetrofitError error) {
-//                Log.e(getTagName(), "failure", error);
-//            }
-//        });
-
-
         return true;
     }
 
     @Override
     public boolean onSuggestionClick(int i) {
         Log.d(getTagName(), "onSuggestionClick item: " + i);
-//        SearchCursorAdapter suggestionsAdapter = (SearchCursorAdapter) searchView.getSuggestionsAdapter();
-//        ProductJson product = suggestionsAdapter.getProducts().get(i);
-//
-//        searchView.setQuery("", true);
-//        searchView.setIconified(true);
-//        searchView.clearFocus();
-//        searchView.setSuggestionsAdapter(null);
-//
-//        Intent intent = new Intent(getBaseContext(), ProductDetailsActivity.class);
-//        intent.putExtra(AppConstants.INTENT_PARAM_PRODUCTID, product.getProductId());
-//        startActivity(intent);
 
         return true;
 
@@ -415,14 +441,14 @@ public abstract class BaseActivity extends ActionBarActivity
             for (DrawerItem drawerItem : drawerItems) {
                 drawerItem.setSelected(false);
             }
-            if(position>0){
-                DrawerItem drawerItem = drawerItems.get(position-1);
+            if (position > 0) {
+                DrawerItem drawerItem = drawerItems.get(position - 1);
                 drawerItem.setSelected(true);
 
             }
             updateDrawer();
             SharedPreferences.Editor sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
-            sharedPreferences.putInt(AppConstants.PREFERENCE_LAST_DRAWERITEM_CLICKED,position-1);
+            sharedPreferences.putInt(AppConstants.PREFERENCE_LAST_DRAWERITEM_CLICKED, position - 1);
             sharedPreferences.commit();
 
         }
@@ -443,22 +469,24 @@ public abstract class BaseActivity extends ActionBarActivity
                 switch (position) {
                     case 0:
                         //header image click
-                        editProfile();
                         return;
 
                     case 1:
                         //invite friends
-                        inviteFriends();
-                        return;
+                        intent = new Intent(getBaseContext(), InviteFriendsActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        break;
 
                     case 2:
                         //faq
                         intent = new Intent(getBaseContext(), FaqActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         break;
 
                     case 3:
                         //my wallet
                         intent = new Intent(getBaseContext(), WalletActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         break;
 
                     case 4:
@@ -469,6 +497,7 @@ public abstract class BaseActivity extends ActionBarActivity
                     case 5:
                         //notification
                         intent = new Intent(getBaseContext(), NotificationActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         break;
 
                     case 6:
@@ -479,11 +508,13 @@ public abstract class BaseActivity extends ActionBarActivity
                     case 7:
                         //suggest an outlet
                         intent = new Intent(getBaseContext(), SuggestOutletActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         break;
 
                     case 8:
                         //write to us
                         intent = new Intent(getBaseContext(), WriteToUsActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         break;
 
                     case 9:
@@ -491,6 +522,9 @@ public abstract class BaseActivity extends ActionBarActivity
                         rateApp();
                         return;
 
+                }
+                if (intent != null) {
+                    intent.putExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, true);
                 }
                 startActivity(intent);
             }
@@ -530,10 +564,21 @@ public abstract class BaseActivity extends ActionBarActivity
         final MenuItem homeMenuItem = menu.findItem(R.id.action_home);
 
 
-        if(getLayoutResource() == R.layout.activity_wallet){
+        if(getLayoutResource() == R.layout.activity_edit_profile){
+            homeMenuItem.setVisible(false);
+            walletMenuItem.setVisible(false);
+            notificationsMenuItem.setVisible(false);
+            searchMenuItem.setVisible(false);
+        }else if(getLayoutResource() == R.layout.redeem_voucher_activity){
+			homeMenuItem.setVisible(false);
+			walletMenuItem.setVisible(false);
+			notificationsMenuItem.setVisible(false);
+			searchMenuItem.setVisible(false);
+		}
+        else if (getLayoutResource() == R.layout.activity_wallet) {
             homeMenuItem.setVisible(true);
             walletMenuItem.setVisible(false);
-        }else if(getLayoutResource() == R.layout.activity_notification){
+        } else if (getLayoutResource() == R.layout.activity_notification) {
             homeMenuItem.setVisible(true);
             notificationsMenuItem.setVisible(false);
         }
@@ -551,25 +596,25 @@ public abstract class BaseActivity extends ActionBarActivity
             public void onFocusChange(View view, boolean b) {
                 searchView.setSuggestionsAdapter(null);
                 if (b) {
-                    if(getLayoutResource() == R.layout.activity_wallet){
+                    if (getLayoutResource() == R.layout.activity_wallet) {
                         homeMenuItem.setVisible(true);
                         walletMenuItem.setVisible(false);
-                    }else if(getLayoutResource() == R.layout.activity_notification){
+                    } else if (getLayoutResource() == R.layout.activity_notification) {
                         homeMenuItem.setVisible(true);
                         notificationsMenuItem.setVisible(false);
-                    }else {
+                    } else {
                         notificationsMenuItem.setVisible(true);
                         walletMenuItem.setVisible(true);
                     }
 
                 } else {
-                    if(getLayoutResource() == R.layout.activity_wallet){
+                    if (getLayoutResource() == R.layout.activity_wallet) {
                         homeMenuItem.setVisible(true);
                         walletMenuItem.setVisible(false);
-                    }else if(getLayoutResource() == R.layout.activity_notification){
+                    } else if (getLayoutResource() == R.layout.activity_notification) {
                         homeMenuItem.setVisible(true);
                         notificationsMenuItem.setVisible(false);
-                    }else {
+                    } else {
                         notificationsMenuItem.setVisible(true);
                         walletMenuItem.setVisible(true);
                     }
@@ -645,7 +690,7 @@ public abstract class BaseActivity extends ActionBarActivity
     public void buildAndShowSnackbarWithMessage(String msg) {
         final Snackbar snackbar = Snackbar.with(getApplicationContext())
                 .type(SnackbarType.MULTI_LINE)
-                //.color(getResources().getColor(android.R.color.black))
+                        //.color(getResources().getColor(android.R.color.black))
                 .text(msg)
                 .actionLabel("RETRY") // action button label
                 .duration(Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
@@ -713,31 +758,22 @@ public abstract class BaseActivity extends ActionBarActivity
     }
 
     private void rateApp() {
-        Uri uri = Uri.parse("market://details?id=com.twyst.app.android");
+        Uri uri = Uri.parse("market://details?id=in.twyst");
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
         try {
             startActivity(goToMarket);
         } catch (ActivityNotFoundException e) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.twyst.app.android")));
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id="+getApplication().getPackageName()+"&ah=-smMDxRK7pmXEK32N7mSNcbZ2ZM")));
         }
 
     }
 
 
-    private void editProfile() {
-
-    }
-
-    private void inviteFriends() {
-        Intent intent = new Intent(getBaseContext(), InviteFriendsActivity.class);
-        startActivity(intent);
-    }
-
     @Override
     public void onBackPressed() {
         if (drawerOpened) {
-            drawerLayout.closeDrawer(Gravity.LEFT);
-        }else {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
             super.onBackPressed();
         }
     }
@@ -745,27 +781,27 @@ public abstract class BaseActivity extends ActionBarActivity
     protected void showShareIntents(String title, String text) {
         List<Intent> targetedShareIntents = new ArrayList<Intent>();
         Intent facebookIntent = getShareIntent("facebook", "", text);
-        if(facebookIntent != null) {
+        if (facebookIntent != null) {
             targetedShareIntents.add(facebookIntent);
         }
 
         Intent whatsappIntent = getShareIntent("whatsapp", "", text);
-        if(whatsappIntent != null) {
+        if (whatsappIntent != null) {
             targetedShareIntents.add(whatsappIntent);
         }
 
         Intent twIntent = getShareIntent("twitter", "", text);
-        if(twIntent != null) {
+        if (twIntent != null) {
             targetedShareIntents.add(twIntent);
         }
 
         Intent gmailIntent = getShareIntent("gmail", "", text);
-        if(gmailIntent != null) {
+        if (gmailIntent != null) {
             targetedShareIntents.add(gmailIntent);
         }
 
         Intent mmsIntent = getShareIntent("mms", "", text);
-        if(mmsIntent != null) {
+        if (mmsIntent != null) {
             targetedShareIntents.add(mmsIntent);
         }
 
@@ -782,12 +818,12 @@ public abstract class BaseActivity extends ActionBarActivity
         // gets the list of intents that can be loaded.
         List<ResolveInfo> resInfo = this.getPackageManager().queryIntentActivities(share, 0);
         System.out.println("resinfo: " + resInfo);
-        if (!resInfo.isEmpty()){
+        if (!resInfo.isEmpty()) {
             for (ResolveInfo info : resInfo) {
                 if (info.activityInfo.packageName.toLowerCase().contains(type) ||
-                        info.activityInfo.name.toLowerCase().contains(type) ) {
-                    share.putExtra(Intent.EXTRA_SUBJECT,  subject);
-                    share.putExtra(Intent.EXTRA_TEXT,     text);
+                        info.activityInfo.name.toLowerCase().contains(type)) {
+                    share.putExtra(Intent.EXTRA_SUBJECT, subject);
+                    share.putExtra(Intent.EXTRA_TEXT, text);
                     share.setPackage(info.activityInfo.packageName);
                     found = true;
                     break;
@@ -799,5 +835,11 @@ public abstract class BaseActivity extends ActionBarActivity
             return share;
         }
         return null;
+    }
+
+    public String getUserToken() {
+        SharedPreferences prefs = this.getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return prefs.getString(AppConstants.PREFERENCE_USER_TOKEN, "");
+
     }
 }

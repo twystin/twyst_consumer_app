@@ -3,6 +3,7 @@ package in.twyst.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +62,17 @@ public class Offer implements Serializable {
 
     @SerializedName("outlets")
     private List<OutletList> outletList;
+
+    @SerializedName("issued_by")
+    private String issuedBy;
+
+    public String getIssuedBy() {
+        return issuedBy;
+    }
+
+    public void setIssuedBy(String issuedBy) {
+        this.issuedBy = issuedBy;
+    }
 
     public List<OutletList> getOutletList() {
         return outletList;
@@ -227,6 +239,36 @@ public class Offer implements Serializable {
         private String _id;
 
         private String name;
+
+        private String city;
+
+        private ArrayList<String> location_1;
+
+        private ArrayList<String> location_2;
+
+        public ArrayList<String> getLocation_1() {
+            return location_1;
+        }
+
+        public void setLocation_1(ArrayList<String> location_1) {
+            this.location_1 = location_1;
+        }
+
+        public ArrayList<String> getLocation_2() {
+            return location_2;
+        }
+
+        public void setLocation_2(ArrayList<String> location_2) {
+            this.location_2 = location_2;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
 
         public String get_id() {
             return _id;

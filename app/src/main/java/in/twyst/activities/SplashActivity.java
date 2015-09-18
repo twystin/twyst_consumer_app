@@ -7,6 +7,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,16 +17,27 @@ import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import in.twyst.R;
@@ -40,10 +54,11 @@ import retrofit.client.Response;
  * Created by satish on 23/12/14.
  */
 public class SplashActivity extends Activity {
-    // Splash screen timer
-    private static int SPLASH_TIME_OUT = 1500;
+
+    private static int SPLASH_TIME_OUT = 1700;
     private GoogleCloudMessaging googleCloudMessaging;
     private Context context;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,17 +68,14 @@ public class SplashActivity extends Activity {
 
         if (AppConstants.IS_DEVELOPMENT) {
             getKey();
+            generateHashKey();
         }
 
         context = getApplicationContext();
+
         new FetchContact().execute();
         if (checkPlayServices()) {
             googleCloudMessaging = GoogleCloudMessaging.getInstance(this);
-            //String registrationId = getRegistrationId(context);
-            //Log.i(getTagName(), "current registrationId=" + registrationId);
-            //if (registrationId.isEmpty()) {
-            //    registerInBackground();
-            //}
             registerInBackground();
         } else {
             Log.i(getClass().getSimpleName(), "No valid Google Play Services APK found.");
@@ -74,6 +86,7 @@ public class SplashActivity extends Activity {
             public void run() {
                 SharedPreferences.Editor sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
                 sharedPreferences.remove(AppConstants.PREFERENCE_LAST_DRAWERITEM_CLICKED).commit();
+                sharedPreferences.remove(AppConstants.PREFERENCE_PARAM_SEARCH_QUERY).commit();
 
                 SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
                 int tutorialCount = prefs.getInt(AppConstants.PREFERENCE_TUTORIAL_COUNT, 0);
@@ -82,7 +95,10 @@ public class SplashActivity extends Activity {
                 boolean tutorialSkipped = prefs.getBoolean(AppConstants.PREFERENCE_TUTORIAL_SKIPPED, false);
 
                 if (phoneVerified && emailVerified && (tutorialCount >= 3 || tutorialSkipped)) {
-                    startActivity(new Intent(SplashActivity.this, DiscoverActivity.class));
+                    Intent intent = new Intent(SplashActivity.this, DiscoverActivity.class);
+                    intent.setAction("setChildNo");
+                    intent.putExtra("Search", false);
+                    startActivity(intent);
                 } else {
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putInt(AppConstants.PREFERENCE_TUTORIAL_COUNT, ++tutorialCount).commit();
@@ -144,34 +160,48 @@ public class SplashActivity extends Activity {
                 md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
                 String something = new String(Base64.encode(md.digest(), 0));
-                //String something = new String(Base64.encodeBytes(md.digest()));
-                Log.d("", "***************************");
-                Log.d("hash key", something);
-                Log.d("", "***************************");
             }
         } catch (PackageManager.NameNotFoundException e1) {
-            Log.e("name not found", e1.toString());
         } catch (NoSuchAlgorithmException e) {
-            Log.e("no such an algorithm", e.toString());
         } catch (Exception e) {
-            Log.e("exception", e.toString());
         }
+    }
+
+    private void generateHashKey() {
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo("in.twyst", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String hashCode  = Base64.encodeToString(md.digest(), Base64.DEFAULT);
+                System.out.println("Print the hashKey for Facebook :" + hashCode);
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(),Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     public class FetchContact extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-
             PhoneBookContacts.getInstance().loadContacts(getApplicationContext());
-
             return null;
         }
 
         protected void onPostExecute(Void aVoid) {
-
             super.onPostExecute(aVoid);
         }
     }
-
 
 }

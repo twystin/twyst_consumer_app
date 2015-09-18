@@ -77,6 +77,8 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
             ImageView detailIcon = (ImageView) itemView.findViewById(R.id.detailIcon);
             TextView detailText = (TextView) itemView.findViewById(R.id.detailText);
             RelativeLayout footer = (RelativeLayout) itemView.findViewById(R.id.footerLayout);
+            LinearLayout availabilityLayout = (LinearLayout) itemView.findViewById(R.id.availabilityLayout);
+            LinearLayout parentView = (LinearLayout) itemView.findViewById(R.id.parentView);
 
             text1.setText("");
             text2.setText("");
@@ -142,7 +144,30 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                         e.printStackTrace();
                     }
                 }
-            } else {
+            }else if("checkin".equalsIgnoreCase(offer.getType())){
+                if (!TextUtils.isEmpty(offer.getExpiry())) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                    try {
+                        Date expiryDate = sdf.parse(offer.getExpiry());
+                        long days = TimeUnit.DAYS.convert(expiryDate.getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+
+                        long hours = TimeUnit.HOURS.convert(expiryDate.getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+                        Log.i("days", "" + days);
+
+                        if (days == 0) {
+                            expiryText = hours + ((hours == 1) ? " hours " : " hours ") + "left";
+                        } else if (days > 7) {
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("d-MMM");
+                            expiryText = "valid till " + simpleDateFormat.format(expiryDate).toLowerCase();
+                        } else {
+                            expiryText = days + ((days == 1) ? " day " : " days ") + "left";
+                        }
+
+                    }catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }else {
                 if (!TextUtils.isEmpty(offer.getExpiry())) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
                     try {
@@ -195,6 +220,7 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
             });
 
             footerImageView.setVisibility(View.VISIBLE);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
 
             Resources resources = itemView.getContext().getResources();
             if ("checkin".equalsIgnoreCase(offer.getType())) {
@@ -203,6 +229,12 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                 text1.setTextColor(resources.getColor(R.color.outlet_txt_color_grey));
                 text2.setTextColor(resources.getColor(R.color.outlet_txt_color_grey));
                 text3.setTextColor(resources.getColor(R.color.outlet_txt_color_grey));
+                time.setText(expiryText);
+                params.weight = 1.0f;
+                availabilityLayout.setLayoutParams(params);
+                parentView.removeAllViews();
+                parentView.addView(availabilityLayout);
+                detailLayout.setVisibility(View.GONE);
 
                 footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_discover_offer_checkin_locked));
 
@@ -212,13 +244,19 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                     footerText.setText(offer.getNext() + " check-ins to go");
                 }
 
-                time.setText(expiryText);
+
 
             } else if ("coupon".equalsIgnoreCase(offer.getType())) {
                 text1.setTextColor(resources.getColor(R.color.offer_color_red));
                 text2.setTextColor(resources.getColor(R.color.offer_color_red));
                 text3.setTextColor(resources.getColor(R.color.offer_color_red));
                 time.setText(lapseText);
+                params.weight = 1.0f;
+                parentView.setWeightSum(1f);
+                availabilityLayout.setLayoutParams(params);
+                parentView.removeAllViews();
+                parentView.addView(availabilityLayout);
+                detailLayout.setVisibility(View.GONE);
 
                 if (offer.isAvailableNow()) {
                     itemView.setBackgroundResource(R.drawable.card_red);
@@ -239,6 +277,12 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                 text1.setTextColor(resources.getColor(R.color.offer_color_yellow));
                 text2.setTextColor(resources.getColor(R.color.offer_color_yellow));
                 text3.setTextColor(resources.getColor(R.color.offer_color_yellow));
+                params.weight = 1.0f;
+                parentView.setWeightSum(1f);
+                availabilityLayout.setLayoutParams(params);
+                parentView.removeAllViews();
+                parentView.addView(availabilityLayout);
+                detailLayout.setVisibility(View.GONE);
 
                 footerText.setText("grab offer");
                 footerImageView.setVisibility(View.GONE);
@@ -252,6 +296,12 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                 text1.setTextColor(resources.getColor(R.color.offer_color_green));
                 text2.setTextColor(resources.getColor(R.color.offer_color_green));
                 text3.setTextColor(resources.getColor(R.color.offer_color_green));
+                params.weight = 1.0f;
+                parentView.setWeightSum(1f);
+                availabilityLayout.setLayoutParams(params);
+                parentView.removeAllViews();
+                parentView.addView(availabilityLayout);
+                detailLayout.setVisibility(View.GONE);
                 time.setText(expiryText);
                 if (offer.isAvailableNow()) {
                     itemView.setBackgroundResource(R.drawable.card_green);
@@ -275,6 +325,12 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                 text1.setTextColor(resources.getColor(R.color.offer_color_green));
                 text2.setTextColor(resources.getColor(R.color.offer_color_green));
                 text3.setTextColor(resources.getColor(R.color.offer_color_green));
+                params.weight = 1.0f;
+                parentView.setWeightSum(1f);
+                availabilityLayout.setLayoutParams(params);
+                parentView.removeAllViews();
+                parentView.addView(availabilityLayout);
+                detailLayout.setVisibility(View.GONE);
                 time.setText(expiryText);
                 if (offer.isAvailableNow()) {
                     itemView.setBackgroundResource(R.drawable.card_green);
@@ -295,11 +351,23 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                 text3.setTextColor(resources.getColor(R.color.offer_color_blue));
                 time.setText(expiryText);
                 if(!TextUtils.isEmpty(offer.getSource())){
-                    detailLayout.setVisibility(View.VISIBLE);
                     detailIcon.setBackground(resources.getDrawable(R.drawable.icon_discover_offer_bank_creditcard_grey));
                     detailText.setText(offer.getSource());
+                    params.weight = 0.5f;
+                    parentView.setWeightSum(1f);
+                    availabilityLayout.setLayoutParams(params);
+                    detailLayout.setLayoutParams(params);
+                    parentView.removeAllViews();
+                    parentView.addView(availabilityLayout);
+                    parentView.addView(detailLayout);
+                    detailLayout.setVisibility(View.VISIBLE);
                 }else {
                     detailLayout.setVisibility(View.GONE);
+                    params.weight = 1.0f;
+                    parentView.setWeightSum(1f);
+                    availabilityLayout.setLayoutParams(params);
+                    parentView.removeAllViews();
+                    parentView.addView(availabilityLayout);
                 }
 
                 if(offer.isAvailableNow()){
@@ -366,11 +434,10 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                 footerText.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         Intent intent = new Intent(v.getContext(), SubmitOfferActivity.class);
                         intent.putExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_NAME, outlet.getName());
+                        intent.putExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_ADDRESS,outlet.getAddress());
                         v.getContext().startActivity(intent);
-
                     }
                 });
 

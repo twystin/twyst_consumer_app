@@ -134,7 +134,7 @@ public class OTPVerificationActivity extends Activity {
     public void buildAndShowSnackbarWithMessage(String msg) {
         final Snackbar snackbar = Snackbar.with(getApplicationContext())
                 .type(SnackbarType.MULTI_LINE)
-                .color(getResources().getColor(R.color.snackbar_bg))
+//                .color(getResources().getColor(R.color.snackbar_bg))
                 .text(msg)
                 .actionLabel("RETRY") // action button label
                 .duration(Snackbar.SnackbarDuration.LENGTH_INDEFINITE)

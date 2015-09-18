@@ -79,7 +79,7 @@
                 android:layout_marginRight="50dp"
                 android:layout_marginTop="30dp"
                 android:orientation="horizontal"
-                android:weightSum="2">
+                android:weightSum="1">
 
                 <LinearLayout
                     android:id="@+id/checkInShareButton"
@@ -111,6 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:visibility="gone"
                     android:orientation="vertical">
 
                     <ImageView

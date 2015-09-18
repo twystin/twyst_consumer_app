@@ -93,7 +93,10 @@ public class TutorialActivity extends FragmentActivity {
             startActivity(new Intent(getBaseContext(), LoginActivity.class));
             finish();
         } else {
-            startActivity(new Intent(getBaseContext(), DiscoverActivity.class));
+            Intent intent = new Intent(getBaseContext(), DiscoverActivity.class);
+            intent.setAction("setChildNo");
+            intent.putExtra("Search", false);
+            startActivity(intent);
             finish();
         }
 

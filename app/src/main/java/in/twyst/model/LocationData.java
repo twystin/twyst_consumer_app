@@ -20,7 +20,7 @@ public class LocationData implements Serializable{
     @SerializedName("City")
     private String city;
 
-    @SerializedName("lat ")
+    @SerializedName("lat")
     private String lat;
 
     @SerializedName("long")

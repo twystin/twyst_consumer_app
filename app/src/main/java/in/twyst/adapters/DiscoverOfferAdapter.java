@@ -372,9 +372,10 @@ public class DiscoverOfferAdapter extends RecyclerView.Adapter<RecyclerView.View
                 holder.footerText.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.i("outletname",outlet.getName());
+                        Log.i("outletname", outlet.getName());
                         Intent intent = new Intent(v.getContext(), SubmitOfferActivity.class);
                         intent.putExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_NAME,outlet.getName());
+                        intent.putExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_ADDRESS,outlet.getAddress());
                         v.getContext().startActivity(intent);
 
                     }

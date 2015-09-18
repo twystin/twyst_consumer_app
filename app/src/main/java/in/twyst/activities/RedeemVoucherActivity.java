@@ -1,11 +1,14 @@
 package in.twyst.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -67,11 +70,10 @@ public class RedeemVoucherActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         setupAsChild = true;
         super.onCreate(savedInstanceState);
-        Bundle data = getIntent().getExtras();
 
-        offer = (Offer) data.getSerializable(AppConstants.INTENT_PARAM_OFFER_OBJECT);
-        outlet = (Outlet) data.getSerializable(AppConstants.INTENT_PARAM_OUTLET_OBJECT);
-        useOfferData = (UseOfferData) data.getSerializable(AppConstants.INTENT_PARAM_USE_OFFER_DATA_OBJECT);
+        offer = (Offer) getIntent().getExtras().getSerializable(AppConstants.INTENT_PARAM_OFFER_OBJECT);
+        outlet = (Outlet) getIntent().getExtras().getSerializable(AppConstants.INTENT_PARAM_OUTLET_OBJECT);
+        useOfferData = (UseOfferData) getIntent().getExtras().getSerializable(AppConstants.INTENT_PARAM_USE_OFFER_DATA_OBJECT);
 
         TextView outletName = (TextView)findViewById(R.id.outletName);
         TextView distance = (TextView)findViewById(R.id.outletDistance);
@@ -316,33 +318,31 @@ public class RedeemVoucherActivity extends BaseActivity{
 
         if(!TextUtils.isEmpty(offer.getTerms())){
 
-            findViewById(R.id.termsCondition).setVisibility(View.VISIBLE);
             String[] splitStr = new String[0];
 
-            if(offer.getTerms().contains(";")){
+            if(offer.getTerms().contains(";")||!TextUtils.isEmpty(offer.getTerms())){
                 splitStr = offer.getTerms().trim().split("\\s*;\\s*");
                 for(int i=0; i< splitStr.length;i++){
                     term1 = splitStr[0];
-
-                    if(!TextUtils.isEmpty(splitStr[1])){
+                    if(offer.getTerms().contains(";") && !TextUtils.isEmpty(splitStr[1])){
                         term2 = splitStr[1];
+                        terms2.setVisibility(View.VISIBLE);
                     }
-                    if(splitStr.length>2) {
+                    else {
+                        terms2.setVisibility(View.GONE);
+                    }
+                  /*  if(splitStr.length>2) {
                         if (!TextUtils.isEmpty(splitStr[2])) {
                             term3 = splitStr[2];
                         }
-                    }
-
+                    }*/
                 }
 
             }else{
                 term1 = offer.getTerms();
             }
-        }else {
-            findViewById(R.id.termsCondition).setVisibility(View.VISIBLE);
-            viewMore.setVisibility(View.INVISIBLE);
-
         }
+
         if(!TextUtils.isEmpty(term1)){
             terms1.setText(term1);
             terms1.setVisibility(View.VISIBLE);
@@ -360,14 +360,7 @@ public class RedeemVoucherActivity extends BaseActivity{
         viewMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* if(!TextUtils.isEmpty(term3) && TextUtils.isEmpty(term4)){
-                    terms4.setVisibility(View.VISIBLE);
-                }else if(TextUtils.isEmpty(term3) && !TextUtils.isEmpty(term4)){
-                    terms3.setVisibility(View.VISIBLE);
-                }else{
-                    terms3.setVisibility(View.VISIBLE);
-                    terms4.setVisibility(View.VISIBLE);
-                }*/
+                viewMoreDialog();
             }
         });
 
@@ -376,14 +369,9 @@ public class RedeemVoucherActivity extends BaseActivity{
         findViewById(R.id.outletShare).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text = "Hey Checkout the offers being offered by " + outlet.getName() + " outlet on \"Twyst\" app.\n" + "Download Now:";
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("text/plain");
-
-                // i.putExtra(Intent.EXTRA_SUBJECT, subject);
-                i.putExtra(Intent.EXTRA_TEXT, text);
-
-                startActivity(Intent.createChooser(i, "Share using"));
+                String text2 = "https://play.google.com/store/apps/details?id="+getApplication().getPackageName()+"&ah=-smMDxRK7pmXEK32N7mSNcbZ2ZM";
+                String text = "Hey Checkout the offers being offered by " + outlet.getName() + " outlet on \"Twyst\" app.\n" + "Download Now:"+text2;
+                showShareIntents("Share using", text);
 
 
                 ShareOffer shareOffer = new ShareOffer();
@@ -409,15 +397,62 @@ public class RedeemVoucherActivity extends BaseActivity{
         });
 
     }
-    private String getUserToken() {
-        SharedPreferences prefs = this.getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return prefs.getString(AppConstants.PREFERENCE_USER_TOKEN, "");
+
+    private void viewMoreDialog() {
+        {
+
+
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            final View dialogView = li.inflate(R.layout.dialog_viewmore_tnc_offer_details, null);
+            TextView termsD1 = (TextView) dialogView.findViewById(R.id.termsd1);
+            TextView termsD2 = (TextView) dialogView.findViewById(R.id.termsd2);
+            TextView termsD3 = (TextView) dialogView.findViewById(R.id.termsd3);
+            TextView termsD4 = (TextView) dialogView.findViewById(R.id.termsd4);
+            TextView termsD5 = (TextView) dialogView.findViewById(R.id.termsd5);
+            TextView termsD6 = (TextView) dialogView.findViewById(R.id.termsd6);
+            TextView termsD7 = (TextView) dialogView.findViewById(R.id.termsd7);
+            TextView termsD8 = (TextView) dialogView.findViewById(R.id.termsd8);
+
+            termsD1.setText("1. Offers (2 or more) cannot be clubbed.");
+            termsD2.setText("2. Offers are not valid on specially priced combinations e.g. any other buffet brunch deal corporate dining rate happy hours etc.");
+            termsD3.setText("3. Only 1 voucher offer can be used per bill generated.");
+            termsD4.setText("4. In certain cases, specific items may be part of the offer.");
+            termsD5.setText("5. The availability of the specific items is not guaranteed and must be checked with the outlet before using the offer.");
+            termsD6.setText("6. The offers are provided at the sole discretion of the merchant,and the merchant reserves the right to alter or withdraw the offer at any time.");
+            termsD7.setText("7. Offers vouchers consisting of alcohol alcohol-based products will be available only to individuals above legal drinking age.");
+            termsD8.setText("8. The establishment reserves the right to verify the customer's age before providing such reward.");
+
+            builder.setView(dialogView);
+
+            final AlertDialog dialog = builder.create();
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
+
+            dialogView.findViewById(R.id.extendBtn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+
+                }
+            });
+
+            dialogView.findViewById(R.id.cancelExtendBtn).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+        }
     }
 
     @Override
     public void onBackPressed() {
         if (drawerOpened) {
-            drawerLayout.closeDrawer(Gravity.LEFT);
+            drawerLayout.closeDrawer(GravityCompat.START);
         }else {
             Intent intent = new Intent(RedeemVoucherActivity.this,DiscoverActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

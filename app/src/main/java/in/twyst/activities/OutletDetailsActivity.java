@@ -28,6 +28,7 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -89,6 +90,11 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
     public Outlet outlet;
     private LinearLayout outlet_view_call, outlet_view_follow, outlet_view_map, outlet_view_feedback;
     private View feedbackObstructor2, feedbackObstructor;
+    private LinearLayout takePhotoLayout;
+    private LinearLayout attachImageLayout;
+    private Button submitBtn;
+    private TextView editImageBtn;
+
 
 
     @Override
@@ -106,7 +112,7 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
         setupAsChild = true;
         super.onCreate(savedInstanceState);
 
-        SharedPreferences preferences = this.getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
         String appLocationLatiude = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, "");
         String appLocationLongitude = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, "");
 
@@ -126,6 +132,10 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
         outlet_view_map = (LinearLayout) findViewById(R.id.outlet_view_map);
         outlet_view_feedback = (LinearLayout) findViewById(R.id.outlet_view_feedback);
         feedbackLayout = findViewById(R.id.feedbackLayout);
+        takePhotoLayout = (LinearLayout) findViewById(R.id.takePhotoLayout);
+        attachImageLayout = (LinearLayout) findViewById(R.id.attachImageLayout);
+        submitBtn = (Button) findViewById(R.id.submitBtn);
+        editImageBtn = (TextView) findViewById(R.id.editImgButton);
 
         outletDetailsRecyclerView = (ObservableRecyclerView) findViewById(R.id.outletDetailsRecyclerView);
         outletDetailsRecyclerView.setHasFixedSize(true);
@@ -205,6 +215,14 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
                 collapse(feedbackLayout);
                 spinner.setSelection(0);
                 feedbackTV.setText("");
+                takePhotoLayout.setBackground(getResources().getDrawable(R.drawable.button_red));
+                takePhotoLayout.setClickable(true);
+                takePhotoLayout.setEnabled(true);
+                attachImageLayout.setBackground(getResources().getDrawable(R.drawable.button_red));
+                attachImageLayout.setClickable(true);
+                attachImageLayout.setEnabled(true);
+                submitBtn.setBackground(getResources().getDrawable(R.drawable.button_grey));
+                editImageBtn.setVisibility(View.GONE);
                 attachImage.setBackgroundResource(android.R.color.transparent);
                 attachImage.setVisibility(View.GONE);
             }
@@ -214,7 +232,7 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
             @Override
             public void onClick(final View view) {
 
-                if (!TextUtils.isEmpty(feedbackTV.getText()) && attachImage.getDrawable()!=null) {
+                if (!TextUtils.isEmpty(feedbackTV.getText()) && attachImage.getDrawable() != null) {
                     final TwystProgressHUD twystProgressHUD = TwystProgressHUD.show(OutletDetailsActivity.this, false, null);
                     Feedback feedback = new Feedback();
                     FeedbackMeta meta = new FeedbackMeta();
@@ -242,10 +260,20 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
                                 fabMenu.setVisibility(View.VISIBLE);
                                 spinner.setSelection(0);
                                 feedbackTV.setText("");
+                                takePhotoLayout.setBackground(getResources().getDrawable(R.drawable.button_red));
+                                takePhotoLayout.setClickable(true);
+                                takePhotoLayout.setEnabled(true);
+                                attachImageLayout.setBackground(getResources().getDrawable(R.drawable.button_red));
+                                attachImageLayout.setClickable(true);
+                                attachImageLayout.setEnabled(true);
+                                submitBtn.setBackground(getResources().getDrawable(R.drawable.button_grey));
+                                editImageBtn.setVisibility(View.GONE);
                                 attachImage.setBackgroundResource(android.R.color.transparent);
                                 attachImage.setVisibility(View.GONE);
 
                             }
+
+
                         }
 
                         @Override
@@ -255,6 +283,14 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
                             fabMenu.setVisibility(View.VISIBLE);
                             spinner.setSelection(0);
                             feedbackTV.setText("");
+                            takePhotoLayout.setBackground(getResources().getDrawable(R.drawable.button_red));
+                            takePhotoLayout.setClickable(true);
+                            takePhotoLayout.setEnabled(true);
+                            attachImageLayout.setBackground(getResources().getDrawable(R.drawable.button_red));
+                            attachImageLayout.setClickable(true);
+                            attachImageLayout.setEnabled(true);
+                            submitBtn.setBackground(getResources().getDrawable(R.drawable.button_grey));
+                            editImageBtn.setVisibility(View.GONE);
                             attachImage.setBackgroundResource(android.R.color.transparent);
                             attachImage.setVisibility(View.GONE);
 
@@ -265,24 +301,51 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
                             }
                         }
                     });
-                } else if (!TextUtils.isEmpty(feedbackTV.getText()) && attachImage.getDrawable()==null) {
+                } else if (!TextUtils.isEmpty(feedbackTV.getText()) && attachImage.getDrawable() == null) {
                     feedbackTV.setError("Comments required");
-                    Toast.makeText(OutletDetailsActivity.this, "Please attach a photo or take photo!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OutletDetailsActivity.this, "Please attach a photo or take photo!", Toast.LENGTH_SHORT).show();
                 } else {
                     feedbackTV.setError("Please enter some feedback before submitting!");
-                    Toast.makeText(OutletDetailsActivity.this, "Please fill all the required fields.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OutletDetailsActivity.this, "Please fill all the required fields.", Toast.LENGTH_SHORT).show();
                 }
 
             }
         });
+        editImageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                final CharSequence[] items = {"Take Photo", "Choose Photo", "Cancel"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(OutletDetailsActivity.this);
+                builder.setTitle("Add Photo!");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        if (items[item].equals("Take Photo")) {
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            File f = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                            startActivityForResult(intent, REQUEST_CAMERA);
+                        } else if (items[item].equals("Choose Photo")) {
+                            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            intent.setType("image/*");
+                            startActivityForResult(Intent.createChooser(intent, "Select File"), SELECT_FILE);
+                        } else if (items[item].equals("Cancel")) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                builder.show();
+
+
+            }
+        });
         findViewById(R.id.takePhoto).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 File f = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                attachImage.setVisibility(View.VISIBLE);
                 startActivityForResult(intent, REQUEST_CAMERA);
             }
         });
@@ -292,7 +355,6 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent.setType("image/*");
-                attachImage.setVisibility(View.VISIBLE);
                 startActivityForResult(Intent.createChooser(intent, "Select File"), SELECT_FILE);
             }
         });
@@ -305,6 +367,15 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
                 fabMenu.setVisibility(View.VISIBLE);
                 spinner.setSelection(0);
                 feedbackTV.setText("");
+                feedbackTV.setError(null);
+                takePhotoLayout.setBackground(getResources().getDrawable(R.drawable.button_red));
+                takePhotoLayout.setClickable(true);
+                takePhotoLayout.setEnabled(true);
+                attachImageLayout.setBackground(getResources().getDrawable(R.drawable.button_red));
+                attachImageLayout.setClickable(true);
+                attachImageLayout.setEnabled(true);
+                submitBtn.setBackground(getResources().getDrawable(R.drawable.button_grey));
+                editImageBtn.setVisibility(View.GONE);
                 attachImage.setBackgroundResource(android.R.color.transparent);
                 attachImage.setVisibility(View.GONE);
 
@@ -319,6 +390,14 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
                     fabMenu.setVisibility(View.VISIBLE);
                     spinner.setSelection(0);
                     feedbackTV.setText("");
+                    takePhotoLayout.setBackground(getResources().getDrawable(R.drawable.button_red));
+                    takePhotoLayout.setClickable(true);
+                    takePhotoLayout.setEnabled(true);
+                    attachImageLayout.setBackground(getResources().getDrawable(R.drawable.button_red));
+                    attachImageLayout.setClickable(true);
+                    attachImageLayout.setEnabled(true);
+                    submitBtn.setBackground(getResources().getDrawable(R.drawable.button_grey));
+                    editImageBtn.setVisibility(View.GONE);
                     attachImage.setBackgroundResource(android.R.color.transparent);
                     attachImage.setVisibility(View.GONE);
 
@@ -342,11 +421,7 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
                 HttpService.getInstance().shareOutlet(getUserToken(), shareOutlet, new Callback<BaseResponse>() {
                     @Override
                     public void success(BaseResponse baseResponse, Response response) {
-                        /*if (baseResponse.isResponse()) {
-                            Toast.makeText(OutletDetailsActivity.this, "outlet shared successfully!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(OutletDetailsActivity.this, "unable to share outlet!", Toast.LENGTH_SHORT).show();
-                        }*/
+
                     }
 
                     @Override
@@ -511,6 +586,7 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
                 if (obstructor.getVisibility() == View.VISIBLE) {
                     Intent intent = new Intent(OutletDetailsActivity.this, SubmitOfferActivity.class);
                     intent.putExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_NAME, outlet.getName());
+                    intent.putExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_ADDRESS, outlet.getAddress());
                     startActivity(intent);
                     fabMenu.collapse();
 
@@ -526,7 +602,6 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
 
                 String twystBucks = outletBaseResponse.getData().getTwystBucks();
 
-                SharedPreferences.Editor sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
                 sharedPreferences.putInt(AppConstants.PREFERENCE_LAST_TWYST_BUCK, Integer.parseInt(twystBucks));
                 sharedPreferences.commit();
 
@@ -567,7 +642,7 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
                 fabMenu.setVisibility(View.VISIBLE);
                 outletDetailsRecyclerView.setVisibility(View.VISIBLE);
                 layout.setVisibility(View.VISIBLE);
-                outletAdapter.setItems(outlet.getOffers(),outlet.getName());
+                outletAdapter.setItems(outlet.getOffers(),outlet.getName(),outlet.getAddress());
                 outletAdapter.notifyDataSetChanged();
             }
 
@@ -579,15 +654,12 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
         });
     }
 
-    private String getUserToken() {
-        SharedPreferences prefs = this.getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return prefs.getString(AppConstants.PREFERENCE_USER_TOKEN, "");
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(getClass().getSimpleName(), "onActivityResult called");
+        attachImage.setVisibility(View.VISIBLE);
+
 
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CAMERA) {
@@ -613,7 +685,14 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
                     String fileNameSegments[] = imagePath.split("/");
                     fileName = fileNameSegments[fileNameSegments.length - 1];
                     if (imagePath != null && !imagePath.isEmpty()) {
-
+                        takePhotoLayout.setBackground(getResources().getDrawable(R.drawable.button_grey));
+                        takePhotoLayout.setClickable(false);
+                        takePhotoLayout.setEnabled(false);
+                        attachImageLayout.setBackground(getResources().getDrawable(R.drawable.button_grey));
+                        attachImageLayout.setClickable(false);
+                        attachImageLayout.setEnabled(false);
+                        submitBtn.setBackground(getResources().getDrawable(R.drawable.button_red));
+                        editImageBtn.setVisibility(View.VISIBLE);
                         // Convert image to String using Base64
                         encodeImagetoString();
                         // When Image is not selected from Gallery
@@ -644,7 +723,14 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
                 String fileNameSegments[] = imagePath.split("/");
                 fileName = fileNameSegments[fileNameSegments.length - 1];
                 if (imagePath != null && !imagePath.isEmpty()) {
-
+                    takePhotoLayout.setBackground(getResources().getDrawable(R.drawable.button_grey));
+                    takePhotoLayout.setClickable(false);
+                    takePhotoLayout.setEnabled(false);
+                    attachImageLayout.setBackground(getResources().getDrawable(R.drawable.button_grey));
+                    attachImageLayout.setClickable(false);
+                    attachImageLayout.setEnabled(false);
+                    submitBtn.setBackground(getResources().getDrawable(R.drawable.button_red));
+                    editImageBtn.setVisibility(View.VISIBLE);
                     // Convert image to String using Base64
                     encodeImagetoString();
                     // When Image is not selected from Gallery

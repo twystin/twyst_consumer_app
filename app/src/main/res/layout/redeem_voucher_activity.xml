@@ -12,436 +12,420 @@
         android:layout_height="match_parent">
 
 
-            <RelativeLayout
-                android:id="@+id/contentView"
+        <RelativeLayout
+            android:id="@+id/contentView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="?actionBarSize">
+
+            <LinearLayout
+                android:id="@+id/linearLayout4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="?actionBarSize">
+                android:background="@drawable/offer_detail_bg_top"
+                android:orientation="vertical" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/offer_detail_bg_top"
-                    android:orientation="vertical"
-                    android:id="@+id/linearLayout4" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/linearLayout5"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/linearLayout4"
+                android:scaleType="fitXY"
+                android:src="@drawable/offer_detail_bg_center" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:src="@drawable/offer_detail_bg_center"
-                    android:layout_height="wrap_content"
-                    android:scaleType="fitXY"
-                    android:layout_above="@+id/linearLayout5"
-                    android:layout_below="@+id/linearLayout4"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/linearLayout5"
+                android:layout_below="@+id/linearLayout4"
+                android:paddingLeft="8dp"
+                android:paddingRight="9dp">
 
                 <RelativeLayout
+                    android:id="@+id/relativeLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/linearLayout4"
-                    android:layout_above="@+id/linearLayout5"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="9dp">
+                    android:layout_height="@dimen/offer_detail_iamge_height">
 
-                    <RelativeLayout
-                        android:id="@+id/relativeLayout"
+                    <ImageView
+                        android:id="@+id/outletImage"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/offer_detail_iamge_height">
+                        android:layout_height="match_parent" />
 
-                        <ImageView
-                            android:id="@+id/outletImage"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="#80000000"
-                            android:layout_alignTop="@+id/outletImage">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentTop="true"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                android:weightSum="1"
-                                android:paddingLeft="@dimen/offer_detail_padding"
-                                android:paddingRight="@dimen/offer_detail_padding"
-                                android:layout_marginTop="5dp">
-
-                                <TextView
-                                    android:id="@+id/outletName"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentLeft="true"
-                                    android:layout_alignParentTop="false"
-                                    android:layout_centerVertical="true"
-                                    android:layout_marginLeft="0dp"
-                                    android:layout_marginTop="0dp"
-                                    android:layout_weight=".9"
-                                    android:lines="1"
-                                    android:ellipsize="end"
-                                    android:text="Striker Pub &amp; Brewery"
-                                    android:textColor="@android:color/white"
-                                    android:textSize="@dimen/offer_detail_name_text" />
-
-                                <ImageView
-                                    android:id="@+id/outletShare"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentLeft="false"
-                                    android:layout_alignParentRight="true"
-                                    android:layout_alignParentTop="false"
-                                    android:layout_centerVertical="true"
-                                    android:layout_gravity="right"
-                                    android:layout_marginLeft="0dp"
-                                    android:layout_marginTop="0dp"
-                                    android:layout_weight=".1"
-                                    android:src="@drawable/icon_outlet_detail_share" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="bottom"
-                                android:layout_alignParentBottom="true"
-                                android:orientation="horizontal"
-                                android:paddingBottom="10dp"
-                                android:paddingLeft="20dp"
-                                android:paddingRight="20dp">
-
-                                <TextView
-                                    android:id="@+id/outletDistance"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:drawableLeft="@drawable/offer_detail_location_icon"
-                                    android:drawablePadding="5dp"
-                                    android:text="15.3 km"
-                                    android:textColor="@android:color/white"
-                                    android:textSize="@dimen/outlet_detail_distance" />
-
-
-                            </RelativeLayout>
-                        </LinearLayout>
-
-                    </RelativeLayout>
-                    <RelativeLayout
-                        android:layout_below="@+id/relativeLayout"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="visible"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:paddingTop="5dp"
-                        android:id="@+id/relativeLayout2">
+                        android:layout_height="match_parent"
+                        android:layout_alignTop="@+id/outletImage"
+                        android:background="#80000000"
+                        android:orientation="vertical">
 
                         <RelativeLayout
-                            android:id="@+id/layoutofferDetail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginBottom="3dp"
                             android:layout_alignParentTop="true"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true">
+                            android:layout_marginTop="5dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/offer_detail_padding"
+                            android:paddingRight="@dimen/offer_detail_padding"
+                            android:weightSum="1">
 
                             <TextView
-                                android:id="@+id/textView"
-                                android:layout_width="match_parent"
+                                android:id="@+id/outletName"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:textColor="#7d7d7d"
-                                android:textSize="9sp"
-                                android:text="Your voucher code"/>
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentTop="false"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="0dp"
+                                android:layout_marginTop="0dp"
+                                android:layout_weight=".9"
+                                android:ellipsize="end"
+                                android:lines="1"
+                                android:text="Striker Pub &amp; Brewery"
+                                android:textColor="@android:color/white"
+                                android:textSize="@dimen/offer_detail_name_text" />
+
+                            <ImageView
+                                android:id="@+id/outletShare"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="false"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentTop="false"
+                                android:layout_centerVertical="true"
+                                android:layout_gravity="right"
+                                android:layout_marginLeft="0dp"
+                                android:layout_marginTop="0dp"
+                                android:layout_weight=".1"
+                                android:src="@drawable/icon_outlet_detail_share" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentBottom="true"
+                            android:gravity="bottom"
+                            android:orientation="horizontal"
+                            android:paddingBottom="10dp"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp">
 
                             <TextView
-                                android:id="@+id/voucherCodetext"
-                                android:layout_width="match_parent"
+                                android:id="@+id/outletDistance"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@android:color/black"
-                                android:layout_below="@+id/textView"
-                                android:gravity="center_horizontal"
-                                android:layout_marginTop="@dimen/redeem_padding"
-                                android:textSize="@dimen/offer_detail_text2"
-                                android:textStyle="bold"
-                                android:text="RBBMGL"/>
-
-                            <TextView
-                                android:id="@+id/textView2"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:textColor="#7d7d7d"
-                                android:layout_marginTop="@dimen/redeem_padding"
-                                android:layout_below="@+id/voucherCodetext"
-                                android:textSize="@dimen/outlet_detail_distance"
-                                android:text="Please present the code to the outlet\nin the next 60  in to avail the offer"/>
-
-                            <LinearLayout
-                                android:id="@+id/redshapeLayout"
-                                android:layout_below="@+id/textView2"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/shape_redeem_button"
-                                android:orientation="horizontal"
-                                android:layout_marginTop="@dimen/redeem_padding"
-                                android:layout_marginBottom="@dimen/redeem_padding">
-                                <RelativeLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="10dp">
-
-
-                                    <TextView
-                                        android:id="@+id/outlet_500"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:visibility="visible"
-                                        android:layout_centerVertical="true"
-                                        android:layout_centerHorizontal="true"
-                                        android:gravity="center"
-                                        android:text="1"
-                                        android:textSize="6sp"
-                                        android:background="@drawable/redeem_voucher_coin_icon"
-                                        android:textColor="@color/colorPrimary"
-                                        />
-
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:background="@drawable/redeem_voucher_buck_icon"/>
-                                </RelativeLayout>
-                                <TextView
-                                    android:id="@+id/text"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="7dp"
-                                    android:layout_marginRight="7dp"
-                                    android:layout_gravity="center_vertical"
-                                    android:gravity="center"
-                                    android:text="Upload your bill and\nget 500 Twyst bucks"
-                                    android:textColor="@color/abc_primary_text_disable_only_material_dark"
-                                    android:textSize="@dimen/offer_detail_text1" />
-
-                                <com.balysv.materialripple.MaterialRippleLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="7dp"
-                                    android:layout_marginRight="7dp"
-                                    app:mrl_rippleOverlay="true"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginBottom="10dp"
-                                    android:id="@+id/view1">
-                                    <Button
-                                        android:id="@+id/btnNow"
-                                        android:layout_width="@dimen/redeem_button_width"
-                                        android:layout_height="@dimen/redeem_button_height"
-                                        android:background="@drawable/button_white"
-                                        android:textSize="@dimen/redeem_button_text"
-                                        android:text="Now"
-                                        android:textAllCaps="false"
-                                        android:textColor="@color/colorPrimary"
-
-                                        />
-                                </com.balysv.materialripple.MaterialRippleLayout>
-                                <com.balysv.materialripple.MaterialRippleLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="7dp"
-                                    android:layout_marginRight="7dp"
-                                    app:mrl_rippleOverlay="true"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginBottom="10dp"
-                                    android:id="@+id/view2">
-                                    <Button
-                                        android:id="@+id/btnLater"
-                                        android:layout_width="@dimen/redeem_button_width"
-                                        android:layout_height="@dimen/redeem_button_height"
-                                        android:background="@drawable/button_white"
-                                        android:textSize="@dimen/redeem_button_text"
-                                        android:text="Later"
-                                        android:textAllCaps="false"
-                                        android:textColor="@color/colorPrimary"
-
-                                        />
-                                </com.balysv.materialripple.MaterialRippleLayout>
-                            </LinearLayout>
-
-                            <TextView
-                                android:id="@+id/free"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:textColor="#7d7d7d"
-                                android:layout_marginTop="5dp"
-                                android:layout_below="@+id/redshapeLayout"
-                                android:textSize="@dimen/offer_detail_text3"
-                                android:text="free"/>
-                            <TextView
-                                android:id="@+id/offerDetail1"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:textColor="#7d7d7d"
-                                android:layout_below="@+id/free"
-                                android:textSize="@dimen/offer_detail_text1"
-                                android:text="Glass of ouse blew"/>
-                            <TextView
-                                android:id="@+id/offerDetail2"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:textColor="#7d7d7d"
-                                android:layout_below="@+id/offerDetail1"
-                                android:textSize="@dimen/offer_detail_text1"
-                                android:layout_marginBottom="10dp"
-                                android:text="Glass of ouse blew"/>
+                                android:drawableLeft="@drawable/offer_detail_location_icon"
+                                android:drawablePadding="5dp"
+                                android:text="15.3 km"
+                                android:textColor="@android:color/white"
+                                android:textSize="@dimen/outlet_detail_distance" />
 
 
                         </RelativeLayout>
+                    </LinearLayout>
 
+                </RelativeLayout>
 
-
-
-
-                    </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/relativeLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/relativeLayout"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="4dp"
+                    android:visibility="visible">
 
                     <RelativeLayout
-                        android:id="@+id/termsConditionLayout"
+                        android:id="@+id/layoutofferDetail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:visibility="visible"
-                        android:layout_below="@+id/relativeLayout2"
-                        android:layout_centerHorizontal="true">
-
-
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginTop="3dp"
+                        android:gravity="center_vertical">
 
                         <TextView
-                            android:id="@+id/termsCondition"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/textView"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="* Terms &amp; Conditions"
-                            android:textColor="@color/outlet_txt_color_grey_dark"
-                            android:layout_alignParentTop="true"
-                            android:gravity="center"
-                            android:singleLine="true"
-                            android:paddingTop="@dimen/redeem_padding"
-                            android:layout_margin="5dp"
-                            android:textStyle="bold"
+                            android:layout_marginTop="3dp"
+                            android:gravity="center_horizontal"
+                            android:text="Your voucher code"
+                            android:textColor="#7d7d7d"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/voucherCodetext"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/textView"
+                            android:layout_marginTop="@dimen/redeem_padding"
+                            android:gravity="center_horizontal"
+                            android:text="RBBMGL"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/offer_detail_text2"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/voucherCodetext"
+                            android:layout_marginTop="@dimen/redeem_padding"
+                            android:gravity="center_horizontal"
+                            android:text="Please present the code to the outlet\nin the next 60  in to avail the offer"
+                            android:textColor="#7d7d7d"
+                            android:textSize="@dimen/outlet_detail_distance" />
+
+                        <LinearLayout
+                            android:id="@+id/redshapeLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/textView2"
+                            android:layout_marginBottom="@dimen/redeem_padding"
+                            android:layout_marginTop="@dimen/redeem_padding"
+                            android:background="@drawable/shape_redeem_button"
+                            android:orientation="horizontal">
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="10dp">
+
+
+                                <TextView
+                                    android:id="@+id/outlet_500"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_centerVertical="true"
+                                    android:background="@drawable/redeem_voucher_coin_icon"
+                                    android:gravity="center"
+                                    android:text="1"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="6sp"
+                                    android:visibility="visible" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/redeem_voucher_buck_icon" />
+                            </RelativeLayout>
+
+                            <TextView
+                                android:id="@+id/text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="7dp"
+                                android:layout_marginRight="7dp"
+                                android:gravity="center"
+                                android:text="Upload your bill and\nget 500 Twyst bucks"
+                                android:textColor="@color/abc_primary_text_disable_only_material_dark"
+                                android:textSize="@dimen/offer_detail_text1" />
+
+                            <com.balysv.materialripple.MaterialRippleLayout
+                                android:id="@+id/view1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginLeft="7dp"
+                                android:layout_marginRight="7dp"
+                                android:layout_marginTop="10dp"
+                                app:mrl_rippleOverlay="true">
+
+                                <Button
+                                    android:id="@+id/btnNow"
+                                    android:layout_width="@dimen/redeem_button_width"
+                                    android:layout_height="@dimen/redeem_button_height"
+                                    android:background="@drawable/button_white"
+                                    android:text="Now"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="@dimen/redeem_button_text" />
+                            </com.balysv.materialripple.MaterialRippleLayout>
+
+                            <com.balysv.materialripple.MaterialRippleLayout
+                                android:id="@+id/view2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginLeft="7dp"
+                                android:layout_marginRight="7dp"
+                                android:layout_marginTop="10dp"
+                                app:mrl_rippleOverlay="true">
+
+                                <Button
+                                    android:id="@+id/btnLater"
+                                    android:layout_width="@dimen/redeem_button_width"
+                                    android:layout_height="@dimen/redeem_button_height"
+                                    android:background="@drawable/button_white"
+                                    android:text="Later"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="@dimen/redeem_button_text"
+
+                                    />
+                            </com.balysv.materialripple.MaterialRippleLayout>
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/free"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/redshapeLayout"
+                            android:layout_marginTop="4dp"
+                            android:gravity="center_horizontal"
+                            android:text="free"
+                            android:textColor="#7d7d7d"
+                            android:textSize="@dimen/offer_detail_text3" />
+
+                        <TextView
+                            android:id="@+id/offerDetail1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/free"
+                            android:gravity="center_horizontal"
+                            android:text="Glass of ouse blew"
+                            android:textColor="#7d7d7d"
                             android:textSize="@dimen/offer_detail_text1" />
 
                         <TextView
-                            android:id="@+id/text1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/outlet_txt_color_grey_dark"
-                            android:text="Minimum bill value must be Rs 500/-"
-                            android:textSize="@dimen/outlet_detail_distance"
-                            android:layout_margin="1dp"
-                            android:paddingLeft="15dp"
-                            android:layout_below="@+id/termsCondition"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true" />
-
-
-
-                        <TextView
-                            android:id="@+id/text2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/outlet_txt_color_grey_dark"
-                            android:text="House brew subject availability"
-                            android:textSize="@dimen/outlet_detail_distance"
-                            android:layout_margin="1dp"
-                            android:paddingLeft="15dp"
-                            android:layout_below="@+id/text1"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true" />
-
-                        <TextView
-                            android:id="@+id/text3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/outlet_txt_color_grey_dark"
-                            android:text="Offer available sunday- thursday"
-                            android:textSize="@dimen/outlet_detail_distance"
-                            android:layout_margin="3dp"
-                            android:paddingLeft="15dp"
-                            android:visibility="gone"
-                            android:layout_below="@+id/text2"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true" />
-
-
-
-                        <View
+                            android:id="@+id/offerDetail2"
                             android:layout_width="match_parent"
-                            android:layout_height="0.8dp"
-                            android:background="#78797a"
-                            android:id="@+id/line1"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_toRightOf="@+id/text3"
-                            android:layout_toEndOf="@+id/text3" />
-
-
-                        <TextView
-                            android:id="@+id/viewMore"
-                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/outlet_txt_color_grey_dark"
-                            android:drawablePadding="5dp"
-                            android:textStyle="bold"
-                            android:text="view more"
-                            android:textSize="12sp"
-                            android:visibility="invisible"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true" />
+                            android:layout_below="@+id/offerDetail1"
+                            android:layout_marginBottom="10dp"
+                            android:gravity="center_horizontal"
+                            android:text="Glass of ouse blew"
+                            android:textColor="#7d7d7d"
+                            android:textSize="@dimen/offer_detail_text1" />
+
 
                     </RelativeLayout>
 
 
                 </RelativeLayout>
 
-
-
-                <LinearLayout
+                <RelativeLayout
+                    android:id="@+id/termsConditionLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/offer_detail_bg_bottom"
+                    android:layout_below="@+id/relativeLayout2"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center_vertical"
                     android:orientation="vertical"
-                    android:layout_above="@+id/reportText"
-                    android:id="@+id/linearLayout5">
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:visibility="visible">
 
-                </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/termsCondition"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/redeem_padding"
+                        android:singleLine="true"
+                        android:text="* Terms &amp; Conditions"
+                        android:textColor="@color/outlet_txt_color_grey_dark"
+                        android:textSize="@dimen/offer_detail_text1"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/text1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/termsCondition"
+                        android:layout_margin="1dp"
+                        android:paddingLeft="15dp"
+                        android:visibility="gone"
+                        android:textColor="@color/outlet_txt_color_grey_dark"
+                        android:textSize="@dimen/outlet_detail_distance" />
 
 
-                <TextView
-                    android:id="@+id/reportText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="20dp"
-                    android:drawableLeft="@drawable/icon_offer_detail_report"
-                    android:drawablePadding="5dp"
-                    android:gravity="left|center"
-                    android:paddingBottom="@dimen/offer_detail_report_padding_bottom"
-                    android:paddingTop="2dp"
-                    android:text="Report a problem"
-                    android:textAllCaps="true"
-                    android:textColor="@color/offer_color_red"
-                    android:textSize="@dimen/outlet_detail_distance" />
+                    <TextView
+                        android:id="@+id/text2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/text1"
+                        android:layout_margin="1dp"
+                        android:paddingLeft="15dp"
+                        android:visibility="gone"
+                        android:textColor="@color/outlet_txt_color_grey_dark"
+                        android:textSize="@dimen/outlet_detail_distance" />
+
+
+                    <View
+                        android:id="@+id/line1"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.8dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="#78797a" />
+
+
+                    <TextView
+                        android:id="@+id/viewMore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/text2"
+                        android:layout_centerHorizontal="true"
+                        android:drawablePadding="5dp"
+                        android:drawableRight="@drawable/icon_offer_detail_grey_arrow"
+                        android:text="view more"
+                        android:textColor="@color/outlet_txt_color_grey_dark"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+
             </RelativeLayout>
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/reportText"
+                android:background="@drawable/offer_detail_bg_bottom"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/reportText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="20dp"
+                android:drawableLeft="@drawable/icon_offer_detail_report"
+                android:drawablePadding="5dp"
+                android:gravity="left|center"
+                android:paddingBottom="@dimen/offer_detail_report_padding_bottom"
+                android:paddingTop="2dp"
+                android:text="Report a problem"
+                android:textAllCaps="true"
+                android:textColor="@color/offer_color_red"
+                android:textSize="@dimen/outlet_detail_distance" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/obstructor"
@@ -456,19 +440,19 @@
             android:id="@+id/obstructor2"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:layout_above="@+id/reportProblemLayout"
             android:alpha="0"
             android:background="@android:color/black"
             android:clickable="true"
-            android:visibility="gone"
-            android:layout_above="@+id/reportProblemLayout" />
+            android:visibility="gone" />
 
         <LinearLayout
+            android:id="@+id/reportProblemLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="#fff"
             android:orientation="vertical"
-            android:id="@+id/reportProblemLayout"
             android:visibility="gone">
 
             <TextView
@@ -487,10 +471,10 @@
                 android:id="@+id/report1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
+                android:layout_marginBottom="4dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="4dp">
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
 
                 <TextView
                     android:id="@+id/textReport1"
@@ -504,8 +488,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:src="@drawable/icon_check_unchecked"
-                    android:layout_centerVertical="true" />
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/icon_check_unchecked" />
 
             </RelativeLayout>
 
@@ -582,6 +566,7 @@
                 android:lines="4"
                 android:maxLines="4"
                 android:padding="5dp"
+                android:textCursorDrawable="@null"
                 android:singleLine="false"
                 android:textColor="#2E2E2E"
                 android:textColorHint="#c2c2c2"
@@ -627,10 +612,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:background="@drawable/button_red"
+                        android:enabled="true"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
                         android:text="SEND"
-                        android:enabled="true"
                         android:textColor="@android:color/white"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -639,13 +624,14 @@
             </RelativeLayout>
 
         </LinearLayout>
-        <include
-            android:id="@+id/circularProgressBar"
-            layout="@layout/circular_progress_bar"/>
 
         <include
-        android:id="@+id/toolbarWrapper"
-        layout="@layout/toolbar_wrapper" />
+            android:id="@+id/circularProgressBar"
+            layout="@layout/circular_progress_bar" />
+
+        <include
+            android:id="@+id/toolbarWrapper"
+            layout="@layout/toolbar_wrapper" />
 
     </RelativeLayout>
 

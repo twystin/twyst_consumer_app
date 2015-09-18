@@ -34,9 +34,10 @@
 
 
             <TextView
+                android:id="@+id/costTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="You don't have enough Twyst Bucks to extend this voucher's validity."
+                android:text="You don't have enough Twyst Bucks to extend this voucher's validity. You need 150 twyst bucks."
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="7dp"
                 android:gravity="bottom"

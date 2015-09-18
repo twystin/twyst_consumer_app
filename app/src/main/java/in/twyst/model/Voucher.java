@@ -9,26 +9,39 @@ import java.io.Serializable;
  */
 public class Voucher implements Serializable{
 
-    @SerializedName("offer")
-    private String offer;
+    @SerializedName("event_meta")
+    private VoucherMeta voucherMeta;
 
-    public String getOffer() {
-        return offer;
+    public VoucherMeta getVoucherMeta() {
+        return voucherMeta;
     }
 
-    public void setOffer(String offer) {
-        this.offer = offer;
+    public void setVoucherMeta(VoucherMeta voucherMeta) {
+        this.voucherMeta = voucherMeta;
     }
 
-    @SerializedName("date")
-    private String date;
+    public static class VoucherMeta implements Serializable{
+        @SerializedName("offer")
+        private String offer;
+
+        public String getOffer() {
+            return offer;
+        }
+
+        public void setOffer(String offer) {
+            this.offer = offer;
+        }
+
+        @SerializedName("date")
+        private String date;
 
 
-    public String getDate() {
-        return date;
-    }
+        public String getDate() {
+            return date;
+        }
 
-    public void setDate(String date) {
-        this.date = date;
+        public void setDate(String date) {
+            this.date = date;
+        }
     }
 }

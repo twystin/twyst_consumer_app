@@ -32,10 +32,10 @@
 
 
             <ListView
-                android:id="@+id/listView"
+                android:id="@+id/locList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/termsCondition"/>
+                android:choiceMode="singleChoice"/>
 
 
 
@@ -51,9 +51,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="14dp"
-                    android:layout_toLeftOf="@+id/extendBtn"
-                    android:layout_toStartOf="@+id/extendBtn"
-                    android:visibility="invisible"
+                    android:layout_toLeftOf="@+id/locChoose"
+                    android:layout_toStartOf="@+id/locChoose"
+                    android:visibility="visible"
                     app:mrl_rippleOverlay="true">
 
                     <TextView
@@ -69,7 +69,7 @@
                 </com.balysv.materialripple.MaterialRippleLayout>
 
                 <com.balysv.materialripple.MaterialRippleLayout
-                    android:id="@+id/locClose"
+                    android:id="@+id/locChoose"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -80,7 +80,7 @@
                         android:layout_width="75dp"
                         android:layout_height="30dp"
                         android:background="@drawable/button_red"
-                        android:text="Close"
+                        android:text="Choose"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/outlet_details_coupon_txt" />
                 </com.balysv.materialripple.MaterialRippleLayout>

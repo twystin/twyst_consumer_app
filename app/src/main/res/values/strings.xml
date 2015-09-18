@@ -28,6 +28,7 @@
     <string name="submit_offer">Submit Offer</string>
     <string name="suggest_outlet">Suggest an outlet</string>
     <string name="faq">FAQs</string>
+    <string name="profile">Profile</string>
 
 
 
@@ -51,5 +52,7 @@
     <string name="send_failed">Sending invitations failed</string>
     <string name="invite_dialog_title">You got an invitation!</string>
     <string name="checkin">Check-in Success!</string>
+ <string name="account">Accounts</string>
+ <string name="connected_account">Connected Accounts</string>
 
 </resources>

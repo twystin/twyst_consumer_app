@@ -99,11 +99,11 @@ public class ScannerActivity extends ActionBarActivity implements ZXingScannerVi
                         String json = GSON.toJson(dataMap);
                         CheckInSuccessData checkInSuccessData = GSON.fromJson(json, CheckInSuccessData.class);
                         Intent intent = new Intent(getApplicationContext(), CheckInSuccessActivity.class);
-                        intent.putExtra(AppConstants.INTENT_PARAM_CHECKIN_BUCKS, checkInSuccessData.getTwyst_bucks());
                         intent.putExtra(AppConstants.INTENT_PARAM_CHECKIN_HEADER,checkInSuccessData.getHeader());
                         intent.putExtra(AppConstants.INTENT_PARAM_CHECKIN_LINE1,checkInSuccessData.getLine1());
                         intent.putExtra(AppConstants.INTENT_PARAM_CHECKIN_LINE2,checkInSuccessData.getLine2());
-                        intent.putExtra(AppConstants.INTENT_PARAM_CHECKIN_OUTLET_NAME,checkInSuccessData.getOutlet());
+                        intent.putExtra(AppConstants.INTENT_PARAM_CHECKIN_OUTLET_NAME,checkInSuccessData.getOutlet_name());
+                        intent.putExtra(AppConstants.INTENT_PARAM_CHECKIN_OUTLET_ID, checkInSuccessData.getOutlet_id());
                         intent.putExtra(AppConstants.INTENT_PARAM_CHECKIN_CODE,checkInSuccessData.getCode());
                         startActivity(intent);
                     } else {

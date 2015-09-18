@@ -15,7 +15,8 @@
         <item name="colorAccent">@color/app_accent_color</item>
 
         <item name="android:actionMenuTextColor">@android:color/white</item>
-
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowContentOverlay">@null</item>

@@ -63,7 +63,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
-                            android:layout_marginTop="5dp"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
                             android:paddingLeft="@dimen/offer_detail_padding"
@@ -95,6 +94,7 @@
                                 android:layout_alignParentTop="false"
                                 android:layout_centerVertical="true"
                                 android:layout_gravity="right"
+                                android:padding="5dp"
                                 android:layout_marginLeft="591dp"
                                 android:layout_marginTop="0dp"
                                 android:layout_weight=".1"
@@ -225,60 +225,45 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/termsCondition"
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginLeft="16dp"
                         android:layout_marginTop="2dp"
                         android:textSize="@dimen/outlet_details_coupon_txt"
-                        android:text="applicable on starters only"
-                        android:visibility="invisible" />
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:id="@+id/layoutterms2"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/terms1"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:weightSum="1"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="16dp">
 
                         <TextView
                             android:id="@+id/terms2"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="30dp"
-                            android:text="applicable on starters only"
+                            android:layout_weight=".72"
                             android:textSize="@dimen/outlet_details_coupon_txt"
-                            android:visibility="invisible" />
+                            android:lines="1"
+                            android:ellipsize="end"
+                            android:visibility="gone" />
 
                         <TextView
-                            android:id="@+id/viewMore"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/viewMore1"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/terms4"
-                            android:layout_marginLeft="10dp"
-                            android:drawablePadding="10dp"
+                            android:layout_weight=".27"
+                            android:drawablePadding="2dp"
                             android:drawableRight="@drawable/icon_offer_detail_grey_arrow"
                             android:text="View more"
                             android:textSize="@dimen/offer_detail_text1"
                             android:textStyle="bold"
-                            android:visibility="invisible" />
+                            android:visibility="visible" />
 
                     </LinearLayout>
 
-                   <!-- <TextView
-                        android:id="@+id/terms3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/terms2"
-                        android:layout_marginLeft="30dp"
-                        android:textSize="@dimen/outlet_details_coupon_txt"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/terms4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/terms3"
-                        android:layout_marginLeft="30dp"
-                        android:textSize="@dimen/outlet_details_coupon_txt"
-                        android:visibility="gone" />-->
 
 
                     <TextView
@@ -333,9 +318,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_above="@+id/view"
-                        android:paddingTop="5dp"
-                        android:visibility="gone"
-                        android:paddingBottom="7dp"
+                        android:paddingTop="3dp"
+                        android:visibility="visible"
+                        android:paddingBottom="5dp"
                         android:layout_marginTop="@dimen/offer_detail_report_padding_top">
 
                         <TextView
@@ -365,7 +350,8 @@
                                 android:id="@+id/textView20"
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
-                                android:layout_marginRight="5dp"
+                                android:layout_marginRight="7dp"
+                                android:layout_marginBottom="4dp"
                                 android:background="#78797a"
                                 android:visibility="visible"
                                 android:gravity="bottom"
@@ -376,9 +362,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:drawablePadding="10dp"
+                                android:paddingLeft="5dp"
                                 android:layout_centerVertical="true"
                                 android:textSize="@dimen/offer_detail_text1"
-                                android:visibility="visible" />
+                                android:visibility="invisible" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -620,6 +607,7 @@
                 android:lines="4"
                 android:maxLines="4"
                 android:padding="5dp"
+                android:textCursorDrawable="@null"
                 android:singleLine="false"
                 android:textColor="#2E2E2E"
                 android:textColorHint="#c2c2c2"

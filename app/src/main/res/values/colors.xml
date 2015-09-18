@@ -12,7 +12,7 @@
     <color name="drawer_item_icon_color">#ffffff</color>
     <color name="drawer_item_section_color">#8C000000</color>
 
-    <color name="app_accent_color">#727272</color>
+    <color name="app_accent_color">#e9573f</color>
     <color name="app_accent_color_transparent">#c8f47c20</color>
 
     <color name="pager_active">#007AFF</color>
@@ -47,6 +47,8 @@
     <color name="blue_semi_transparent">#805677fc</color>
     <color name="blue_semi_transparent_pressed">#80738ffe</color>
     <color name="fab_label_color">#646464</color>
+    <color name="edit_profile_hint_color">#c7c7c7</color>
+    <color name="edit_profile_text_color">#555555</color>
 
     <!-- For Notification-->
     <color name="notification_bg">#e9e9da</color>

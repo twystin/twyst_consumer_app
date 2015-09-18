@@ -5,14 +5,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -62,6 +65,8 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ObservableRecyclerView recyclerView;
     private boolean firstLoad;
+    private RelativeLayout hideSpinner;
+    private boolean fromDrawer;
 
     @Override
     protected String getTagName() {
@@ -77,6 +82,7 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
     protected void onCreate(Bundle savedInstanceState) {
         setupAsChild = true;
         super.onCreate(savedInstanceState);
+        fromDrawer = getIntent().getBooleanExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, false);
 
         recyclerView = (ObservableRecyclerView) findViewById(R.id.walletRecycleView);
         recyclerView.setHasFixedSize(true);
@@ -105,8 +111,18 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
 
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        fromDrawer = intent.getBooleanExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, false);
+    }
+
     private void fetchCoupons() {
-        HttpService.getInstance().getCoupons(getUserToken(), new Callback<BaseResponse<WalletData>>() {
+        SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        String lat = prefs.getString(AppConstants.PREFERENCE_CURRENT_LAT, "");
+        String lng = prefs.getString(AppConstants.PREFERENCE_CURRENT_LNG, "");
+
+        HttpService.getInstance().getCoupons(getUserToken(),lat,lng, new Callback<BaseResponse<WalletData>>() {
             @Override
             public void success(BaseResponse<WalletData> arrayListBaseResponse, Response response) {
                 if (arrayListBaseResponse.isResponse()) {
@@ -117,7 +133,7 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
                     if (TextUtils.isEmpty(twystBucks)) {
                         twystBucks = "0";
                     } else {
-                        SharedPreferences.Editor sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
+                        sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
                         sharedPreferences.putInt(AppConstants.PREFERENCE_LAST_TWYST_BUCK, Integer.parseInt(twystBucks));
                         sharedPreferences.commit();
                     }
@@ -252,12 +268,13 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
 
 
                     final LinearLayout twystBucksLayout = (LinearLayout) findViewById(R.id.twystBucksLayout);
+                    hideSpinner = (RelativeLayout)findViewById(R.id.hideSpinner);
                     twystBucksLayout.setVisibility(View.VISIBLE);
                     buckText.setText(twystBucks);
 
-                    if (arrayListBaseResponse.getData() != null) {
+                    if(outlets.size()>0){
 
-
+                        hideSpinner.setVisibility(View.VISIBLE);
                         walletAdapter = new WalletAdapter();
                         walletAdapter.setItems(outlets);
 
@@ -411,11 +428,12 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
 
 
                         }else{
-                            Toast.makeText(WalletActivity.this, "You have no active vouchers", Toast.LENGTH_LONG).show();
+                             hideSpinner.setVisibility(View.GONE);
+                             Toast.makeText(WalletActivity.this, arrayListBaseResponse.getMessage(), Toast.LENGTH_SHORT).show();
                         }
 
                     } else {
-                        Toast.makeText(WalletActivity.this, arrayListBaseResponse.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(WalletActivity.this, arrayListBaseResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -440,12 +458,6 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
 
         // Stop refresh animation
         mSwipeRefreshLayout.setRefreshing(false);
-    }
-
-    private String getUserToken() {
-        SharedPreferences prefs = this.getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return prefs.getString(AppConstants.PREFERENCE_USER_TOKEN, "");
-
     }
 
     @Override
@@ -561,6 +573,22 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
         //a.setDuration((int)(targetHeight / hideableLayout.getContext().getResources().getDisplayMetrics().density));
         a.setDuration(((int)(targetHeight / hideableLayout.getContext().getResources().getDisplayMetrics().density)) * 4);
         hideableLayout.startAnimation(a);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerOpened) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            if (fromDrawer) {
+                //clear history and go to discover
+                Intent intent = new Intent(getBaseContext(), DiscoverActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            } else {
+                super.onBackPressed();
+            }
+        }
     }
 
 }

@@ -8,10 +8,9 @@ import com.google.android.gms.analytics.Tracker;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 
-import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import in.twyst.model.AuthToken;
 import in.twyst.model.BaseResponse;
@@ -20,12 +19,11 @@ import in.twyst.model.Data;
 import in.twyst.model.DiscoverData;
 import in.twyst.model.Feedback;
 import in.twyst.model.Friend;
-import in.twyst.model.FriendData;
-import in.twyst.model.GetFriend;
+import in.twyst.model.NotificationData;
+import in.twyst.model.Profile;
 import in.twyst.model.LikeOffer;
 import in.twyst.model.LocationData;
 import in.twyst.model.OTPCode;
-import in.twyst.model.Outlet;
 import in.twyst.model.OutletDetailData;
 import in.twyst.model.ProfileUpdate;
 import in.twyst.model.Referral;
@@ -36,7 +34,7 @@ import in.twyst.model.SubmitOffer;
 import in.twyst.model.Suggestion;
 import in.twyst.model.UploadBill;
 import in.twyst.model.UseOffer;
-import in.twyst.model.UseOfferData;
+import in.twyst.model.UserLocation;
 import in.twyst.model.Voucher;
 import in.twyst.model.WalletData;
 import in.twyst.model.WriteToUs;
@@ -45,7 +43,6 @@ import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.client.Response;
-
 /**
  * Created by satish on 30/11/14.
  */
@@ -103,8 +100,8 @@ public class HttpService {
         twystService.userAuthToken(code, phone, callback);
     }
 
-    public void updateProfile(String token, String email,String deviceId,String version,String device,String model,String product, Callback<BaseResponse<ProfileUpdate>> callback) {
-        twystService.updateProfile(token, email, deviceId, version, device, model, product, callback);
+    public void updateProfile(String token, String email, String image, String fname, String mname, String lname, String city,String id, String source,String facebookUri,String googleplusUri, String deviceId, String version, String device, String model, String product,Callback<BaseResponse<ProfileUpdate>> callback) {
+        twystService.updateProfile(token, email, image, fname, mname, lname, city,id,source,facebookUri, googleplusUri, deviceId, version, device, model, product, callback);
     }
 
     public void getRecommendedOutlets(String userToken, int start,String lat, String lng, String date, String time, Callback<BaseResponse<DiscoverData>> callback) {
@@ -174,8 +171,8 @@ public class HttpService {
         twystService.uploadBill(token, uploadBill, callback);
     }
 
-    public void getCoupons(String userToken, Callback<BaseResponse<WalletData>> callback) {
-        twystService.getCoupons(userToken, callback);
+    public void getCoupons(String userToken, String lat, String lng, Callback<BaseResponse<WalletData>> callback) {
+        twystService.getCoupons(userToken,lat,lng, callback);
     }
 
     public void writeToUs(String token, WriteToUs writeToUs, Callback<BaseResponse> callback){
@@ -202,7 +199,20 @@ public class HttpService {
         twystService.reportProblem(token, reportProblem, callback);
     }
 
-    public void getProfile(String token, Callback<BaseResponse<GetFriend>> callback){
+    public void getProfile(String token, Callback<BaseResponse<Profile>> callback){
         twystService.getProfile(token, callback);
     }
+
+    public void searchOffer(String token, String searchText, String lat,String lng, String date, String time , Callback<BaseResponse<DiscoverData>> callback){
+        twystService.searchOffer(token, searchText,lat,lng,date,time, callback);
+    }
+
+    public void postLocation(String token, UserLocation userLocation, Callback<BaseResponse> callback){
+        twystService.postLocation(token, userLocation, callback);
+    }
+
+    public void getNotification(String token, Callback<BaseResponse<ArrayList<NotificationData>>> callback){
+        twystService.getNotification(token, callback);
+    }
+
 }

@@ -114,12 +114,14 @@
                 android:id="@+id/divider"/>
 
             <RelativeLayout
+                android:id="@+id/hideSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp"
                 android:paddingRight="10dp"
-                android:paddingBottom="10dp">
+                android:paddingBottom="10dp"
+                android:visibility="gone">
 
 
                 <TextView

@@ -40,7 +40,7 @@ import retrofit.client.Response;
 public class PhoneVerificationActivity extends Activity {
 
     private String otpCodeReaded;
-
+    private SharedPreferences.Editor sharedPreferences;
     private String getTagName() {
         return this.getClass().getSimpleName();
     }
@@ -53,6 +53,7 @@ public class PhoneVerificationActivity extends Activity {
         final EditText mobileNo = (EditText) findViewById(R.id.phone);
 
         final Button continueBtn = (Button) findViewById(R.id.continueBtn);
+        sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,7 +91,6 @@ public class PhoneVerificationActivity extends Activity {
                                                 retry++;
 
                                             } else {
-                                                SharedPreferences.Editor sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
                                                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_PHONE,otpCode.getPhone());
                                                 sharedPreferences.apply();
                                                 Intent intent = new Intent(getBaseContext(), OTPVerificationActivity.class);
@@ -110,6 +110,14 @@ public class PhoneVerificationActivity extends Activity {
                                 findViewById(R.id.circularProgressBar).setVisibility(View.INVISIBLE);
                                 Log.d("error message", "" + twystResponse.getMessage());
                                 Toast.makeText(PhoneVerificationActivity.this, twystResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                                if(twystResponse.getMessage().equalsIgnoreCase("We have already sent you an authentication code.")){
+                                    sharedPreferences.putString(AppConstants.PREFERENCE_USER_PHONE,mobileNo.getText().toString());
+                                    sharedPreferences.apply();
+                                    Intent intent = new Intent(getBaseContext(), OTPVerificationActivity.class);
+                                    intent.putExtra(AppConstants.INTENT_PARAM_OTP_PHONE, mobileNo.getText().toString());
+                                    startActivity(intent);
+                                    finish();
+                                }
                             }
 
                         }
@@ -138,23 +146,11 @@ public class PhoneVerificationActivity extends Activity {
 
     }
 
-//    public void enableSmsModule() {
-//        PackageManager pm = getPackageManager();
-//        ComponentName componentName = new ComponentName(getApplicationContext(), SmsListener.class);
-//        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-//    }
-//
-//    public void disableSmsModule() {
-//        PackageManager pm = getPackageManager();
-//        ComponentName componentName = new ComponentName(getApplicationContext(), SmsListener.class);
-//        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-//    }
 
     private void validateOTP(final OTPCode otpCode) {
         HttpService.getInstance().userAuthToken(otpCodeReaded, otpCode.getPhone(), new Callback<BaseResponse<AuthToken>>() {
             @Override
             public void success(BaseResponse<AuthToken> baseResponse, Response response) {
-                SharedPreferences.Editor sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
                 if (baseResponse.isResponse()) {
 
                     AuthToken authToken = baseResponse.getData();
@@ -189,22 +185,21 @@ public class PhoneVerificationActivity extends Activity {
     private boolean checkSmsCode() {
         Cursor cursor = getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
 
-        if (cursor.moveToFirst()) { // must check the result to prevent exception
+        if (cursor.moveToFirst()) {
             do {
                 String msgData = "";
                 for (int idx = 0; idx < cursor.getColumnCount(); idx++) {
                     msgData += " " + cursor.getColumnName(idx) + ":" + cursor.getString(idx);
                 }
-                //Log.d(getClass().getSimpleName(), "SMS: " + msgData);
-                // use msgData
+
             } while (cursor.moveToNext());
         } else {
             // empty box, no SMS
         }
 
 
-        SharedPreferences sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        String smsBody = sharedPreferences.getString(AppConstants.PREFERENCE_SMS_BODY, "");
+        SharedPreferences pref = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        String smsBody = pref.getString(AppConstants.PREFERENCE_SMS_BODY, "");
         if (TextUtils.isEmpty(smsBody)) {
             return false;
         } else {
@@ -217,9 +212,8 @@ public class PhoneVerificationActivity extends Activity {
                 otpCodeReaded = null;
             }
 
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.remove(AppConstants.PREFERENCE_SMS_BODY);
-            editor.commit();
+            sharedPreferences.remove(AppConstants.PREFERENCE_SMS_BODY);
+            sharedPreferences.commit();
             return true;
         }
 
@@ -256,7 +250,7 @@ public class PhoneVerificationActivity extends Activity {
         snackbar.postDelayed(new Runnable() {
             @Override
             public void run() {
-                showSnackbar(snackbar); // activity where it is displayed
+                showSnackbar(snackbar);
             }
         }, 500);
 

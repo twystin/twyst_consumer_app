@@ -1,11 +1,9 @@
 package in.twyst.activities;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -25,6 +23,9 @@ import retrofit.client.Response;
  * Created by rahuls on 7/8/15.
  */
 public class SuggestOutletActivity extends BaseActivity{
+
+    private boolean fromDrawer;
+
     @Override
     protected String getTagName() {
         return null;
@@ -39,7 +40,7 @@ public class SuggestOutletActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         setupAsChild= true;
         super.onCreate(savedInstanceState);
-
+        fromDrawer = getIntent().getBooleanExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, false);
         hideProgressHUDInLayout();
 
 
@@ -53,8 +54,6 @@ public class SuggestOutletActivity extends BaseActivity{
 
                 if (!TextUtils.isEmpty(outletLocET.getText()) && !TextUtils.isEmpty(outletNameET.getText())) {
                     final TwystProgressHUD twystProgressHUD = TwystProgressHUD.show(SuggestOutletActivity.this, false, null);
-                    SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-                    String usertoken = prefs.getString(AppConstants.PREFERENCE_USER_TOKEN, "");
 
                     Suggestion suggestion = new Suggestion();
                     SuggestionMeta suggestionMeta = new SuggestionMeta();
@@ -68,7 +67,7 @@ public class SuggestOutletActivity extends BaseActivity{
 
                     suggestion.setSuggestionMeta(suggestionMeta);
 
-                    HttpService.getInstance().postSuggestion(usertoken, suggestion, new Callback<BaseResponse>() {
+                    HttpService.getInstance().postSuggestion(getUserToken(), suggestion, new Callback<BaseResponse>() {
                         @Override
                         public void success(BaseResponse baseResponse, Response response) {
 
@@ -107,5 +106,21 @@ public class SuggestOutletActivity extends BaseActivity{
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerOpened) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            if (fromDrawer) {
+                //clear history and go to discover
+                Intent intent = new Intent(getBaseContext(), DiscoverActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            } else {
+                super.onBackPressed();
+            }
+        }
     }
 }

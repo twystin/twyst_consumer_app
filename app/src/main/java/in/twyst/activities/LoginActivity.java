@@ -1,29 +1,18 @@
 package in.twyst.activities;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -35,11 +24,8 @@ import com.facebook.GraphRequestBatch;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
-import com.facebook.applinks.AppLinkData;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.share.model.AppInviteContent;
-import com.facebook.share.widget.AppInviteDialog;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -52,22 +38,15 @@ import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 import com.nispok.snackbar.enums.SnackbarType;
 import com.nispok.snackbar.listeners.ActionClickListener;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 import java.util.regex.Pattern;
-
-import bolts.AppLinks;
 import in.twyst.R;
 import in.twyst.model.BaseResponse;
 import in.twyst.model.Friend;
@@ -93,10 +72,15 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
     private CallbackManager callbackManager;
 
     private EditText email;
-
+    private String userImage;
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private String dob;
+    private String city;
     private String source = "phonebook";
     private String socialEmail;
-    private String id;
+    private String id,fbid,linkUri;
     private Friend friend;
     private List<Friend.Friends> friendsList;
     private Friend.Friends friends;
@@ -132,56 +116,47 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
             @Override
             public void onSuccess(LoginResult loginResult) {
 
-                System.out.println("LoginActivity.onSuccess called");
-
                 AccessToken accessToken = loginResult.getAccessToken();
 
-                GraphRequestBatch batch = new GraphRequestBatch(
-                        GraphRequest.newMeRequest(
-                                accessToken,
-                                new GraphRequest.GraphJSONObjectCallback() {
-                                    @Override
-                                    public void onCompleted(
-                                            JSONObject jsonObject,
-                                            GraphResponse response) {
+                GraphRequestBatch batch = new GraphRequestBatch(GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject jsonObject, GraphResponse response) {
 
-                                        try {
+                        try {
+                            id = jsonObject.getString("id");
+                            socialEmail = jsonObject.getString("email");
 
-                                            System.out.println("getUser onCompleted : jsonObject " + response.getJSONObject());
+                        } catch (JSONException jsone) {
+                            jsone.printStackTrace();
+                        }
+                        try {
+                            dob = jsonObject.getString("birthday");
 
-                                            id = jsonObject.getString("id");
-                                            socialEmail = jsonObject.getString("email");
+                        } catch (JSONException jsone) {
+                            jsone.printStackTrace();
+                        }
 
-                                        } catch (JSONException jsone) {
-                                            jsone.printStackTrace();
-                                        }
+                    }
+                }),
+                        GraphRequest.newMyFriendsRequest(accessToken, new GraphRequest.GraphJSONArrayCallback() {
+                            @Override
+                            public void onCompleted(JSONArray jsonArray, GraphResponse response) {
 
+                                friendsList = new ArrayList<Friend.Friends>();
 
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    try {
+                                        friends = new Friend.Friends();
+                                        friends.setId(jsonArray.getJSONObject(i).getString("id"));
+                                        friends.setName(jsonArray.getJSONObject(i).getString("name"));
+                                        friends.setPhone(null);
+                                        friendsList.add(friends);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                }),
-                        GraphRequest.newMyFriendsRequest(
-                                accessToken,
-                                new GraphRequest.GraphJSONArrayCallback() {
-                                    @Override
-                                    public void onCompleted(
-                                            JSONArray jsonArray,
-                                            GraphResponse response) {
-
-                                        friendsList = new ArrayList<Friend.Friends>();
-
-                                        for(int i=0;i<jsonArray.length();i++){
-                                            try {
-                                                friends = new Friend.Friends();
-                                                friends.setId(jsonArray.getJSONObject(i).getString("id"));
-                                                friends.setName(jsonArray.getJSONObject(i).getString("name"));
-                                                friends.setPhone(null);
-                                                friendsList.add(friends);
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }
-                                })
+                                }
+                            }
+                        })
                 );
                 batch.addCallback(new GraphRequestBatch.Callback() {
                     @Override
@@ -212,8 +187,15 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
             protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
                 Profile.fetchProfileForCurrentAccessToken();
 
-                sharedPreferences.putString(AppConstants.PREFERENCE_USER_PIC, String.valueOf(currentProfile.getProfilePictureUri(250,250)));
+                userImage = String.valueOf(currentProfile.getProfilePictureUri(250, 250));
+                firstName = currentProfile.getFirstName();
+                middleName = currentProfile.getMiddleName();
+                lastName = currentProfile.getLastName();
+                fbid = currentProfile.getId();
+                linkUri = String.valueOf(currentProfile.getLinkUri());
+                sharedPreferences.putString(AppConstants.PREFERENCE_USER_PIC, String.valueOf(currentProfile.getProfilePictureUri(250, 250)));
                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_NAME, currentProfile.getFirstName());
+                sharedPreferences.putString(AppConstants.PREFERENCE_USER_FULL_NAME,currentProfile.getName());
                 sharedPreferences.apply();
             }
 
@@ -242,16 +224,22 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
                     email.setError(null);
                     socialEmail = email.getText().toString();
                     source = "phonebook";
-
+                    userImage = "";
+                    firstName = "";
+                    middleName = "";
+                    lastName = "";
+                    dob = "";
+                    id = "";
                     friendsList = PhoneBookContacts.getInstance().getPhoneContactList();
-                    SharedPreferences.Editor sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
+                    sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
                     sharedPreferences.putString(AppConstants.PREFERENCE_USER_PIC, "");
-                    sharedPreferences.putString(AppConstants.PREFERENCE_USER_NAME,socialEmail);
+                    sharedPreferences.putString(AppConstants.PREFERENCE_USER_NAME, socialEmail);
+                    sharedPreferences.putString(AppConstants.PREFERENCE_USER_FULL_NAME, socialEmail);
                     sharedPreferences.apply();
                     updateUserEmail();
 
-                    }
                 }
+            }
         });
 
         fbLogin.setOnClickListener(new View.OnClickListener() {
@@ -282,16 +270,19 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
         sharedPreferences.commit();
 
         Intent intent = new Intent(getBaseContext(), DiscoverActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setAction("setChildNo");
+        intent.putExtra("Search", false);
         startActivity(intent);
         finish();
     }
 
     private void updateUserEmail() {
-        SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
         final String token = prefs.getString(AppConstants.PREFERENCE_USER_TOKEN, "");
         String deviceId = null;
 
-            deviceId = prefs.getString(AppConstants.PREFERENCE_REGISTRATION_ID,"");
+        deviceId = prefs.getString(AppConstants.PREFERENCE_REGISTRATION_ID,"");
             StringBuilder builder = new StringBuilder();
 
             Field[] fields = Build.VERSION_CODES.class.getFields();
@@ -315,39 +306,50 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
                 }
             }
 
-            Log.d("Login activity", "" + builder.toString());
             final TwystProgressHUD twystProgressHUD = TwystProgressHUD.show(this, false, null);
-            String email;
+            final String email;
             if(TextUtils.isEmpty(socialEmail)){
-                email = id+"@twyst.in";
+                email = "";
             }else {
                 email = socialEmail;
             }
-            HttpService.getInstance().updateProfile(token, email, deviceId, builder.toString(), android.os.Build.DEVICE, android.os.Build.MODEL, android.os.Build.PRODUCT, new Callback<BaseResponse<ProfileUpdate>>() {
-                @Override
-                public void success(BaseResponse<ProfileUpdate> loginDataBaseResponse, Response response) {
-                    twystProgressHUD.dismiss();
-                    if (loginDataBaseResponse.isResponse()) {
+        city = prefs.getString(AppConstants.PREFERENCE_LOCALITY_SHOWN_DRAWER,"");
+        Log.i("dob", dob + " firstName" + firstName + " lastName" + lastName + " middleName" + middleName + " city" + city + " image" + userImage);
+        String facebookUri = null;
+        String googleplusUri = null;
+        if(source.equalsIgnoreCase("FACEBOOK")) {
+            facebookUri = linkUri;
 
-                        SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-                        final String code = prefs.getString(AppConstants.PREFERENCE_USER_REFERRAL, "");
-                        if (!TextUtils.isEmpty(code)) {
-                            postReferral(token, code);
-                        } else {
-                            updateSocialFriendList(token);
-                        }
+        }else if(source.equalsIgnoreCase("GOOGLE")){
+            googleplusUri = linkUri;
+        }
 
+
+        HttpService.getInstance().updateProfile(token, email, userImage, firstName, middleName, lastName, city,id,source,facebookUri,googleplusUri, deviceId, builder.toString(), android.os.Build.DEVICE, android.os.Build.MODEL, android.os.Build.PRODUCT, new Callback<BaseResponse<ProfileUpdate>>() {
+            @Override
+            public void success(BaseResponse<ProfileUpdate> loginDataBaseResponse, Response response) {
+                twystProgressHUD.dismiss();
+                if (loginDataBaseResponse.isResponse()) {
+
+
+                    final String code = prefs.getString(AppConstants.PREFERENCE_USER_REFERRAL, "");
+                    if (!TextUtils.isEmpty(code)) {
+                        postReferral(token, code);
                     } else {
-                        Log.d(getTagName(), "" + loginDataBaseResponse.getMessage());
+                        updateSocialFriendList(token);
                     }
-                }
 
-                @Override
-                public void failure(RetrofitError error) {
-                    twystProgressHUD.dismiss();
-                    handleRetrofitError(error);
+                } else {
+                    Log.d(getTagName(), "" + loginDataBaseResponse.getMessage());
                 }
-            });
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                twystProgressHUD.dismiss();
+                handleRetrofitError(error);
+            }
+        });
     }
 
     private void postReferral(final String token, final String code){
@@ -374,8 +376,6 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
     private void updateSocialFriendList(String token) {
         final TwystProgressHUD twystProgressHUD = TwystProgressHUD.show(this, false, null);
         friend = new Friend();
-        Log.i("friendsList",""+friendsList);
-        Log.i("source", "" + source);
         friend.setSource(source);
         friend.setList(friendsList);
         HttpService.getInstance().updateSocialFriends(token, friend, new Callback<BaseResponse<ProfileUpdate>>() {
@@ -402,25 +402,9 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
 
     public void facebookLogin() {
 
-        Collection<String> permissions = Arrays.asList("email", "user_friends", "public_profile");
+        Collection<String> permissions = Arrays.asList("email", "user_friends", "public_profile","user_birthday");
         LoginManager.getInstance().logInWithReadPermissions(this, permissions);
 
-//        AccessTokenTracker tokenTracker = new AccessTokenTracker() {
-//            @Override
-//            protected void onCurrentAccessTokenChanged(AccessToken oldToken, AccessToken newToken) {
-//
-//            }
-//        };
-//
-//        ProfileTracker profileTracker = new ProfileTracker() {
-//            @Override
-//            protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
-//
-//            }
-//        };
-//
-//        tokenTracker.startTracking();
-//        profileTracker.startTracking();
     }
 
 
@@ -460,14 +444,23 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
             if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
                 Person currentPerson = Plus.PeopleApi
                         .getCurrentPerson(mGoogleApiClient);
+                String personFullName =currentPerson.getDisplayName();
                 String personName = currentPerson.getName().getGivenName();
                 String personPhotoUrl = currentPerson.getImage().getUrl();
-                Log.i("LoginActivity", "Name: " + personName
+                linkUri = currentPerson.getUrl();
+                Log.i("LoginActivity", "Name: " + personFullName
                         + ", Image: " + personPhotoUrl);
 
-                SharedPreferences.Editor sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
+                userImage = personPhotoUrl;
+                firstName = personName;
+                middleName = currentPerson.getName().getMiddleName();
+                lastName = currentPerson.getName().getFamilyName();
+                dob = currentPerson.getBirthday();
+                id = currentPerson.getId();
+                sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_PIC, personPhotoUrl);
                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_NAME,personName);
+                sharedPreferences.putString(AppConstants.PREFERENCE_USER_FULL_NAME,personFullName);
                 sharedPreferences.apply();
 //
 
@@ -567,7 +560,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
     public void buildAndShowSnackbarWithMessage(String msg) {
         final Snackbar snackbar = Snackbar.with(getApplicationContext())
                 .type(SnackbarType.MULTI_LINE)
-                .color(getResources().getColor(R.color.snackbar_bg))
+//                .color(getResources().getColor(R.color.snackbar_bg))
                 .text(msg)
                 .actionLabel("RETRY") // action button label
                 .duration(Snackbar.SnackbarDuration.LENGTH_INDEFINITE)

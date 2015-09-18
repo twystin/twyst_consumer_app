@@ -1,8 +1,8 @@
 package in.twyst.activities;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -24,6 +24,7 @@ import retrofit.client.Response;
  * Created by rahuls on 7/8/15.
  */
 public class WriteToUsActivity extends BaseActivity{
+    private boolean fromDrawer;
     @Override
     protected String getTagName() {
         return null;
@@ -38,13 +39,11 @@ public class WriteToUsActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         setupAsChild = true;
         super.onCreate(savedInstanceState);
-
+        fromDrawer = getIntent().getBooleanExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, false);
 
         hideProgressHUDInLayout();
         final EditText commentEt = (EditText)findViewById(R.id.commentEt);
 
-        SharedPreferences prefs = this.getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        final String token = prefs.getString(AppConstants.PREFERENCE_USER_TOKEN, "");
         findViewById(R.id.writeToUsBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,7 +58,7 @@ public class WriteToUsActivity extends BaseActivity{
                     WriteMeta writeMeta = new WriteMeta();
                     writeMeta.setComments(commentEt.getText().toString());
                     writeToUs.setWriteMeta(writeMeta);
-                    HttpService.getInstance().writeToUs(token, writeToUs, new Callback<BaseResponse>() {
+                    HttpService.getInstance().writeToUs(getUserToken(), writeToUs, new Callback<BaseResponse>() {
                         @Override
                         public void success(BaseResponse baseResponse, Response response) {
                             Toast.makeText(WriteToUsActivity.this,"Your comment has been sent to Twyst.",Toast.LENGTH_SHORT).show();
@@ -84,5 +83,21 @@ public class WriteToUsActivity extends BaseActivity{
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerOpened) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            if (fromDrawer) {
+                //clear history and go to discover
+                Intent intent = new Intent(getBaseContext(), DiscoverActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            } else {
+                super.onBackPressed();
+            }
+        }
     }
 }

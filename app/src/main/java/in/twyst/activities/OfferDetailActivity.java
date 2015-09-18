@@ -1,5 +1,6 @@
 package in.twyst.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,11 +11,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -22,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.balysv.materialripple.MaterialRippleLayout;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.squareup.picasso.Picasso;
@@ -43,6 +48,7 @@ import in.twyst.model.LikeOffer;
 import in.twyst.model.LikeOfferMeta;
 import in.twyst.model.Offer;
 import in.twyst.model.Outlet;
+import in.twyst.model.OutletDetailData;
 import in.twyst.model.ReportProblem;
 import in.twyst.model.ShareOffer;
 import in.twyst.model.ShareOfferData;
@@ -76,13 +82,20 @@ public class OfferDetailActivity extends BaseActivity {
     boolean image2clicked = false;
     boolean image3clicked = false;
     int count;
-    private String extendDate, extendDate2;
+    private String extendDate, extendDate2,lapsedDate;
     private View reportProblemLayout;
     private boolean isPanelShown;
     private View obstructor, obstructor2;
     private Gson gson = new Gson();
     private String issueReport;
     private String itemValue, idValue;
+    List<String> values = new ArrayList<>();
+    List<String> outletID = new ArrayList<>();
+    int itemPosition = -2;
+    TextView locationText;
+    boolean flag;
+    String expiryTextCoupon = "";
+    TextView date;
 
     @Override
     protected String getTagName() {
@@ -102,6 +115,12 @@ public class OfferDetailActivity extends BaseActivity {
 
         offer = (Offer) data.getSerializable(AppConstants.INTENT_PARAM_OFFER_OBJECT);
         outlet = (Outlet) data.getSerializable(AppConstants.INTENT_PARAM_OUTLET_OBJECT);
+        if(getIntent().getStringExtra(AppConstants.INTENT_PARAM_OUTLET_ID)!=null && getIntent().getStringExtra(AppConstants.INTENT_PARAM_OFFER_ID)!=null){
+            String outletId = getIntent().getStringExtra(AppConstants.INTENT_PARAM_OUTLET_ID);
+            String offerId = getIntent().getStringExtra(AppConstants.INTENT_PARAM_OFFER_ID);
+            outletDetail(outletId,offerId);
+        }
+
 
         TextView outletName = (TextView) findViewById(R.id.outletName);
         TextView distance = (TextView) findViewById(R.id.outletDistance);
@@ -109,13 +128,13 @@ public class OfferDetailActivity extends BaseActivity {
         TextView coupon_text1 = (TextView) findViewById(R.id.coupon_text1);
         TextView coupon_text2 = (TextView) findViewById(R.id.coupon_text2);
         ImageView outletImage = (ImageView) findViewById(R.id.outletImage);
-        TextView date = (TextView) findViewById(R.id.expiryDate);
+        date = (TextView) findViewById(R.id.expiryDate);
         ImageView buttonImage = (ImageView) findViewById(R.id.btnImage);
         TextView btntext = (TextView) findViewById(R.id.btntext);
         LinearLayout loginBtn = (LinearLayout) findViewById(R.id.loginBtn);
         final TextView likeText = (TextView) findViewById(R.id.likeText);
         ImageView buttonAct = (ImageView) findViewById(R.id.buttonAct);
-
+        locationText = (TextView)findViewById(R.id.locationText);
         reportProblemLayout = findViewById(R.id.reportProblemLayout);
         obstructor = findViewById(R.id.obstructor);
         obstructor2 = findViewById(R.id.obstructor2);
@@ -300,11 +319,7 @@ public class OfferDetailActivity extends BaseActivity {
                 HttpService.getInstance().shareOffer(getUserToken(), shareOffer, new Callback<BaseResponse>() {
                     @Override
                     public void success(BaseResponse baseResponse, Response response) {
-                        /*if (baseResponse.isResponse()) {
-                            Toast.makeText(OfferDetailActivity.this, "offer shared successfully!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(OfferDetailActivity.this, "unable to share offer!", Toast.LENGTH_SHORT).show();
-                        }*/
+
                     }
 
                     @Override
@@ -336,18 +351,18 @@ public class OfferDetailActivity extends BaseActivity {
             }
         });
 
-
-        if (offer.getLikeCount() != 0) {
-            likeText.setText("" + offer.getLikeCount());
-            if (offer.isLike()) {
-                likeText.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.offer_detail_thumb_icon_yellow), null, null, null);
-            } else {
-                likeText.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.offer_detail_thumb_icon), null, null, null);
-            }
+        if (offer.isLike()) {
+            likeText.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.offer_detail_thumb_icon_yellow), null, null, null);
         } else {
-            likeText.setVisibility(View.INVISIBLE);
+            likeText.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.offer_detail_thumb_icon), null, null, null);
         }
 
+        if (offer.getLikeCount() > 0) {
+            likeText.setText("" + offer.getLikeCount());
+
+        } else {
+            likeText.setText("");
+        }
 
         likeText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -401,7 +416,12 @@ public class OfferDetailActivity extends BaseActivity {
 
                                 offer.setLike(false);
 
-                                likeText.setText(String.valueOf(offer.getLikeCount() - 1));
+                                if(offer.getLikeCount()==1){
+                                    likeText.setText(String.valueOf(0));
+                                }else {
+                                    likeText.setText(String.valueOf(offer.getLikeCount() - 1));
+
+                                }
                                 offer.setLikeCount(offer.getLikeCount() - 1);
                                 likeText.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.offer_detail_thumb_icon), null, null, null);
                             } else {
@@ -433,28 +453,33 @@ public class OfferDetailActivity extends BaseActivity {
                     long hours = TimeUnit.HOURS.convert(lapseDate.getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
                     SimpleDateFormat extendDateFormat = new SimpleDateFormat("dd-MMM yyyy");
                     extendDate = extendDateFormat.format(expiryDate);
+                    lapsedDate = extendDateFormat.format(lapseDate);
 
-                    SimpleDateFormat extendDateFormat2 = new SimpleDateFormat("dd/MM/yyyy");
+                    SimpleDateFormat extendDateFormat2 = new SimpleDateFormat("MM/dd/yyyy");
                     extendDate2 = extendDateFormat2.format(expiryDate);
                     Log.i("days", "" + days);
                     if (offer.isAvailableNow()) {
 
                         if (days == 0) {
                             lapseText = hours + ((hours == 1) ? " hours " : " hours ") + "left";
+                            expiryTextCoupon = hours + ((hours == 1) ? " hours " : " hours ") + "left";
                         } else if (days > 7) {
                             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("d-MMM");
                             lapseText = "valid till " + simpleDateFormat.format(lapseDate).toLowerCase();
+                            expiryTextCoupon = "valid till " + simpleDateFormat.format(expiryDate).toLowerCase();
                         } else {
                             lapseText = days + ((days == 1) ? " day " : " days ") + "left";
+                            expiryTextCoupon = days + ((days == 1) ? " day " : " days ") + "left";
                         }
                     } else {
 
                         if(!offer.isAvailableNow() && !TextUtils.isEmpty(offer.getAvailableNext().getDay()) && !TextUtils.isEmpty(offer.getAvailableNext().getTime())){
 
                             lapseText = offer.getAvailableNext().getDay()+", "+offer.getAvailableNext().getTime();
-
+                            expiryTextCoupon = offer.getAvailableNext().getDay()+", "+offer.getAvailableNext().getTime();
                         }else {
                             lapseText = null;
+                            expiryTextCoupon = null;
                             date.setVisibility(View.INVISIBLE);
                         }
 
@@ -465,7 +490,31 @@ public class OfferDetailActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
-        }else {
+        }else if("checkin".equalsIgnoreCase(offer.getType())){
+            if (!TextUtils.isEmpty(offer.getExpiry())) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                try {
+                    Date expiryDate = sdf.parse(offer.getExpiry());
+                    long days = TimeUnit.DAYS.convert(expiryDate.getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+
+                    long hours = TimeUnit.HOURS.convert(expiryDate.getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+                    Log.i("days", "" + days);
+
+                    if (days == 0) {
+                        expiryText = hours + ((hours == 1) ? " hours " : " hours ") + "left";
+                    } else if (days > 7) {
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("d-MMM");
+                        expiryText = "valid till " + simpleDateFormat.format(expiryDate).toLowerCase();
+                    } else {
+                        expiryText = days + ((days == 1) ? " day " : " days ") + "left";
+                    }
+
+                }catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else {
             if (!TextUtils.isEmpty(offer.getExpiry())) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
                 try {
@@ -594,7 +643,31 @@ public class OfferDetailActivity extends BaseActivity {
                 loginBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        redeemConfirmationCoupon();
+
+                        if(offer.getOutletList() == null){
+                            if(offer.getIssuedBy()!=null){
+                                String id = offer.getIssuedBy();
+                                redeemConfirmationCoupon(id);
+                            }
+                        }else {
+                            if(locationText.length()!=0) {
+                                redeemConfirmationCoupon(idValue);
+                            }else {
+                                Toast.makeText(OfferDetailActivity.this,"Please pick a location before proceeding!",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                     /*   if(locationText.length()!=0) {
+                            if (offer.getOutletList() == null) {
+                                String id = offer.getIssuedBy();
+                                redeemConfirmationCoupon(id);
+                            } else {
+                                redeemConfirmationCoupon(idValue);
+                            }
+                        }else {
+                            Toast.makeText(OfferDetailActivity.this,"Please pick a location before proceeding!",Toast.LENGTH_SHORT).show();
+                        }*/
+
                     }
                 });
 
@@ -605,10 +678,14 @@ public class OfferDetailActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         int bucks = getTwystBucks();
-                        if(bucks >= offer.getOfferCost()){
-                            extendVoucher();
-                        }else {
-                            extendVoucherError();
+                        if (bucks >= 150) {
+                            if(extendDate.equals(lapsedDate)){
+                                Toast.makeText(getBaseContext(),"You have already extend voucher to its expiry date",Toast.LENGTH_SHORT).show();
+                            }else {
+                                extendVoucher();
+                            }
+                        } else {
+                            extendVoucherError("coupon");
                         }
 
                     }
@@ -643,10 +720,14 @@ public class OfferDetailActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         int bucks = getTwystBucks();
-                        if (bucks >= offer.getOfferCost()) {
-                            extendVoucher();
+                        if (bucks >= 150) {
+                            if(extendDate.equals(lapsedDate)){
+                                Toast.makeText(getBaseContext(),"You have already extend voucher to its expiry date",Toast.LENGTH_SHORT).show();
+                            }else {
+                                extendVoucher();
+                            }
                         } else {
-                            extendVoucherError();
+                            extendVoucherError("coupon");
                         }
 
                     }
@@ -681,14 +762,14 @@ public class OfferDetailActivity extends BaseActivity {
                     }
                 }
             });
-            buttonAct.setImageDrawable(getResources().getDrawable(R.drawable.remind_me_button_offer_detail));
-            buttonAct.setVisibility(View.VISIBLE);
-            buttonAct.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setReminderWithoutProirInfo();
-                }
-            });
+            buttonAct.setVisibility(View.INVISIBLE);
+                /*buttonAct.setImageDrawable(getResources().getDrawable(R.drawable.remind_me_button_offer_detail));
+                buttonAct.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setReminderWithoutProirInfo();
+                    }
+                });*/
 
 
         } else if ("offer".equalsIgnoreCase(offer.getType())) {
@@ -713,7 +794,7 @@ public class OfferDetailActivity extends BaseActivity {
                             if (getTwystBucks() >= offer.getOfferCost()) {
                                 redeemConfirmationOffer("offer");
                             } else {
-                                Toast.makeText(OfferDetailActivity.this, "Insufficient twyst bucks!", Toast.LENGTH_SHORT).show();
+                                extendVoucherError("offer");
                             }
                         }
                     }
@@ -725,14 +806,14 @@ public class OfferDetailActivity extends BaseActivity {
                     buckText.setVisibility(View.GONE);
                 }
 
-                buttonAct.setImageDrawable(getResources().getDrawable(R.drawable.remind_me_button_offer_detail));
-                buttonAct.setVisibility(View.VISIBLE);
+                buttonAct.setVisibility(View.INVISIBLE);
+                /*buttonAct.setImageDrawable(getResources().getDrawable(R.drawable.remind_me_button_offer_detail));
                 buttonAct.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         setReminderWithoutProirInfo();
                     }
-                });
+                });*/
 
             } else {
                 buttonImage.setVisibility(View.VISIBLE);
@@ -782,14 +863,14 @@ public class OfferDetailActivity extends BaseActivity {
                         redeemConfirmationDeal("deal");
                     }
                 });
-                buttonAct.setImageDrawable(getResources().getDrawable(R.drawable.remind_me_button_offer_detail));
-                buttonAct.setVisibility(View.VISIBLE);
+                buttonAct.setVisibility(View.INVISIBLE);
+                /*buttonAct.setImageDrawable(getResources().getDrawable(R.drawable.remind_me_button_offer_detail));
                 buttonAct.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         setReminderWithoutProirInfo();
                     }
-                });
+                });*/
                 buckText.setVisibility(View.GONE);
 
 
@@ -847,14 +928,14 @@ public class OfferDetailActivity extends BaseActivity {
                     }
                 });
                 buckText.setVisibility(View.GONE);
-                buttonAct.setImageDrawable(getResources().getDrawable(R.drawable.remind_me_button_offer_detail));
-                buttonAct.setVisibility(View.VISIBLE);
+                buttonAct.setVisibility(View.INVISIBLE);
+                /*buttonAct.setImageDrawable(getResources().getDrawable(R.drawable.remind_me_button_offer_detail));
                 buttonAct.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         setReminderWithoutProirInfo();
                     }
-                });
+                });*/
             } else {
                 buttonImage.setVisibility(View.VISIBLE);
                 int sdk = android.os.Build.VERSION.SDK_INT;
@@ -891,63 +972,37 @@ public class OfferDetailActivity extends BaseActivity {
             coupon_text2.setText(offer.getLine2());
         }
 
-        TextView viewMore = (TextView) findViewById(R.id.viewMore);
+        TextView viewMore = (TextView) findViewById(R.id.viewMore1);
         final TextView terms1 = (TextView) findViewById(R.id.terms1);
         final TextView terms2 = (TextView) findViewById(R.id.terms2);
 
 
         if (!TextUtils.isEmpty(offer.getTerms())) {
-            findViewById(R.id.textView10).setVisibility(View.VISIBLE);
-            findViewById(R.id.termsCondition).setVisibility(View.VISIBLE);
             String[] splitStr = new String[0];
 
-            if (offer.getTerms().contains(";")) {
+            if (offer.getTerms().contains(";") || !offer.getTerms().isEmpty()) {
                 splitStr = offer.getTerms().trim().split("\\s*;\\s*");
                 for (int i = 0; i < splitStr.length; i++) {
                     term1 = splitStr[0];
-
-                    if (!TextUtils.isEmpty(splitStr[1])) {
+                    if (offer.getTerms().contains(";") &&!TextUtils.isEmpty(splitStr[1])) {
                         term2 = splitStr[1];
+                        terms2.setVisibility(View.VISIBLE);
                     } else {
-                        term2 = "";
-                    }
-                    if (i == 2) {
-                        if (!TextUtils.isEmpty(splitStr[2])) {
-                            term3 = splitStr[2];
-                            viewMore.setVisibility(View.VISIBLE);
-                        } else {
-                            viewMore.setVisibility(View.GONE);
-                            term3 = "";
-                        }
-                    } else {
-
-                    }
-                    if (i == 3) {
-                        if (!TextUtils.isEmpty(splitStr[3])) {
-                            term4 = splitStr[3];
-                        } else {
-                            term4 = "";
-                        }
-                    } else {
-
+                        terms2.setVisibility(View.GONE);
                     }
                 }
 
             } else {
                 term1 = offer.getTerms();
             }
-        } else {
-            findViewById(R.id.textView10).setVisibility(View.INVISIBLE);
-            findViewById(R.id.termsCondition).setVisibility(View.INVISIBLE);
-            viewMore.setVisibility(View.INVISIBLE);
-
         }
+
         if (!TextUtils.isEmpty(term1)) {
-            terms1.setText(term1);
+            terms1.setText(term1.toString().trim());
             terms1.setVisibility(View.VISIBLE);
         }
         if (!TextUtils.isEmpty(term2)) {
-            terms2.setText(term2);
+            terms2.setText(term2.toString().trim());
             terms2.setVisibility(View.VISIBLE);
         }
 
@@ -959,22 +1014,24 @@ public class OfferDetailActivity extends BaseActivity {
         });
 
         RelativeLayout relativeLayoutPicLoc = (RelativeLayout)findViewById(R.id.relativeLayoutPicLoc);
+        relativeLayoutPicLoc.setVisibility(View.GONE);
+
         if("coupon".equalsIgnoreCase(offer.getType())){
             if(offer.getOutletList()!=null){
-                /*relativeLayoutPicLoc.setVisibility(View.VISIBLE);
+                relativeLayoutPicLoc.setVisibility(View.VISIBLE);
+
                 findViewById(R.id.locationView).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         List<Offer.OutletList> outletList = offer.getOutletList();
 
+                        values.clear();
+                        outletID.clear();
+
                         pickLocDialog(outletList);
-                        findViewById(R.id.textView20).setVisibility(View.GONE);
-                        TextView locationText = (TextView)findViewById(R.id.locationText);
-                        locationText.setText(itemValue);
 
                     }
-                });*/
+                });
             }
         }
 
@@ -997,7 +1054,85 @@ public class OfferDetailActivity extends BaseActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View dialogView = li.inflate(R.layout.dialog_view_outlets, null);
-        final ListView listView = (ListView) dialogView.findViewById(R.id.listView);
+        final ListView listView = (ListView) dialogView.findViewById(R.id.locList);
+
+        MaterialRippleLayout locChoose = (MaterialRippleLayout)dialogView.findViewById(R.id.locChoose);
+        for(int i=0;i<outletList.size();i++){
+            String address = "";
+            String id = "";
+            boolean added = false;
+            if (outletList.get(i).getLocation_1().get(0)!=null) {
+                address += outletList.get(i).getLocation_1().get(0);
+                id += outletList.get(i).get_id();
+                added = true;
+            }
+
+            values.add(address);
+            outletID.add(id);
+        }
+
+        ListAdapter adapter = new ListAdapter(this,values,outletID);
+        listView.setAdapter(adapter);
+
+        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+
+                // ListView Clicked item index
+                itemPosition = position;
+                itemValue = (String) listView.getItemAtPosition(position);
+
+            }
+
+        });*/
+
+
+        builder.setView(dialogView);
+
+        final AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+
+        locChoose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (flag) {
+                    findViewById(R.id.textView20).setVisibility(View.GONE);
+                    locationText.setVisibility(View.VISIBLE);
+                    locationText.setText(itemValue);
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(OfferDetailActivity.this, "Please pick a location!", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+        dialogView.findViewById(R.id.locCancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(locationText.length()>0){
+                    findViewById(R.id.textView20).setVisibility(View.GONE);
+                }else {
+                    flag = false;
+                    findViewById(R.id.textView20).setVisibility(View.VISIBLE);
+                }
+                dialog.dismiss();
+            }
+        });
+
+    }
+
+    /*private void pickLocDialog(List<Offer.OutletList> outletList) {
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View dialogView = li.inflate(R.layout.dialog_view_outlets, null);
+        final ListView listView = (ListView) dialogView.findViewById(R.id.locList);
         List<String> values = new ArrayList<>();
         List<String> ids = new ArrayList<>();
 
@@ -1052,7 +1187,7 @@ public class OfferDetailActivity extends BaseActivity {
             }
         });
 
-    }
+    }*/
 
     private void viewMoreDialog() {
 
@@ -1064,22 +1199,19 @@ public class OfferDetailActivity extends BaseActivity {
         TextView termsD2 = (TextView) dialogView.findViewById(R.id.termsd2);
         TextView termsD3 = (TextView) dialogView.findViewById(R.id.termsd3);
         TextView termsD4 = (TextView) dialogView.findViewById(R.id.termsd4);
+        TextView termsD5 = (TextView) dialogView.findViewById(R.id.termsd5);
+        TextView termsD6 = (TextView) dialogView.findViewById(R.id.termsd6);
+        TextView termsD7 = (TextView) dialogView.findViewById(R.id.termsd7);
+        TextView termsD8 = (TextView) dialogView.findViewById(R.id.termsd8);
 
-        termsD1.setText(term1);
-        termsD2.setText(term2);
-
-        if (!TextUtils.isEmpty(term3)) {
-            termsD3.setText(term3);
-            termsD3.setVisibility(View.VISIBLE);
-        } else {
-            termsD3.setVisibility(View.GONE);
-        }
-        if (!TextUtils.isEmpty(term4)) {
-            termsD4.setText(term4);
-            termsD4.setVisibility(View.VISIBLE);
-        } else {
-            termsD4.setVisibility(View.GONE);
-        }
+        termsD1.setText("1. Offers (2 or more) cannot be clubbed.");
+        termsD2.setText("2. Offers are not valid on specially priced combinations e.g. any other buffet brunch deal corporate dining rate happy hours etc.");
+        termsD3.setText("3. Only 1 voucher offer can be used per bill generated.");
+        termsD4.setText("4. In certain cases, specific items may be part of the offer.");
+        termsD5.setText("5. The availability of the specific items is not guaranteed and must be checked with the outlet before using the offer.");
+        termsD6.setText("6. The offers are provided at the sole discretion of the merchant,and the merchant reserves the right to alter or withdraw the offer at any time.");
+        termsD7.setText("7. Offers vouchers consisting of alcohol alcohol-based products will be available only to individuals above legal drinking age.");
+        termsD8.setText("8. The establishment reserves the right to verify the customer's age before providing such reward.");
 
 
         builder.setView(dialogView);
@@ -1107,11 +1239,6 @@ public class OfferDetailActivity extends BaseActivity {
 
     }
 
-    private String getUserToken() {
-        SharedPreferences prefs = this.getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return prefs.getString(AppConstants.PREFERENCE_USER_TOKEN, "");
-    }
-
     public void setReminder(Calendar day, String time) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, day.get(Calendar.DAY_OF_WEEK));
@@ -1136,7 +1263,7 @@ public class OfferDetailActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    private void redeemConfirmationCoupon() {
+    private void redeemConfirmationCoupon(final String id) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -1159,7 +1286,7 @@ public class OfferDetailActivity extends BaseActivity {
                 useOfferMeta.setOffer(null);
                 useOfferMeta.setType(null);
                 useOfferMeta.setCoupon(offer.getCode());
-                useOffer.setEventOutlet(null);
+                useOffer.setEventOutlet(id);
                 useOffer.setUseOfferMeta(useOfferMeta);
 
                 HttpService.getInstance().postRedeemCoupon(getUserToken(), useOffer, new Callback<BaseResponse>() {
@@ -1168,14 +1295,14 @@ public class OfferDetailActivity extends BaseActivity {
 
                         if (baseResponse.isResponse()) {
                             dialog.dismiss();
-                            Toast.makeText(OfferDetailActivity.this, "Coupon used successfully!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OfferDetailActivity.this, "Coupon redeemed successfully!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(OfferDetailActivity.this, RedeemVoucherActivity.class);
                             intent.putExtra(AppConstants.INTENT_PARAM_OUTLET_OBJECT, outlet);
                             intent.putExtra(AppConstants.INTENT_PARAM_OFFER_OBJECT, offer);
                             startActivity(intent);
                         } else {
                             dialog.dismiss();
-                            Toast.makeText(OfferDetailActivity.this, "Unable to use coupon use!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OfferDetailActivity.this, "Unable to redeem coupon!", Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -1297,7 +1424,7 @@ public class OfferDetailActivity extends BaseActivity {
 
                         if (baseResponse.isResponse()) {
                             dialog.dismiss();
-                            Toast.makeText(OfferDetailActivity.this, "Offer used successfully!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OfferDetailActivity.this, "Offer redeemed successfully!", Toast.LENGTH_SHORT).show();
                         } else {
                             dialog.dismiss();
                             String[] split = baseResponse.getData().toString().split("\\s*-\\s*");
@@ -1393,7 +1520,7 @@ public class OfferDetailActivity extends BaseActivity {
 
         TextView extendtext = (TextView) dialogView.findViewById(R.id.extendtext);
 
-        extendtext.setText("Extend this voucher's validity till " + extendDate + ".This will cost you " + offer.getOfferCost() + " Twyst Bucks.");
+        extendtext.setText("Extend this voucher's validity till " + extendDate + ".This will cost you 150 Twyst Bucks.");
 
         builder.setView(dialogView);
 
@@ -1407,15 +1534,19 @@ public class OfferDetailActivity extends BaseActivity {
             public void onClick(View view) {
 
                 Voucher voucher = new Voucher();
-                voucher.setOffer(offer.get_id());
-                voucher.setDate(extendDate2);
+                Voucher.VoucherMeta voucherMeta = new Voucher.VoucherMeta();
+
+                voucherMeta.setOffer(offer.get_id());
+                voucherMeta.setDate(extendDate2);
+                voucher.setVoucherMeta(voucherMeta);
                 HttpService.getInstance().extendVoucher(getUserToken(), voucher, new Callback<BaseResponse>() {
                     @Override
                     public void success(BaseResponse baseResponse, Response response) {
 
+                        dialog.dismiss();
                         if (baseResponse.isResponse()) {
-                            dialog.dismiss();
-                            Toast.makeText(OfferDetailActivity.this, baseResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                            date.setText(expiryTextCoupon);
+                            Toast.makeText(OfferDetailActivity.this, "Offer extended to its maximum date!", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(OfferDetailActivity.this, baseResponse.getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -1439,12 +1570,17 @@ public class OfferDetailActivity extends BaseActivity {
         });
     }
 
-    private void extendVoucherError() {
+    private void extendVoucherError(String type) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View dialogView = li.inflate(R.layout.dialog_extend_voucher_error, null);
-
+        TextView costTv = (TextView) dialogView.findViewById(R.id.costTv);
+        if(type.equalsIgnoreCase("offer")){
+            costTv.setText("You don't have enough Twyst Bucks to extend this voucher's validity. You need 100 twyst bucks.");
+        }else {
+            costTv.setText("You don't have enough Twyst Bucks to extend this voucher's validity. You need 150 twyst bucks.");
+        }
         builder.setView(dialogView);
 
         final AlertDialog dialog = builder.create();
@@ -1505,6 +1641,118 @@ public class OfferDetailActivity extends BaseActivity {
             reportProblemLayout.setVisibility(View.GONE);
             isPanelShown = false;
         }
+    }
+
+    public class ListAdapter extends BaseAdapter{
+
+        List <String> outletID;
+        List <String> values;
+        Activity activity;
+        boolean[] itemChecked;
+
+        public ListAdapter(Activity activity, List<String> values,List<String> id){
+            super();
+            this.activity = activity;
+            this.values = values;
+            this.outletID = id;
+            itemChecked = new boolean[values.size()];
+        }
+
+        @Override
+        public int getCount() {
+            return values.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return values.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            final ViewHolder holder;
+
+            LayoutInflater inflater = activity.getLayoutInflater();
+            if (convertView == null) {
+                holder = new ViewHolder();
+                convertView = inflater.inflate(R.layout.loc_picker_layout, null);
+                holder.textView = (TextView) convertView.findViewById(R.id.text);
+                holder.checkBox = (CheckBox) convertView.findViewById(R.id.check);
+
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            holder.textView.setText(values.get(position));
+            holder.checkBox.setChecked(itemChecked[position]);
+
+            holder.checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    for (int i=0;i<itemChecked.length;i++){
+                        if(i==position){
+                            flag = true;
+                            itemChecked[i]=true;
+                            itemPosition = position;
+                            itemValue = String.valueOf(holder.textView.getText());
+                            idValue = outletID.get(position);
+                        }else{
+                            itemChecked[i]=false;
+                        }
+                    }
+                    notifyDataSetChanged();
+                }
+            });
+            return convertView;
+        }
+
+        private class ViewHolder {
+
+            TextView textView;
+            CheckBox checkBox;
+        }
+    }
+
+    public void outletDetail(String outletId, final String offerId){
+
+        Offer offers = null;
+        SharedPreferences preferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        String appLocationLatiude = preferences.getString(AppConstants.PREFERENCE_CURRENT_LAT, "");
+        String appLocationLongitude = preferences.getString(AppConstants.PREFERENCE_CURRENT_LNG, "");
+        HttpService.getInstance().getOutletDetails(outletId, getUserToken(), appLocationLatiude, appLocationLongitude, new Callback<BaseResponse<OutletDetailData>>() {
+
+            @Override
+            public void success(BaseResponse<OutletDetailData> outletBaseResponse, Response response) {
+
+                Outlet outlet = outletBaseResponse.getData().getOutlet();
+                String twystBucks = outletBaseResponse.getData().getTwystBucks();
+
+                sharedPreferences.putInt(AppConstants.PREFERENCE_LAST_TWYST_BUCK, Integer.parseInt(twystBucks));
+                sharedPreferences.commit();
+
+                for(int i=0;i<outlet.getOffers().size();i++){
+                    if(outlet.getOffers().get(i).get_id().equals(offerId)){
+                        Offer offers = outlet.getOffers().get(i);
+                        Intent intent = new Intent(OfferDetailActivity.this, OfferDetailActivity.class);
+                        intent.putExtra(AppConstants.INTENT_PARAM_OUTLET_OBJECT,outlet);
+                        intent.putExtra(AppConstants.INTENT_PARAM_OFFER_OBJECT, offers);
+                        startActivity(intent);
+                    }
+                }
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                hideProgressHUDInLayout();
+                handleRetrofitError(error);
+            }
+        });
     }
 
 }

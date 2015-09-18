@@ -92,7 +92,10 @@ public class TutorialFragment extends Fragment {
                             startActivity(new Intent(tutorialActivity, LoginActivity.class));
                             tutorialActivity.finish();
                         } else {
-                            startActivity(new Intent(tutorialActivity, DiscoverActivity.class));
+                            Intent intent = new Intent(tutorialActivity, DiscoverActivity.class);
+                            intent.setAction("setChildNo");
+                            intent.putExtra("Search", false);
+                            startActivity(intent);
                             tutorialActivity.finish();
                         }
                     }

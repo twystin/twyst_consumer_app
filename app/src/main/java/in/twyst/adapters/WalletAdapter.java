@@ -181,17 +181,15 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
             holder.followOutletBtn.setImageResource(R.drawable.icon_discover_follow_outlet_no);
         }
 
+        holder.valid_txt.setText(lapseText);
+        holder.type_offer.setText(offers.get(0).getHeader());
+        holder.coupon_text1.setText(offers.get(0).getLine1());
+        holder.coupon_text2.setText(offers.get(0).getLine2());
+
         if (offers.get(0).getMeta() != null) {
             Meta meta = offers.get(0).getMeta();
             if (meta != null) {
                 if (meta.getRewardType() != null) {
-
-
-                    holder.type_offer.setText(offers.get(0).getHeader());
-                    holder.coupon_text1.setText(offers.get(0).getLine1());
-                    holder.coupon_text2.setText(offers.get(0).getLine2());
-                    holder.valid_txt.setText(lapseText);
-
 
                     if (meta.getRewardType().equals("buy_one_get_one") || meta.getRewardType().equals("onlyhappyhours") || meta.getRewardType().equals("flatoff")
                             || meta.getRewardType().equals("reducedprice") || meta.getRewardType().equals("happyhours") || meta.getRewardType().equals("custom")) {

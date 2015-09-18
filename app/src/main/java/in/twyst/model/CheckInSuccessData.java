@@ -8,9 +8,12 @@ import java.io.Serializable;
 public class CheckInSuccessData implements Serializable {
 
     private Double twyst_bucks;
+    private String outlet_name;
+    private String outlet_id;
     private String code;
     private String header;
     private String line1;
+    private String line2;
 
     public String getLine2() {
         return line2;
@@ -20,8 +23,21 @@ public class CheckInSuccessData implements Serializable {
         this.line2 = line2;
     }
 
-    private String line2;
-    private String outlet;
+    public String getOutlet_name() {
+        return outlet_name;
+    }
+
+    public void setOutlet_name(String outlet_name) {
+        this.outlet_name = outlet_name;
+    }
+
+    public String getOutlet_id() {
+        return outlet_id;
+    }
+
+    public void setOutlet_id(String outlet_id) {
+        this.outlet_id = outlet_id;
+    }
 
     public Double getTwyst_bucks() {
         return twyst_bucks;
@@ -55,11 +71,4 @@ public class CheckInSuccessData implements Serializable {
         this.line1 = line1;
     }
 
-    public String getOutlet() {
-        return outlet;
-    }
-
-    public void setOutlet(String outlet) {
-        this.outlet = outlet;
-    }
 }

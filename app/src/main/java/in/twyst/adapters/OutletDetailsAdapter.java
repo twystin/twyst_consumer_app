@@ -56,6 +56,7 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
     private static final int VIEW_NORMAL = 0;
     private static final int VIEW_FOOTER = 1;
     private String outletname;
+    private String address;
     private List<Offer> items = new ArrayList<>();
 
 
@@ -63,9 +64,10 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
         return items;
     }
 
-    public void setItems(List<Offer> items, String name) {
+    public void setItems(List<Offer> items, String name, String address) {
         this.items = items;
         this.outletname=name;
+        this.address=address;
     }
 
     @Override
@@ -143,6 +145,29 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
                         e.printStackTrace();
                     }
                 }else {
+                }
+            }else if("checkin".equalsIgnoreCase(offer.getType())){
+                if (!TextUtils.isEmpty(offer.getExpiry())) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                    try {
+                        Date expiryDate = sdf.parse(offer.getExpiry());
+                        long days = TimeUnit.DAYS.convert(expiryDate.getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+
+                        long hours = TimeUnit.HOURS.convert(expiryDate.getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+                        Log.i("days", "" + days);
+
+                        if (days == 0) {
+                            expiryText = hours + ((hours == 1) ? " hours " : " hours ") + "left";
+                        } else if (days > 7) {
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("d-MMM");
+                            expiryText = "valid till " + simpleDateFormat.format(expiryDate).toLowerCase();
+                        } else {
+                            expiryText = days + ((days == 1) ? " day " : " days ") + "left";
+                        }
+
+                    }catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
             }else {
                 if (!TextUtils.isEmpty(offer.getExpiry())) {
@@ -395,6 +420,7 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                     Intent intent = new Intent(v.getContext(), SubmitOfferActivity.class);
                     intent.putExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_NAME, outletname);
+                    intent.putExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_ADDRESS, address);
                     v.getContext().startActivity(intent);
 
                 }

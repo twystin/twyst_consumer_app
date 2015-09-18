@@ -19,133 +19,137 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#323232"
             android:layout_below="@+id/toolbarWrapper"
+            android:layout_marginTop="-5.4dp"
+            android:background="#323232"
             android:padding="@dimen/submit_offer_padding"
-            android:layout_marginTop="-5dp"
             android:text="Found an offer that you don't see on Twyst? Let us know, and win some Twyst goodies!"
             android:textColor="@android:color/white"
             android:textSize="@dimen/dialog_header_text" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_below="@+id/textView"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_below="@+id/textView"
             android:background="#fafafa"
+            android:orientation="vertical"
             android:padding="@dimen/submit_offer_padding">
-
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Outlet Name"
-                android:layout_marginTop="@dimen/submit_offer_margin"
                 android:layout_marginBottom="@dimen/submit_offer_margin_bottom"
-                android:singleLine="true"
+                android:layout_marginTop="@dimen/submit_offer_margin"
                 android:gravity="bottom"
-                android:textSize="@dimen/dialog_content_text"
-                android:textColor="#7c7c7c"/>
+                android:singleLine="true"
+                android:text="Outlet Name"
+                android:textColor="#7c7c7c"
+                android:textSize="@dimen/dialog_content_text" />
 
             <EditText
                 android:id="@+id/outletNameET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext_shape"
-                android:textSize="@dimen/dialog_content_text"
-                android:padding="4dp"
                 android:gravity="top"
-                android:textColorHint="#2E2E2E"
+                android:padding="4dp"
+                android:singleLine="false"
+                android:textCursorDrawable="@null"
                 android:textColor="#2E2E2E"
-                android:singleLine="false"/>
+                android:textColorHint="#2E2E2E"
+                android:textSize="@dimen/dialog_content_text" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/submit_offer_margin_bottom"
+                android:layout_marginTop="@dimen/submit_offer_margin"
+                android:gravity="bottom"
+                android:singleLine="true"
                 android:text="Location"
-                android:layout_marginTop="@dimen/submit_offer_margin"
-                android:layout_marginBottom="@dimen/submit_offer_margin_bottom"
-                android:singleLine="true"
-                android:gravity="bottom"
-                android:textSize="@dimen/dialog_content_text"
-                android:textColor="#7c7c7c"/>
+                android:textColor="#7c7c7c"
+                android:textSize="@dimen/dialog_content_text" />
 
 
-
-                <EditText
-                    android:id="@+id/locationEt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/edittext_shape"
-                    android:textSize="@dimen/dialog_content_text"
-                    android:paddingBottom="5dp"
-                    android:padding="4dp"
-                    android:gravity="top"
-                    android:textColorHint="#2E2E2E"
-                    android:textColor="#2E2E2E"
-                    android:singleLine="false"/>
+            <EditText
+                android:id="@+id/locationEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_shape"
+                android:gravity="top"
+                android:padding="4dp"
+                android:paddingBottom="5dp"
+                android:singleLine="false"
+                android:textCursorDrawable="@null"
+                android:textColor="#2E2E2E"
+                android:textColorHint="#2E2E2E"
+                android:textSize="@dimen/dialog_content_text" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="What's the offer?"
-                android:layout_marginTop="@dimen/submit_offer_margin"
                 android:layout_marginBottom="@dimen/submit_offer_margin_bottom"
-                android:singleLine="true"
+                android:layout_marginTop="@dimen/submit_offer_margin"
                 android:gravity="bottom"
-                android:textSize="@dimen/dialog_content_text"
-                android:textColor="#7c7c7c"/>
+                android:singleLine="true"
+                android:text="What's the offer?"
+                android:textColor="#7c7c7c"
+                android:textSize="@dimen/dialog_content_text" />
 
             <EditText
                 android:id="@+id/offerET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext_shape"
-                android:textSize="@dimen/dialog_content_text"
-                android:padding="4dp"
                 android:gravity="top"
-                android:textColorHint="#2E2E2E"
-                android:textColor="#2E2E2E"
-                android:singleLine="false"
+                android:lines="3"
                 android:maxLines="3"
-                android:lines="3"/>
+                android:padding="4dp"
+                android:singleLine="false"
+                android:textCursorDrawable="@null"
+                android:textColor="#2E2E2E"
+                android:textColorHint="#2E2E2E"
+                android:textSize="@dimen/dialog_content_text" />
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/submit_offer_margin_top"
                 android:layout_marginBottom="@dimen/submit_offer_margin"
+                android:layout_marginTop="@dimen/submit_offer_margin_top"
                 android:orientation="horizontal"
                 android:weightSum="100">
 
                 <com.balysv.materialripple.MaterialRippleLayout
                     android:id="@+id/attachBill"
                     android:layout_width="0dp"
-                    android:layout_weight="43"
                     android:layout_height="wrap_content"
+                    android:layout_weight="43"
                     app:mrl_rippleOverlay="true">
 
                     <LinearLayout
+                        android:id="@+id/attachImageLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/button_red"
-                        android:orientation="horizontal"
                         android:layout_gravity="center"
-                        android:gravity="center">
+                        android:background="@drawable/button_red"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
                         <ImageView
+                            android:id="@+id/imageView1"
                             android:layout_width="15dp"
                             android:layout_height="15dp"
-                            android:src="@drawable/submit_offer_attach_icon"
-                            android:id="@+id/imageView1" />
+                            android:src="@drawable/submit_offer_attach_icon" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
-                            android:text="Attach Photo"
-                            android:layout_marginLeft="5dp"
                             android:layout_gravity="center"
+                            android:layout_marginLeft="5dp"
                             android:gravity="center"
+                            android:text="Attach Photo"
                             android:textAllCaps="false"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
@@ -154,48 +158,50 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="14"
                     android:layout_height="wrap_content"
-                    android:text="OR"
-                    android:gravity="center"
                     android:layout_gravity="center"
-                    android:textSize="16sp"
-                    android:textColor="#7c7c7c"/>
+                    android:layout_weight="14"
+                    android:gravity="center"
+                    android:text="OR"
+                    android:textColor="#7c7c7c"
+                    android:textSize="16sp" />
 
                 <com.balysv.materialripple.MaterialRippleLayout
                     android:id="@+id/takePhoto"
                     android:layout_width="0dp"
-                    android:layout_weight="43"
                     android:layout_height="wrap_content"
+                    android:layout_weight="43"
                     app:mrl_rippleOverlay="true">
 
                     <LinearLayout
+                        android:id="@+id/takePhotoLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/button_red"
-                        android:orientation="horizontal"
                         android:layout_gravity="center"
-                        android:gravity="center">
+                        android:background="@drawable/button_red"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
                         <ImageView
+                            android:id="@+id/imageView"
                             android:layout_width="15dp"
                             android:layout_height="15dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/upload_bill_camera_icon"
-                            android:id="@+id/imageView" />
+                            android:src="@drawable/upload_bill_camera_icon" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
-                            android:text="Take Photo"
                             android:layout_gravity="center"
+                            android:layout_marginLeft="5dp"
                             android:gravity="center"
+                            android:text="Take Photo"
                             android:textAllCaps="false"
                             android:textColor="@android:color/white"
-                            android:textSize="12sp"
-                            android:layout_marginLeft="5dp"/>
+                            android:textSize="12sp" />
                     </LinearLayout>
 
                 </com.balysv.materialripple.MaterialRippleLayout>
-
 
 
             </LinearLayout>
@@ -204,38 +210,42 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/submit_offer_padding"
                 android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/submit_offer_padding"
                 android:gravity="start|left">
 
-
-                <ImageView
-                    android:id="@+id/attachImage"
-                    android:layout_width="@dimen/submit_offer_image_width"
-                    android:layout_height="@dimen/submit_offer_image_height"
-                    android:scaleType="fitXY"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true" />
-
-
-
-                <TextView
+                <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Edit"
-                    android:layout_marginLeft="15dp"
-                    android:visibility="invisible"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/attachImage"
-                    android:textSize="16sp"
-                    android:textColor="#7c7c7c"/>
+                    android:layout_height="@dimen/submit_offer_image_height">
 
+                    <ImageView
+                        android:id="@+id/attachImage"
+                        android:layout_width="@dimen/submit_offer_image_width"
+                        android:layout_height="@dimen/submit_offer_image_height"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:scaleType="fitXY" />
+
+
+                    <TextView
+                        android:id="@+id/editImageButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/attachImage"
+                        android:text="Edit"
+                        android:textColor="#7c7c7c"
+                        android:textSize="16sp"
+                        android:visibility="invisible" />
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
                     android:gravity="end|right">
 
                     <com.balysv.materialripple.MaterialRippleLayout
@@ -263,11 +273,12 @@
                         android:id="@+id/submitOfferBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
                         app:mrl_rippleOverlay="true">
 
                         <Button
+                            android:id="@+id/submitButton"
                             android:layout_width="80dp"
                             android:layout_height="34dp"
                             android:background="@drawable/button_grey"
@@ -285,16 +296,15 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="(Once verified, this offer will be on Twyst soon, all thanks to you!)"
                 android:layout_marginTop="8dp"
-                android:singleLine="false"
                 android:gravity="center"
-                android:textSize="@dimen/feedback_info_text"
-                android:textColor="#fc6e51"/>
+                android:singleLine="false"
+                android:text="(Once verified, this offer will be on Twyst soon, all thanks to you!)"
+                android:textColor="#fc6e51"
+                android:textSize="@dimen/feedback_info_text" />
 
 
         </LinearLayout>
-
 
 
         <include

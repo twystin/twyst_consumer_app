@@ -3,8 +3,8 @@ package in.twyst.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,15 +13,20 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.view.GravityCompat;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -40,15 +45,19 @@ import retrofit.client.Response;
 /**
  * Created by rahuls on 7/8/15.
  */
-public class SubmitOfferActivity extends BaseActivity{
+public class SubmitOfferActivity extends BaseActivity {
 
     private static final int REQUEST_CAMERA = 12;
     private static final int SELECT_FILE = 13;
     private ImageView attachImage;
-    public String imagePath,fileName,encodedString;
+    public String imagePath, fileName, encodedString;
     public static String uploadingImage;
-
+    private boolean fromDrawer;
     public static int IMAGE_RESULTS = 103;
+    private LinearLayout takePhotoLayout;
+    private LinearLayout attachImageLayout;
+    private Button submitBtn;
+    private TextView editImageButton;
 
     @Override
     protected String getTagName() {
@@ -62,15 +71,30 @@ public class SubmitOfferActivity extends BaseActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setupAsChild= true;
+        setupAsChild = true;
         super.onCreate(savedInstanceState);
         hideProgressHUDInLayout();
-
+        fromDrawer = getIntent().getBooleanExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, false);
         String outletName = getIntent().getStringExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_NAME);
+        String outletAddress = getIntent().getStringExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_ADDRESS);
         final EditText outletNameET = (EditText) findViewById(R.id.outletNameET);
         final EditText offerET = (EditText) findViewById(R.id.offerET);
         final EditText locationET = (EditText) findViewById(R.id.locationEt);
-        outletNameET.setText(outletName);
+        takePhotoLayout = (LinearLayout) findViewById(R.id.takePhotoLayout);
+        attachImageLayout = (LinearLayout) findViewById(R.id.attachImageLayout);
+        submitBtn = (Button) findViewById(R.id.submitButton);
+        editImageButton = (TextView) findViewById(R.id.editImageButton);
+        if (!TextUtils.isEmpty(outletName) || !TextUtils.isEmpty(outletAddress)) {
+            outletNameET.setText(outletName);
+            locationET.setText(outletAddress);
+            outletNameET.setEnabled(false);
+            outletNameET.setKeyListener(null);
+            locationET.setEnabled(false);
+            locationET.setKeyListener(null);
+            offerET.requestFocus();
+
+        }
+
 
         attachImage = (ImageView) findViewById(R.id.attachImage);
 
@@ -80,8 +104,6 @@ public class SubmitOfferActivity extends BaseActivity{
 
                 if (!TextUtils.isEmpty(offerET.getText()) && !TextUtils.isEmpty(outletNameET.getText()) && !TextUtils.isEmpty(locationET.getText())) {
                     final TwystProgressHUD twystProgressHUD = TwystProgressHUD.show(SubmitOfferActivity.this, false, null);
-                    SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-                    String usertoken = prefs.getString(AppConstants.PREFERENCE_USER_TOKEN, "");
 
                     SubmitOffer submitOffer = new SubmitOffer();
                     submitOffer.setOutletId(null);
@@ -103,16 +125,16 @@ public class SubmitOfferActivity extends BaseActivity{
 
                     submitOffer.setSubmitOfferMeta(submitOfferMeta);
 
-                    HttpService.getInstance().postSubmitOffer(usertoken, submitOffer, new Callback<BaseResponse>() {
+                    HttpService.getInstance().postSubmitOffer(getUserToken(), submitOffer, new Callback<BaseResponse>() {
                         @Override
                         public void success(BaseResponse baseResponse, Response response) {
 
                             if (baseResponse.isResponse()) {
-                                if(baseResponse.isResponse()) {
+                                if (baseResponse.isResponse()) {
                                     twystProgressHUD.dismiss();
                                     Toast.makeText(SubmitOfferActivity.this, "Your offer is submitted successfully!", Toast.LENGTH_LONG).show();
                                     finish();
-                                }else {
+                                } else {
                                     twystProgressHUD.dismiss();
                                     Toast.makeText(SubmitOfferActivity.this, "Unable to submit offer!", Toast.LENGTH_LONG).show();
                                 }
@@ -145,6 +167,36 @@ public class SubmitOfferActivity extends BaseActivity{
             }
         });
 
+        editImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final CharSequence[] items = {"Take Photo", "Choose Photo", "Cancel"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(SubmitOfferActivity.this);
+                builder.setTitle("Add Photo!");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        if (items[item].equals("Take Photo")) {
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            File f = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                            startActivityForResult(intent, REQUEST_CAMERA);
+                        } else if (items[item].equals("Choose Photo")) {
+                            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            intent.setType("image/*");
+                            startActivityForResult(Intent.createChooser(intent, "Select File"), SELECT_FILE);
+                        } else if (items[item].equals("Cancel")) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                builder.show();
+
+
+            }
+        });
+
         findViewById(R.id.takePhoto).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,6 +204,8 @@ public class SubmitOfferActivity extends BaseActivity{
                 File f = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
                 startActivityForResult(intent, REQUEST_CAMERA);
+
+
             }
         });
 
@@ -197,12 +251,19 @@ public class SubmitOfferActivity extends BaseActivity{
 
                     imagePath = f.getAbsolutePath();
 
-                    Log.i("imagePath",""+imagePath);
+                    Log.i("imagePath", "" + imagePath);
                     Toast.makeText(this, "You have clicked Image", Toast.LENGTH_LONG).show();
                     String fileNameSegments[] = imagePath.split("/");
                     fileName = fileNameSegments[fileNameSegments.length - 1];
                     if (imagePath != null && !imagePath.isEmpty()) {
-
+                        takePhotoLayout.setBackground(getResources().getDrawable(R.drawable.button_grey));
+                        takePhotoLayout.setClickable(false);
+                        takePhotoLayout.setEnabled(false);
+                        attachImageLayout.setBackground(getResources().getDrawable(R.drawable.button_grey));
+                        attachImageLayout.setClickable(false);
+                        attachImageLayout.setEnabled(false);
+                        submitBtn.setBackground(getResources().getDrawable(R.drawable.button_red));
+                        editImageButton.setVisibility(View.VISIBLE);
                         // Convert image to String using Base64
                         encodeImagetoString();
                         // When Image is not selected from Gallery
@@ -223,18 +284,24 @@ public class SubmitOfferActivity extends BaseActivity{
                 attachImage.setImageBitmap(bm);
 
 
-
-                String[] filePath = { MediaStore.Images.Media.DATA };
+                String[] filePath = {MediaStore.Images.Media.DATA};
                 Cursor cursor = getContentResolver().query(selectedImageUri, filePath, null, null, null);
                 cursor.moveToFirst();
                 imagePath = cursor.getString(cursor.getColumnIndex(filePath[0]));
 
-                Log.i("imagePath",""+imagePath);
+                Log.i("imagePath", "" + imagePath);
                 Toast.makeText(this, "You have picked Image", Toast.LENGTH_LONG).show();
                 String fileNameSegments[] = imagePath.split("/");
                 fileName = fileNameSegments[fileNameSegments.length - 1];
                 if (imagePath != null && !imagePath.isEmpty()) {
-
+                    takePhotoLayout.setBackground(getResources().getDrawable(R.drawable.button_grey));
+                    takePhotoLayout.setClickable(false);
+                    takePhotoLayout.setEnabled(false);
+                    attachImageLayout.setBackground(getResources().getDrawable(R.drawable.button_grey));
+                    attachImageLayout.setClickable(false);
+                    attachImageLayout.setEnabled(false);
+                    submitBtn.setBackground(getResources().getDrawable(R.drawable.button_red));
+                    editImageButton.setVisibility(View.VISIBLE);
                     // Convert image to String using Base64
                     encodeImagetoString();
                     // When Image is not selected from Gallery
@@ -254,14 +321,17 @@ public class SubmitOfferActivity extends BaseActivity{
     public void encodeImagetoString() {
         new AsyncTask<Void, Void, String>() {
 
-            protected void onPreExecute() {};
+            protected void onPreExecute() {
+            }
+
+            ;
 
             @Override
             protected String doInBackground(Void... params) {
                 BitmapFactory.Options options = null;
                 options = new BitmapFactory.Options();
                 options.inSampleSize = 3;
-                Bitmap bitmap = BitmapFactory.decodeFile(imagePath,options);
+                Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 // Must compress the Image to reduce image size to make upload easy
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
@@ -276,5 +346,21 @@ public class SubmitOfferActivity extends BaseActivity{
                 uploadingImage = encodedString;
             }
         }.execute(null, null, null);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerOpened) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            if (fromDrawer) {
+                //clear history and go to discover
+                Intent intent = new Intent(getBaseContext(), DiscoverActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            } else {
+                super.onBackPressed();
+            }
+        }
     }
 }

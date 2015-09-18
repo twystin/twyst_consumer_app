@@ -59,7 +59,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="56dp"
             android:background="#323232"
-            android:padding="@dimen/discover_plan_ahead_padding"
             android:visibility="gone">
 
             <TextView
@@ -69,12 +68,12 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/editTextView"
+                android:layout_toLeftOf="@+id/editLayout"
                 android:drawableLeft="@drawable/icon_outlet_detail_location1"
                 android:drawablePadding="4dp"
                 android:ellipsize="end"
                 android:textSize="@dimen/discover_plan_ahead_size"
-                android:paddingLeft="4dp"
+                android:paddingLeft="@dimen/discover_plan_ahead_padding"
                 android:paddingRight="10dp"
                 android:singleLine="true"
                 android:text="DLF Phase IV (current)"
@@ -88,23 +87,41 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:paddingLeft="4dp"
+                android:paddingLeft="@dimen/discover_plan_ahead_padding"
                 android:paddingRight="10dp"
                 android:textSize="@dimen/discover_plan_ahead_size"
                 android:text="Plan Ahead"
                 android:textColor="@android:color/white"
                 android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/editTextView"
+            <LinearLayout
+                android:id="@+id/editLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="8dp"
-                android:textSize="@dimen/discover_plan_ahead_size"
-                android:text="edit"
-                android:textColor="@android:color/white" />
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/closeBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:padding="@dimen/discover_plan_ahead_padding"
+                    android:src="@drawable/close_image_discover"/>
+                <TextView
+                    android:id="@+id/editTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/discover_plan_ahead_size"
+                    android:text="edit"
+                    android:visibility="visible"
+                    android:padding="@dimen/discover_plan_ahead_padding"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+
 
 
         </RelativeLayout>
@@ -141,7 +158,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="1dp"
-                        android:src="@drawable/icon_plan_ahead_where" />
+                        android:src="@drawable/icon_plan_ahead_at_red" />
 
                     <TextView
                         android:id="@+id/textViewWhere"
@@ -209,7 +226,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/icon_plan_ahead_when" />
+                        android:src="@drawable/icon_plan_ahead_where_red" />
 
                     <TextView
                         android:id="@+id/textViewWhen"
@@ -335,7 +352,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/icon_plan_ahead_at" />
+                        android:src="@drawable/icon_plan_ahead_when_red" />
 
                     <TextView
                         android:id="@+id/textViewAt"

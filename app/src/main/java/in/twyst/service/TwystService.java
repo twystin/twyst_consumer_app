@@ -1,19 +1,16 @@
 package in.twyst.service;
 
-import com.squareup.okhttp.Call;
-
-import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import in.twyst.model.AuthToken;
 import in.twyst.model.BaseResponse;
 import in.twyst.model.CheckinData;
 import in.twyst.model.Data;
 import in.twyst.model.Friend;
-import in.twyst.model.FriendData;
-import in.twyst.model.GetFriend;
+import in.twyst.model.NotificationData;
+import in.twyst.model.Profile;
 import in.twyst.model.Referral;
 import in.twyst.model.ReportProblem;
 import in.twyst.model.UseOffer;
@@ -29,7 +26,7 @@ import in.twyst.model.ShareOutlet;
 import in.twyst.model.SubmitOffer;
 import in.twyst.model.Suggestion;
 import in.twyst.model.UploadBill;
-import in.twyst.model.UseOfferData;
+import in.twyst.model.UserLocation;
 import in.twyst.model.Voucher;
 import in.twyst.model.WalletData;
 import in.twyst.model.WriteToUs;
@@ -57,10 +54,10 @@ public interface TwystService {
 
     @FormUrlEncoded
     @PUT("/api/v4/profile")
-    public void updateProfile(@Query("token") String token, @Field("email") String email, @Field("gcmId") String deviceId,@Field("os_version") String version ,@Field("device") String device,@Field("model") String model,@Field("product") String product, Callback<BaseResponse<ProfileUpdate>> callback);
+    public void updateProfile( @Query("token") String token, @Field("email") String email,@Field("image") String image,@Field("first_name") String fname,@Field("middle_name") String mname,@Field("last_name") String lname,@Field("city") String city, @Field("id")String id, @Field("source")String source, @Field("facebookUri")String facebookUri, @Field("googleplusUri")String googleplusUri, @Field("gcmId") String deviceId,@Field("os_version") String version ,@Field("device") String device,@Field("model") String model,@Field("product") String product, Callback<BaseResponse<ProfileUpdate>> callback);
 
     @GET("/api/v4/recos")
-    public void getRecommendedOutlets(@Query("token") String token, @Query("start") int start, @Query("end") int end, @Query("lat") String lat, @Query("long") String lng, @Query("date") String date,@Query("time") String time, Callback<BaseResponse<DiscoverData>> callback);
+    public void getRecommendedOutlets(@Query("token") String token, @Query("start") int start, @Query("end") int end, @Query("lat") String lat, @Query("long") String lng, @Query("date") String date,@Query(value = "time",encodeValue=false) String time , Callback<BaseResponse<DiscoverData>> callback);
 
     @GET("/api/v4/outlets/{outlet_id}")
     public void getOutletDetails(@Path("outlet_id") String outletId, @Query("token")String token, @Query("lat") String lat, @Query("long") String lng,Callback<BaseResponse<OutletDetailData>> callback);
@@ -80,7 +77,7 @@ public interface TwystService {
     public void outletFeedback(@Query("token") String token, @Body() Feedback feedback, Callback<BaseResponse> callback);
 
     @GET("/api/v4/coupons")
-    public void getCoupons(@Query("token") String token, Callback<BaseResponse<WalletData>> callback);
+    public void getCoupons(@Query("token") String token,@Query("lat") String lat, @Query("long") String lng, Callback<BaseResponse<WalletData>> callback);
 
     @GET("/api/v4/locations")
     public void getLocations(Callback<BaseResponse<ArrayList<LocationData>>> callback);
@@ -124,15 +121,21 @@ public interface TwystService {
     @POST("/api/v4/coupon/redeem")
     public void postRedeemCoupon(@Query("token") String token, @Body() UseOffer useOffer, Callback<BaseResponse> callback);
 
-
     @POST("/api/v4/referral/join")
     public void postReferral(@Query("token") String token, @Body() Referral referral, Callback<BaseResponse> callback);
-
 
     @POST("/api/v4/offer/report/problem")
     public void reportProblem(@Query("token") String token,@Body()ReportProblem reportProblem,Callback<BaseResponse> callback);
 
     @GET("/api/v4/profile")
-    public void getProfile(@Query("token") String token, Callback<BaseResponse<GetFriend>> callback);
+    public void getProfile(@Query("token") String token, Callback<BaseResponse<Profile>> callback);
 
+    @GET("/api/v4/search")
+    public void searchOffer(@Query("token") String token,@Query("text") String searchText,@Query("lat") String lat, @Query("long") String lng, @Query("date") String date,@Query(value = "time",encodeValue=false) String time , Callback<BaseResponse<DiscoverData>> callback);
+
+    @POST("/api/v4/user/location")
+    public void postLocation(@Query("token") String token, @Body() UserLocation userLocation, Callback<BaseResponse> callback);
+
+    @GET("/api/v4/events/notifications")
+    public void getNotification(@Query("token") String token, Callback<BaseResponse<ArrayList<NotificationData>>> callback);
 }

@@ -1,8 +1,11 @@
 package in.twyst.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -13,8 +16,7 @@ import java.util.List;
 
 import in.twyst.R;
 import in.twyst.model.BaseResponse;
-import in.twyst.model.FriendData;
-import in.twyst.model.GetFriend;
+import in.twyst.model.Profile;
 import in.twyst.service.HttpService;
 import in.twyst.util.AppConstants;
 import retrofit.Callback;
@@ -26,7 +28,8 @@ import retrofit.client.Response;
  */
 public class InviteFriendsActivity extends BaseActivity {
 
-    private List<FriendData.FriendLists> friendLists;
+    private List<Profile.FriendLists> friendLists;
+    private boolean fromDrawer;
 
     @Override
     protected String getTagName() {
@@ -42,25 +45,26 @@ public class InviteFriendsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setupAsChild= true;
         super.onCreate(savedInstanceState);
+
+        fromDrawer = getIntent().getBooleanExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, false);
+
         final ListView inviteTwystList = (ListView)findViewById(R.id.inviteTwystList);
 
 
-        HttpService.getInstance().getProfile(getUserToken(), new Callback<BaseResponse<GetFriend>>() {
+        HttpService.getInstance().getProfile(getUserToken(), new Callback<BaseResponse<Profile>>() {
             @Override
-            public void success(BaseResponse<GetFriend> friendDataBaseResponse, Response response) {
-
+            public void success(BaseResponse<Profile> friendDataBaseResponse, Response response) {
                 if (friendDataBaseResponse.isResponse()) {
                     if (friendDataBaseResponse.getData() != null) {
+                        friendLists = friendDataBaseResponse.getData().getTwystFriendLists();
 
-                        FriendData friendData = friendDataBaseResponse.getData().getFriendData();
-                        if (friendData.getList() != null) {
-                            friendLists = friendData.getList();
+                        if(friendLists.size()>0) {
 
-                            inviteTwystList.setAdapter(new ArrayAdapter<FriendData.FriendLists>(InviteFriendsActivity.this, R.layout.listview_item_invite_contact, R.id.contactName, friendLists));
-                        } else {
+                            inviteTwystList.setAdapter(new ArrayAdapter<Profile.FriendLists>(InviteFriendsActivity.this, R.layout.listview_item_invite_contact, R.id.contactName, friendLists));
+
+                        }else {
                             Toast.makeText(InviteFriendsActivity.this, "Friend list is empty!", Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 }
             }
@@ -90,9 +94,20 @@ public class InviteFriendsActivity extends BaseActivity {
         hideProgressHUDInLayout();
     }
 
-    private String getUserToken() {
-        SharedPreferences prefs = this.getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return prefs.getString(AppConstants.PREFERENCE_USER_TOKEN, "");
 
+    @Override
+    public void onBackPressed() {
+        if (drawerOpened) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            if (fromDrawer) {
+                //clear history and go to discover
+                Intent intent = new Intent(getBaseContext(), DiscoverActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            } else {
+                super.onBackPressed();
+            }
+        }
     }
 }
