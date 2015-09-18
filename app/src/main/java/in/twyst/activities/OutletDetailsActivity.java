@@ -45,6 +45,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.Locale;
 
 import in.twyst.R;
 import in.twyst.adapters.OutletDetailsAdapter;
@@ -113,8 +114,8 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
         super.onCreate(savedInstanceState);
 
         SharedPreferences preferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        String appLocationLatiude = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, "");
-        String appLocationLongitude = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, "");
+        final String appLocationLatiude = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, "");
+        final String appLocationLongitude = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, "");
 
         Intent intent = getIntent();
         final String outletid = intent.getStringExtra(AppConstants.INTENT_PARAM_OUTLET_ID);
@@ -147,13 +148,26 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
         outlet_view_map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent1 = new Intent(OutletDetailsActivity.this, MapViewActivity.class);
-                intent1.putExtra(AppConstants.INTENT_PARAM_OUTLET_LOCATION_LAT, outlet.getLat());
-                intent1.putExtra(AppConstants.INTENT_PARAM_OUTLET_LOCATION_LONG, outlet.getLng());
-                intent1.putExtra(AppConstants.INTENT_PARAM_OUTLET_NAME, outlet.getName());
-                startActivity(intent1);
-            }
+//                Intent intent1 = new Intent(OutletDetailsActivity.this, MapViewActivity.class);
+//                intent1.putExtra(AppConstants.INTENT_PARAM_OUTLET_LOCATION_LAT, outlet.getLat());
+//                intent1.putExtra(AppConstants.INTENT_PARAM_OUTLET_LOCATION_LONG, outlet.getLng());
+//                intent1.putExtra(AppConstants.INTENT_PARAM_OUTLET_NAME, outlet.getName());
+//                startActivity(intent1);
 
+                Float latSource = Float.parseFloat(appLocationLatiude);
+                Float lonSource = Float.parseFloat(appLocationLongitude);
+                Float latDest = Float.parseFloat(outlet.getLat());
+                Float lonDest = Float.parseFloat(outlet.getLng());
+                String outletName = Uri.encode(outlet.getName());
+
+                String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?saddr=%f,%f(%s)&daddr=%f,%f (%s)",
+                        latSource, lonSource, "My Location", latDest, lonDest, outletName);
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+                startActivity(intent);
+
+            }
         });
 
         fabMenu = (FloatingActionsMenu) findViewById(R.id.fabMenu);
