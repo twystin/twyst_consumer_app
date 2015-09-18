@@ -55,6 +55,7 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private static final int VIEW_NORMAL = 0;
     private static final int VIEW_FOOTER = 1;
+    private static final int VIEW_INVISIBLE = 2;
     private String outletname;
     private String address;
     private List<Offer> items = new ArrayList<>();
@@ -83,14 +84,22 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             SubmitViewHolder vh = new SubmitViewHolder(v);
             return vh;
-        }
+        } else if (viewType == VIEW_INVISIBLE) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_invisible, parent, false);
 
-        throw new RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
+        InvisibleViewHolder vh = new InvisibleViewHolder(v);
+        return vh;
+    }
+
+
+    throw new RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position == items.size()) {
+        if (position == 0) {
+            return VIEW_INVISIBLE;
+        }else if (position == items.size()+1) {
             return VIEW_FOOTER;
         } else {
             return VIEW_NORMAL;
@@ -101,7 +110,7 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(RecyclerView.ViewHolder holder1, int position) {
         if(holder1 instanceof OfferViewHolder){
             final OfferViewHolder holder = (OfferViewHolder) holder1;
-            final Offer offer = items.get(position);
+            final Offer offer = items.get(position-1);
             final View view = holder.itemView;
             Resources resources = view.getContext().getResources();
 
@@ -407,7 +416,8 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
             }else {}
 
-        }else {
+        }else if(holder1 instanceof SubmitViewHolder){
+
             SubmitViewHolder holder = (SubmitViewHolder) holder1;
             final View view = holder.itemView;
             Resources resources = view.getContext().getResources();
@@ -431,7 +441,7 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-        return items.size()+1;
+        return items.size()+2;
     }
 
     public static class OfferViewHolder extends RecyclerView.ViewHolder {
@@ -495,6 +505,15 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
             submitOffer.setText("");
         }
     }
+
+    public static class InvisibleViewHolder extends RecyclerView.ViewHolder {
+
+
+        public InvisibleViewHolder(View view) {
+            super(view);
+        }
+    }
+
 
 }
 

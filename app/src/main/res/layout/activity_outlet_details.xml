@@ -16,6 +16,17 @@
             android:id="@+id/toolbarWrapper"
             layout="@layout/toolbar_wrapper" />
 
+        <com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView
+            android:id="@+id/outletDetailsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/toolbarWrapper"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="7.5dp"
+            android:layout_marginRight="7.5dp"
+            android:layout_marginTop="5dp"
+            android:overScrollMode="never"
+            android:visibility="invisible" />
 
         <RelativeLayout
             android:id="@+id/layout"
@@ -31,6 +42,7 @@
                 android:id="@+id/outletImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="#ffffffff"
                 android:layout_centerInParent="true"
                 android:scaleType="centerCrop" />
 
@@ -248,19 +260,6 @@
 
 
         </RelativeLayout>
-
-
-        <com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView
-            android:id="@+id/outletDetailsRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/layout"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="7.5dp"
-            android:layout_marginRight="7.5dp"
-            android:layout_marginTop="5dp"
-            android:overScrollMode="never"
-            android:visibility="invisible" />
 
         <RelativeLayout
             android:id="@+id/obstructor"

@@ -857,7 +857,29 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
     }
 
     @Override
-    public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
+    public void onScrollChanged(final int scrollY, boolean firstScroll, boolean dragging) {
+        final int lowerLimit = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 110, getResources().getDisplayMetrics());
+        final int upperLimit = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 185, getResources().getDisplayMetrics());
+
+        final View layout = findViewById(R.id.layout);
+        final View hideableLayout = findViewById(R.id.hideableLayout);
+
+//        Log.d(getTagName(), "scrollY: " + scrollY + " upperLimit:" + upperLimit + " lowerLimit:" + lowerLimit);
+        final int diff = upperLimit - scrollY;
+        if (diff > upperLimit) {
+            layout.getLayoutParams().height = upperLimit;
+            layout.requestLayout();
+            hideableLayout.setAlpha(1f);
+        } else if (diff < lowerLimit) {
+            layout.getLayoutParams().height = lowerLimit;
+            layout.requestLayout();
+            hideableLayout.setAlpha(0f);
+        } else if (diff <= upperLimit && diff > lowerLimit) {
+            layout.getLayoutParams().height = diff;
+            layout.requestLayout();
+            float ratio = (scrollY * 1f / (upperLimit - lowerLimit) * 1f) * 1f;
+            hideableLayout.setAlpha(1f - ratio);
+        }
     }
 
     @Override
@@ -866,15 +888,15 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
 
     @Override
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-        if (scrollState == ScrollState.UP) {
-            if (detailsIsShown()) {
-                hideDetails();
-            }
-        } else if (scrollState == ScrollState.DOWN) {
-            if (detailsIsHidden()) {
-                showDetails();
-            }
-        }
+//        if (scrollState == ScrollState.UP) {
+//            if (detailsIsShown()) {
+//                hideDetails();
+//            }
+//        } else if (scrollState == ScrollState.DOWN) {
+//            if (detailsIsHidden()) {
+//                showDetails();
+//            }
+//        }
     }
 
     private boolean detailsIsShown() {
