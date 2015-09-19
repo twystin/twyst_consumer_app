@@ -1255,9 +1255,11 @@ public class OfferDetailActivity extends BaseActivity {
             AvailableNext availableNext = offer.getAvailableNext();
             String sDay = availableNext.getDay();
             String sTime = availableNext.getTime();
-            int sHour = Integer.parseInt(sTime.substring(0, 2));
-            int sMin = Integer.parseInt(sTime.substring(3, 5));
-            String ampm = sTime.substring(6, 8);
+
+            int position = sTime.indexOf(":");
+            int sHour = Integer.parseInt(sTime.substring(0, position));
+            int sMin = Integer.parseInt(sTime.substring(position+1, position+3));
+            String ampm = sTime.substring(position+4, position+6);
 
             if (sDay.equalsIgnoreCase("Tomorrow")) {
                 calendarDest.add(Calendar.DATE, 1);
