@@ -2,21 +2,15 @@ package in.twyst.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,8 +19,6 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +34,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.balysv.materialripple.MaterialRippleLayout;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.gms.common.ConnectionResult;
@@ -56,11 +47,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.location.places.ui.PlacePicker;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -114,17 +101,17 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private boolean firstLoad;
-    int autoCompleteFlag ;
+    int autoCompleteFlag;
     private String searchedItem;
     protected boolean search;
     private Date selectedDate;
     private ArrayList<LocationData> locations = new ArrayList<>(0);
     private LocationData selectedLocation;
-	TextView day1;
-	private boolean clearDateTime, planAheadChanged;
+    TextView day1;
+    private boolean clearDateTime, planAheadChanged, fromchangeLoc, planAheadChangeConfirm;
     private ImageView closeBtn;
     private TextView planAheadLocation;
-    private String lat,lng;
+    private String lat, lng;
 
     @Override
     protected String getTagName() {
@@ -150,16 +137,15 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(getIntent().getAction().equalsIgnoreCase("setChildYes")){
+        if (getIntent().getAction().equalsIgnoreCase("setChildYes")) {
             setupAsChild = true;
-        }else {
+        } else {
             setupAsChild = false;
         }
         super.onCreate(savedInstanceState);
-        if(!search) {
+        if (!search) {
             HttpService.getInstance().getLocations(new Callback<BaseResponse<ArrayList<LocationData>>>() {
                 @Override
                 public void success(BaseResponse<ArrayList<LocationData>> arrayListBaseResponse, Response response) {
@@ -193,18 +179,18 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         selectedLocationTxt = (TextView) findViewById(R.id.selectedLocationTxt);
-        locationText =(TextView)findViewById(R.id.locationText);
+        locationText = (TextView) findViewById(R.id.locationText);
         planAheadContent = findViewById(R.id.planAheadContent);
-        editTextView =(TextView)findViewById(R.id.editTextView);
-        closeBtn = (ImageView)findViewById(R.id.closeBtn);
+        editTextView = (TextView) findViewById(R.id.editTextView);
+        closeBtn = (ImageView) findViewById(R.id.closeBtn);
         planAheadLocation = (TextView) findViewById(R.id.planAheadLocation);
         fabMenu = (FloatingActionsMenu) findViewById(R.id.fabMenu);
         obstructor = (RelativeLayout) findViewById(R.id.obstructor);
         planAheadObstructor = (RelativeLayout) findViewById(R.id.planAheadObstructor);
         planAheadObstructor2 = (RelativeLayout) findViewById(R.id.planAheadObstructor2);
-		day1 = (TextView) findViewById(R.id.day1);
-        submitFab = (FloatingActionButton)findViewById(R.id.submitFab);
-        checkinFab = (FloatingActionButton)findViewById(R.id.checkinFab);
+        day1 = (TextView) findViewById(R.id.day1);
+        submitFab = (FloatingActionButton) findViewById(R.id.submitFab);
+        checkinFab = (FloatingActionButton) findViewById(R.id.checkinFab);
 
         findViewById(R.id.changeOnMapBtn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,45 +198,62 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 // showPlacesPicker();
                 Intent intent = new Intent(DiscoverActivity.this, ChangeMapActivity.class);
                 startActivityForResult(intent, PLACE_PICKER_REQUEST);
+                fromchangeLoc = true;
             }
         });
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
         mSwipeRefreshLayout.setColorScheme(R.color.button_orange);
 
         mSwipeRefreshLayout.setEnabled(false);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-			@Override
-			public void onRefresh() {
-				if (search) {
-					fetchSearchedOutlets();
-				} else {
-					if (TextUtils.isEmpty(date) && TextUtils.isEmpty(time)) {
-						fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, null, null, true);
-					} else {
-						fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
-					}
-				}
-			}
-		});
+            @Override
+            public void onRefresh() {
+                if (search) {
+                    fetchSearchedOutlets();
+                } else {
+                    if (TextUtils.isEmpty(date) && TextUtils.isEmpty(time)) {
+                        fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, null, null, true);
+                    } else {
+                        fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
+                    }
+                }
+            }
+        });
 
         findViewById(R.id.planAheadSubmitBtn).setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 selectedLocationTxt.setVisibility(View.VISIBLE);
-				if(planAheadChanged){
+                if (planAheadChanged) {
                     closeBtn.setVisibility(View.VISIBLE);
                     editTextView.setVisibility(View.GONE);
                     clearDateTime = true;
                     SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-                    placeNameSelectedAndUsed = prefs.getString(AppConstants.PREFERENCE_CHANGE_LOCATION_NAME, "");
-                    latitudeStrSelectedAndUsed = prefs.getString(AppConstants.PREFERENCE_CHANGE_LOCATION_LATITUDE, "");
-                    longitudeStrSelectedAndUsed = prefs.getString(AppConstants.PREFERENCE_CHANGE_LOCATION_LONGITUDE, "");
+                    if (TextUtils.isEmpty(prefs.getString(AppConstants.PREFERENCE_CHANGE_LOCATION_NAME, ""))) {
+                        if (!TextUtils.isEmpty(placeNameSelected) || !TextUtils.isEmpty(latitudeStrSelected) || !TextUtils.isEmpty(longitudeStrSelected)) {
+                            placeNameSelectedAndUsed = placeNameSelected;
+                            latitudeStrSelectedAndUsed = latitudeStrSelected;
+                            longitudeStrSelectedAndUsed = longitudeStrSelected;
+                        }
+                    } else {
+                        if (!TextUtils.isEmpty(placeNameSelected) || !TextUtils.isEmpty(latitudeStrSelected) || !TextUtils.isEmpty(longitudeStrSelected)) {
+                            placeNameSelectedAndUsed = placeNameSelected;
+                            latitudeStrSelectedAndUsed = latitudeStrSelected;
+                            longitudeStrSelectedAndUsed = longitudeStrSelected;
+                        } else {
+                            placeNameSelectedAndUsed = prefs.getString(AppConstants.PREFERENCE_CHANGE_LOCATION_NAME, "");
+                            latitudeStrSelectedAndUsed = prefs.getString(AppConstants.PREFERENCE_CHANGE_LOCATION_LATITUDE, "");
+                            longitudeStrSelectedAndUsed = prefs.getString(AppConstants.PREFERENCE_CHANGE_LOCATION_LONGITUDE, "");
+                        }
+                    }
 
-				}else {
-					editTextView.setVisibility(View.VISIBLE);
+                    planAheadChangeConfirm = true;
+
+                } else {
+                    editTextView.setVisibility(View.VISIBLE);
                     closeBtn.setVisibility(View.GONE);
 
                     if (!TextUtils.isEmpty(placeNameSelected) || !TextUtils.isEmpty(latitudeStrSelected) || !TextUtils.isEmpty(longitudeStrSelected)) {
@@ -259,54 +262,57 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                         longitudeStrSelectedAndUsed = longitudeStrSelected;
                     }
 
-				}
+                }
 
-                if(planAheadLocation.getText().toString().contains("(current)")) {
+                if (planAheadLocation.getText().toString().contains("(current)")) {
                     selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
-                }else {
+                } else {
                     selectedLocationTxt.setText(placeNameSelectedAndUsed);
                 }
-				collapse(planAheadContent);
-				locationText.setVisibility(View.GONE);
-				fabMenu.setVisibility(View.VISIBLE);
-				fabMenu.setEnabled(true);
+                collapse(planAheadContent);
+                locationText.setVisibility(View.GONE);
+                fabMenu.setVisibility(View.VISIBLE);
+                fabMenu.setEnabled(true);
 
-				findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
-				Log.i("selected date", "= " + date + " time " + time);
+                findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
+                Log.i("selected date", "= " + date + " time " + time);
 
-				if (TextUtils.isEmpty(date) && TextUtils.isEmpty(time)) {
-					fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, null, null, true);
-				} else {
-					fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
-				}
+                if (TextUtils.isEmpty(date) && TextUtils.isEmpty(time)) {
+                    fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, null, null, true);
+                } else {
+                    fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
+                }
 
-			}
-		});
-
+            }
+        });
 
 
         findViewById(R.id.planAheadCancelBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 collapse(planAheadContent);
-                if(clearDateTime){
+                if (clearDateTime) {
                     closeBtn.setVisibility(View.VISIBLE);
                     editTextView.setVisibility(View.GONE);
-                }else {
+                } else {
                     editTextView.setVisibility(View.VISIBLE);
                     closeBtn.setVisibility(View.GONE);
                 }
-                if(planAheadChanged){
+                if (planAheadChanged) {
                     refreshDateTimeLoc();
+                }
+                if (closeBtn.getVisibility() == View.VISIBLE) {
+                    editTextView.setVisibility(View.VISIBLE);
+                    closeBtn.setVisibility(View.GONE);
                 }
                 locationText.setVisibility(View.GONE);
                 selectedLocationTxt.setVisibility(View.VISIBLE);
 
                 fabMenu.setVisibility(View.VISIBLE);
                 fabMenu.setEnabled(true);
-                if(planAheadLocation.getText().toString().contains("(current)")) {
+                if (planAheadLocation.getText().toString().contains("(current)")) {
                     selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
-                }else {
+                } else {
                     selectedLocationTxt.setText(placeNameSelectedAndUsed);
                 }
 
@@ -317,14 +323,14 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
 
         mRecyclerView.setAdapter(discoverAdapter);
 
-        if(search){
+        if (search) {
             editTextView.setText("");
             editTextView.setVisibility(View.VISIBLE);
             locationText.setText("");
             selectedLocationTxt.setCompoundDrawables(null, null, null, null);
-			fetchSearchedOutlets();
+            fetchSearchedOutlets();
 
-        }else {
+        } else {
             planAheadObstructor2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -357,20 +363,20 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
             setupAsPlanAheadView();
         }
 
-		closeBtn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if(planAheadChanged){
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (planAheadChanged) {
                     findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
                     editTextView.setVisibility(View.VISIBLE);
                     closeBtn.setVisibility(View.GONE);
 
                     refreshDateTimeLoc();
-                    fetchOutlets(1,lat,lng,date,time,true);
+                    fetchOutlets(1, lat, lng, date, time, true);
 
-				}
-			}
-		});
+                }
+            }
+        });
 
         fabMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
             @Override
@@ -485,10 +491,10 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
 
             collapse(planAheadContent);
 
-            if(clearDateTime){
+            if (clearDateTime) {
                 closeBtn.setVisibility(View.VISIBLE);
                 editTextView.setVisibility(View.GONE);
-            }else {
+            } else {
                 editTextView.setVisibility(View.VISIBLE);
                 closeBtn.setVisibility(View.GONE);
             }
@@ -542,7 +548,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 deselectDays();
                 day2.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 day2.setTextColor(Color.WHITE);
-                date = (String) DateFormat.format("MM-dd-yyyy",(Date) day2.getTag());
+                date = (String) DateFormat.format("MM-dd-yyyy", (Date) day2.getTag());
                 dateSelected = true;
                 selectedDate = (Date) day2.getTag();
                 planAheadChanged = true;
@@ -559,7 +565,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 deselectDays();
                 day3.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 day3.setTextColor(Color.WHITE);
-                date = (String) DateFormat.format("MM-dd-yyyy",(Date) day3.getTag());
+                date = (String) DateFormat.format("MM-dd-yyyy", (Date) day3.getTag());
                 dateSelected = true;
                 planAheadChanged = true;
                 selectedDate = (Date) day3.getTag();
@@ -571,17 +577,17 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         day4.setText(dayOfWeek(++dayOfWeekInt % 7));
         day4.setTag(calendar.getTime());
         day4.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				deselectDays();
-				day4.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-				day4.setTextColor(Color.WHITE);
-				date = (String) DateFormat.format("MM-dd-yyyy", (Date) day4.getTag());
-				dateSelected = true;
-				selectedDate = (Date) day4.getTag();
+            @Override
+            public void onClick(View view) {
+                deselectDays();
+                day4.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                day4.setTextColor(Color.WHITE);
+                date = (String) DateFormat.format("MM-dd-yyyy", (Date) day4.getTag());
+                dateSelected = true;
+                selectedDate = (Date) day4.getTag();
                 planAheadChanged = true;
-			}
-		});
+            }
+        });
 
         calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + 1);
         final TextView day5 = (TextView) findViewById(R.id.day5);
@@ -593,7 +599,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 deselectDays();
                 day5.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 day5.setTextColor(Color.WHITE);
-                date = (String) DateFormat.format("MM-dd-yyyy",(Date) day5.getTag());
+                date = (String) DateFormat.format("MM-dd-yyyy", (Date) day5.getTag());
                 dateSelected = true;
                 selectedDate = (Date) day5.getTag();
                 planAheadChanged = true;
@@ -610,7 +616,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 deselectDays();
                 day6.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 day6.setTextColor(Color.WHITE);
-                date = (String) DateFormat.format("MM-dd-yyyy",(Date) day6.getTag() );
+                date = (String) DateFormat.format("MM-dd-yyyy", (Date) day6.getTag());
                 dateSelected = true;
                 selectedDate = (Date) day6.getTag();
                 planAheadChanged = true;
@@ -627,7 +633,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 deselectDays();
                 day7.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 day7.setTextColor(Color.WHITE);
-                date = (String) DateFormat.format("MM-dd-yyyy",(Date) day7.getTag());
+                date = (String) DateFormat.format("MM-dd-yyyy", (Date) day7.getTag());
                 dateSelected = true;
                 selectedDate = (Date) day7.getTag();
                 planAheadChanged = true;
@@ -651,36 +657,36 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         seekBar.setProgress(progress);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
 
-				if (progress == 0 || progress == 48)
-					return;
+                if (progress == 0 || progress == 48)
+                    return;
 
-				int hours = progress / 2;
-				int minutes = (progress % 2) * 30;
+                int hours = progress / 2;
+                int minutes = (progress % 2) * 30;
 
-				time = convertHoursToString(hours) + ":" + convertMinutesToString(minutes);
-				if (!dateSelected) {
-					selectedDate = (Date) day1.getTag();
-					dateSelected = true;
+                time = convertHoursToString(hours) + ":" + convertMinutesToString(minutes);
+                if (!dateSelected) {
+                    selectedDate = (Date) day1.getTag();
+                    dateSelected = true;
 
-				}
+                }
                 planAheadChanged = true;
-				Log.d(getTagName(), "selected time: hour: " + hours + ", minutes: " + minutes + ", final: " + convertHoursToString(hours) + ":" + convertMinutesToString(minutes));
-				planAheadTime.setText(convertHoursToString(((hours <= 12) ? hours : (hours % 12))) + ":" + convertMinutesToString(minutes) + ((hours < 12) ? "am" : "pm"));
-			}
+                Log.d(getTagName(), "selected time: hour: " + hours + ", minutes: " + minutes + ", final: " + convertHoursToString(hours) + ":" + convertMinutesToString(minutes));
+                planAheadTime.setText(convertHoursToString(((hours <= 12) ? hours : (hours % 12))) + ":" + convertMinutesToString(minutes) + ((hours < 12) ? "am" : "pm"));
+            }
 
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
 
-			}
+            }
 
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
 
-			}
-		});
+            }
+        });
     }
 
 
@@ -898,55 +904,55 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
 
         Calendar calendar = Calendar.getInstance();
         Date currentDateTime = calendar.getTime();
-        String date = (String) DateFormat.format("MM-dd-yyyy",currentDateTime );
+        String date = (String) DateFormat.format("MM-dd-yyyy", currentDateTime);
         int hoursIn = calendar.get(Calendar.HOUR_OF_DAY);
         int minutes = calendar.get(Calendar.MINUTE);
         String time = convertHoursToString(hoursIn) + ":" + convertMinutesToString(minutes);
 
-        if(!TextUtils.isEmpty(searchedItem)) {
-            HttpService.getInstance().searchOffer(getUserToken(),searchedItem,lat,lng,date,time, new Callback<BaseResponse<DiscoverData>>() {
+        if (!TextUtils.isEmpty(searchedItem)) {
+            HttpService.getInstance().searchOffer(getUserToken(), searchedItem, lat, lng, date, time, new Callback<BaseResponse<DiscoverData>>() {
                 @Override
                 public void success(BaseResponse<DiscoverData> discoverDataBaseResponse, Response response) {
 
-					if(discoverDataBaseResponse.isResponse()){
+                    if (discoverDataBaseResponse.isResponse()) {
 
-						ArrayList<Outlet> outlets = discoverDataBaseResponse.getData().getOutlets();
-						String twystBucks = discoverDataBaseResponse.getData().getTwystBucks();
+                        ArrayList<Outlet> outlets = discoverDataBaseResponse.getData().getOutlets();
+                        String twystBucks = discoverDataBaseResponse.getData().getTwystBucks();
 
-						if (!TextUtils.isEmpty(twystBucks)) {
-							sharedPreferences.putInt(AppConstants.PREFERENCE_LAST_TWYST_BUCK, Integer.parseInt(twystBucks));
-							sharedPreferences.commit();
-						}
+                        if (!TextUtils.isEmpty(twystBucks)) {
+                            sharedPreferences.putInt(AppConstants.PREFERENCE_LAST_TWYST_BUCK, Integer.parseInt(twystBucks));
+                            sharedPreferences.commit();
+                        }
 
-						if (outlets != null) {
-							if (outlets.isEmpty()) {
-								outletsNotFound = true;
-								discoverAdapter.setOutletsNotFound(true);
-							} else {
-								discoverAdapter.getItems().clear();
+                        if (outlets != null) {
+                            if (outlets.isEmpty()) {
+                                outletsNotFound = true;
+                                discoverAdapter.setOutletsNotFound(true);
+                            } else {
+                                discoverAdapter.getItems().clear();
 
-								if (outlets.size() < AppConstants.DISCOVER_LIST_PAGESIZE) {
-									outletsNotFound = true;
-									discoverAdapter.setOutletsNotFound(true);
-								} else {
-									outletsNotFound = false;
-									discoverAdapter.setOutletsNotFound(false);
-								}
+                                if (outlets.size() < AppConstants.DISCOVER_LIST_PAGESIZE) {
+                                    outletsNotFound = true;
+                                    discoverAdapter.setOutletsNotFound(true);
+                                } else {
+                                    outletsNotFound = false;
+                                    discoverAdapter.setOutletsNotFound(false);
+                                }
 
-								discoverAdapter.getItems().addAll(outlets);
-								discoverAdapter.notifyDataSetChanged();
-							}
-						}
+                                discoverAdapter.getItems().addAll(outlets);
+                                discoverAdapter.notifyDataSetChanged();
+                            }
+                        }
 
-						onItemsLoadComplete();
-						hideProgressHUDInLayout();
+                        onItemsLoadComplete();
+                        hideProgressHUDInLayout();
 
-						fabMenu.setVisibility(View.VISIBLE);
-						findViewById(R.id.planAhead).setVisibility(View.VISIBLE);
+                        fabMenu.setVisibility(View.VISIBLE);
+                        findViewById(R.id.planAhead).setVisibility(View.VISIBLE);
 
-					}else {
-						Toast.makeText(DiscoverActivity.this, discoverDataBaseResponse.getMessage(), Toast.LENGTH_SHORT).show();
-					}
+                    } else {
+                        Toast.makeText(DiscoverActivity.this, discoverDataBaseResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
@@ -1009,8 +1015,8 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
             planAheadLocation.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#636363\">(current)</font></b>"));
 
             findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
-            if(firstLoad){
-                fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed,date, time, true);
+            if (firstLoad) {
+                fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
             }
 
         } else {
@@ -1054,7 +1060,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 LocationData locationData = (LocationData) extras.getSerializable("locationData");
                 Double lat = Double.valueOf(locationData.getLat());
                 Double lng = Double.valueOf(locationData.getLng());
-                LocationData nearestOutletLocation =  findNearestOutletLocation(lat, lng);
+                LocationData nearestOutletLocation = findNearestOutletLocation(lat, lng);
                 String locationName = nearestOutletLocation.toString();
 
                 placeNameSelected = locationName;
@@ -1065,10 +1071,10 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
 
                 SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
                 searchedItem = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, "");
-                if(searchedItem.equalsIgnoreCase(locationName)) {
+                if (searchedItem.equalsIgnoreCase(locationName)) {
                     planAheadLocation.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#636363\">(current)</font></b>"));
                     planAheadChanged = false;
-                }else {
+                } else {
                     planAheadLocation.setText(locationName);
                     placeNameSelectedAndUsed = locationName;
                     sharedPreferences.putString(AppConstants.PREFERENCE_CHANGE_LOCATION_LATITUDE, latitudeStrSelected);
@@ -1108,7 +1114,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         switch (status.getStatusCode()) {
             case LocationSettingsStatusCodes.SUCCESS:
                 Log.i(getTagName(), "All location settings are satisfied.");
-                if(!search){
+                if (!search) {
                     retrieveLocation();
                     break;
                 }
@@ -1137,16 +1143,16 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
     protected void onResume() {
         super.onResume();
 
-        if(search){
+        if (search) {
             if (firstLoad) {
                 fetchSearchedOutlets();
             } else {
                 firstLoad = true;
             }
 
-        }else {
+        } else {
             if (firstLoad) {
-                if (!TextUtils.isEmpty(date) && !TextUtils.isEmpty(time)) {
+                if (!TextUtils.isEmpty(date) && !TextUtils.isEmpty(time) && !fromchangeLoc) {
                     fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
                 }
             } else {
@@ -1173,7 +1179,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 v.getLayoutParams().height = interpolatedTime == 1
                         ? ViewGroup.LayoutParams.WRAP_CONTENT
-                        : (int)(targetHeight * interpolatedTime);
+                        : (int) (targetHeight * interpolatedTime);
                 v.requestLayout();
 
             }
@@ -1198,14 +1204,13 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         //animation1.setStartOffset(10);
         planAheadObstructor.setVisibility(View.GONE);
         planAheadObstructor2.setVisibility(View.GONE);
-        Animation a = new Animation()
-        {
+        Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if(interpolatedTime == 1){
+                if (interpolatedTime == 1) {
                     v.setVisibility(View.GONE);
-                }else{
-                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                } else {
+                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
                     v.requestLayout();
                 }
             }
@@ -1225,10 +1230,10 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
 
     @Override
     public void onBackPressed() {
-        if(obstructor.getVisibility()==View.VISIBLE){
+        if (obstructor.getVisibility() == View.VISIBLE) {
             fabMenu.collapse();
 
-        }else if( findViewById(R.id.checkinObstructor).getVisibility() == View.VISIBLE){
+        } else if (findViewById(R.id.checkinObstructor).getVisibility() == View.VISIBLE) {
             fabMenu.collapse();
             findViewById(R.id.checkinObstructor).setVisibility(View.GONE);
             findViewById(R.id.checkinObstructor2).setVisibility(View.GONE);
@@ -1236,39 +1241,37 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         } else if (drawerOpened) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setTitle("Are you sure you want to exit ?")
-//                    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//
-//                            finish();
-//                        }
-//                    })
-//                    .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int id) {
-//                            // User cancelled the dialog
-//                        }
-//                    });
-//            builder.create().show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Are you sure you want to exit ?")
+                    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-            finish();
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User cancelled the dialog
+                        }
+                    });
+            builder.create().show();
         }
 
     }
 
-    public void refreshDateTimeLoc(){
+    public void refreshDateTimeLoc() {
         SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
         searchedItem = prefs.getString(AppConstants.PREFERENCE_PARAM_SEARCH_QUERY, "");
         lat = prefs.getString(AppConstants.PREFERENCE_CURRENT_LAT, "");
         lng = prefs.getString(AppConstants.PREFERENCE_CURRENT_LNG, "");
         Calendar calendar = Calendar.getInstance();
         Date currentDateTime = calendar.getTime();
-        date = (String) DateFormat.format("MM-dd-yyyy",currentDateTime );
+        date = (String) DateFormat.format("MM-dd-yyyy", currentDateTime);
         int hoursIn = calendar.get(Calendar.HOUR_OF_DAY);
         int minutes = calendar.get(Calendar.MINUTE);
         time = convertHoursToString(hoursIn) + ":" + convertMinutesToString(minutes);
-        planAheadChanged = false;
+
         clearDateTime = false;
         deselectDays();
         day1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
