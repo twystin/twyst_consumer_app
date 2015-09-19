@@ -48,6 +48,7 @@ public class AppConstants {
     public static final String PREFERENCE_USER_FULL_NAME ="user_full_name" ;
     public static final String PREFERENCE_USER_PHONE= "user_phone";
     public static final String PREFERENCE_USER_REFERRAL = "user_referral";
+    public static final String PREFERENCE_NOTIFICATION_COUNT = "notification_count";
     public static final String PREFERENCE_CHANGE_LOCATION_NAME = "change_location_name";
     public static final String PREFERENCE_CHANGE_LOCATION_LATITUDE = "change_location_latitude";
     public static final String PREFERENCE_CHANGE_LOCATION_LONGITUDE = "change_location_longitude";

@@ -1,11 +1,15 @@
 package in.twyst.activities;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.CalendarContract;
 import android.text.TextUtils;
 import android.util.Log;
@@ -41,6 +45,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import in.twyst.R;
+import in.twyst.alarm.NotificationPublisherReceiver;
 import in.twyst.model.AvailableNext;
 import in.twyst.model.BaseResponse;
 import in.twyst.model.EventMeta;
@@ -113,15 +118,19 @@ public class OfferDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         Bundle data = getIntent().getExtras();
 
-        offer = (Offer) data.getSerializable(AppConstants.INTENT_PARAM_OFFER_OBJECT);
-        outlet = (Outlet) data.getSerializable(AppConstants.INTENT_PARAM_OUTLET_OBJECT);
         if(getIntent().getStringExtra(AppConstants.INTENT_PARAM_OUTLET_ID)!=null && getIntent().getStringExtra(AppConstants.INTENT_PARAM_OFFER_ID)!=null){
             String outletId = getIntent().getStringExtra(AppConstants.INTENT_PARAM_OUTLET_ID);
             String offerId = getIntent().getStringExtra(AppConstants.INTENT_PARAM_OFFER_ID);
             outletDetail(outletId,offerId);
+        }else {
+
+            offer = (Offer) data.getSerializable(AppConstants.INTENT_PARAM_OFFER_OBJECT);
+            outlet = (Outlet) data.getSerializable(AppConstants.INTENT_PARAM_OUTLET_OBJECT);
+            setup();
         }
+    }
 
-
+    private void setup(){
         TextView outletName = (TextView) findViewById(R.id.outletName);
         TextView distance = (TextView) findViewById(R.id.outletDistance);
         TextView type_offer = (TextView) findViewById(R.id.type_offer);
@@ -1049,8 +1058,6 @@ public class OfferDetailActivity extends BaseActivity {
     }
 
     private void pickLocDialog(List<Offer.OutletList> outletList) {
-
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View dialogView = li.inflate(R.layout.dialog_view_outlets, null);
@@ -1114,9 +1121,9 @@ public class OfferDetailActivity extends BaseActivity {
         dialogView.findViewById(R.id.locCancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(locationText.length()>0){
+                if (locationText.length() > 0) {
                     findViewById(R.id.textView20).setVisibility(View.GONE);
-                }else {
+                } else {
                     flag = false;
                     findViewById(R.id.textView20).setVisibility(View.VISIBLE);
                 }
@@ -1240,18 +1247,91 @@ public class OfferDetailActivity extends BaseActivity {
     }
 
     public void setReminder(Calendar day, String time) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, day.get(Calendar.DAY_OF_WEEK));
-        long begin = calendar.getTimeInMillis();
-        calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE) + 10);
-        long end = calendar.getTimeInMillis();
-        Intent intent = new Intent(Intent.ACTION_INSERT)
-                .setData(CalendarContract.Events.CONTENT_URI)
-                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, begin)
-                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, end)
-                .putExtra(CalendarContract.Events.TITLE, " Reminder: Twyst offer at " + outlet.getName())
-                .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
-        startActivity(intent);
+        try {
+            long timeDelay;
+            Calendar calendarToday = Calendar.getInstance();
+            Calendar calendarDest = Calendar.getInstance();
+
+            AvailableNext availableNext = offer.getAvailableNext();
+            String sDay = availableNext.getDay();
+            String sTime = availableNext.getTime();
+            int sHour = Integer.parseInt(sTime.substring(0, 2));
+            int sMin = Integer.parseInt(sTime.substring(3, 5));
+            String ampm = sTime.substring(6, 8);
+
+            if (sDay.equalsIgnoreCase("Tomorrow")) {
+                calendarDest.add(Calendar.DATE, 1);
+
+            } else if (sDay.equalsIgnoreCase("Today")) {
+//                calendarDest.add(Calendar.DATE, 0);
+            } else {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                Date dateEnd = sdf.parse(sDay);
+                calendarDest.setTime(dateEnd);
+            }
+            calendarDest.set(Calendar.HOUR_OF_DAY, sHour);
+            calendarDest.set(Calendar.MINUTE, sMin);
+            calendarDest.set(Calendar.SECOND, 0);
+            if (ampm.equalsIgnoreCase("AM")) {
+                calendarDest.set(Calendar.AM_PM, Calendar.AM);
+            } else {
+                calendarDest.set(Calendar.AM_PM, Calendar.PM);
+            }
+
+
+            timeDelay = calendarDest.getTime().getTime() - calendarToday.getTime().getTime();
+            scheduleNotification(getNotification(outlet.getName()), timeDelay);
+            Log.d("OfferDetailActivity", "reminder set for " + timeDelay / 1000 + " seconds");
+            Toast.makeText(OfferDetailActivity.this, "Reminder set", Toast.LENGTH_SHORT).show();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.add(Calendar.DATE, day.get(Calendar.DAY_OF_WEEK));
+//        long begin = calendar.getTimeInMillis();
+//        calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE) + 10);
+//        long end = calendar.getTimeInMillis();
+//        Intent intent = new Intent(Intent.ACTION_INSERT)
+//                .setData(CalendarContract.Events.CONTENT_URI)
+//                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, begin)
+//                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, end)
+//                .putExtra(CalendarContract.Events.TITLE, " Reminder: Twyst offer at " + outlet.getName())
+//                .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
+//        startActivity(intent);
+    }
+
+    private void scheduleNotification(Notification notification, long delay) {
+
+        String offer_id = offer.get_id();
+        String outlet_id = outlet.get_id();
+
+        int notiCount = getNotificationCount();
+        Intent notificationIntent = new Intent(this, NotificationPublisherReceiver.class);
+        notificationIntent.putExtra(NotificationPublisherReceiver.NOTIFICATION_ID, notiCount);
+        notificationIntent.putExtra(NotificationPublisherReceiver.NOTIFICATION, notification);
+        notificationIntent.putExtra(NotificationPublisherReceiver.OUTLET_ID, outlet_id);
+        notificationIntent.putExtra(NotificationPublisherReceiver.OFFER_ID, offer_id);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, notiCount, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+    }
+
+    public int getNotificationCount() {
+        SharedPreferences prefs = this.getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        int lastCount = prefs.getInt(AppConstants.PREFERENCE_NOTIFICATION_COUNT, 0);
+        prefs.edit().putInt(AppConstants.PREFERENCE_NOTIFICATION_COUNT, lastCount + 1).commit();
+        return lastCount;
+    }
+
+    private Notification getNotification(String content) {
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setContentTitle("Offer available");
+        builder.setContentText(content);
+        builder.setSmallIcon(R.drawable.ic_launcher);
+        return builder.build();
     }
 
     public void setReminderWithoutProirInfo() {
@@ -1718,9 +1798,7 @@ public class OfferDetailActivity extends BaseActivity {
         }
     }
 
-    public void outletDetail(String outletId, final String offerId){
-
-        Offer offers = null;
+    private void outletDetail(String outletId, final String offerId){
         SharedPreferences preferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
         String appLocationLatiude = preferences.getString(AppConstants.PREFERENCE_CURRENT_LAT, "");
         String appLocationLongitude = preferences.getString(AppConstants.PREFERENCE_CURRENT_LNG, "");
@@ -1729,7 +1807,7 @@ public class OfferDetailActivity extends BaseActivity {
             @Override
             public void success(BaseResponse<OutletDetailData> outletBaseResponse, Response response) {
 
-                Outlet outlet = outletBaseResponse.getData().getOutlet();
+                outlet = outletBaseResponse.getData().getOutlet();
                 String twystBucks = outletBaseResponse.getData().getTwystBucks();
 
                 sharedPreferences.putInt(AppConstants.PREFERENCE_LAST_TWYST_BUCK, Integer.parseInt(twystBucks));
@@ -1737,13 +1815,11 @@ public class OfferDetailActivity extends BaseActivity {
 
                 for(int i=0;i<outlet.getOffers().size();i++){
                     if(outlet.getOffers().get(i).get_id().equals(offerId)){
-                        Offer offers = outlet.getOffers().get(i);
-                        Intent intent = new Intent(OfferDetailActivity.this, OfferDetailActivity.class);
-                        intent.putExtra(AppConstants.INTENT_PARAM_OUTLET_OBJECT,outlet);
-                        intent.putExtra(AppConstants.INTENT_PARAM_OFFER_OBJECT, offers);
-                        startActivity(intent);
+                        offer = outlet.getOffers().get(i);
+                        break;
                     }
                 }
+                setup();
 
             }
 

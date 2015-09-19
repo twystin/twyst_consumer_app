@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:visibility="gone"
             android:paddingTop="?actionBarSize">
 
             <LinearLayout
@@ -667,9 +668,9 @@
         </LinearLayout>
 
 
-  <!--      <include
+       <include
             android:id="@+id/circularProgressBar"
-            layout="@layout/twyst_progress_hud" />-->
+            layout="@layout/twyst_progress_hud" />
 
         <include
             android:id="@+id/toolbarWrapper"
