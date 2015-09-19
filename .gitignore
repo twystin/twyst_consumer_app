@@ -1,0 +1,11 @@
+.gitignore
+\bin
+\gen
+\.metadata
+\.gradle
+\.idea
+app/app.iml
+local.properties
+Twyst.iml
+twyst.iml
+build/
