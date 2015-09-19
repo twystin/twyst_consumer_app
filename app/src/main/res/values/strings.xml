@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Twyst</string>
-   <!-- <string name="APP_ID">763534923659747</string>-->
-    <string name="APP_ID">905551729519598</string>
+    <string name="FACEBOOK_APP_ID">1642609692619860</string>
+    <string name="GOOGLE_MAP_KEY_ID">AIzaSyB-NhSjuo6htUGPRe5-qCiWR42T9fJQ6bo</string>
     <string name="action_search">Search</string>
     <string name="action_notifications">Notifications</string>
     <string name="action_wallet">Wallet</string>
