@@ -1265,13 +1265,13 @@ public class OfferDetailActivity extends BaseActivity {
                 calendarDest.add(Calendar.DATE, 1);
 
             } else if (sDay.equalsIgnoreCase("Today")) {
-//                calendarDest.add(Calendar.DATE, 0);
+                calendarDest.add(Calendar.DATE, 0);
             } else {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
                 Date dateEnd = sdf.parse(sDay);
                 calendarDest.setTime(dateEnd);
             }
-            calendarDest.set(Calendar.HOUR_OF_DAY, sHour);
+            calendarDest.set(Calendar.HOUR, sHour);
             calendarDest.set(Calendar.MINUTE, sMin);
             calendarDest.set(Calendar.SECOND, 0);
             if (ampm.equalsIgnoreCase("AM")) {
