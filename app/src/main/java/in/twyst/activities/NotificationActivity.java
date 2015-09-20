@@ -72,7 +72,7 @@ public class NotificationActivity extends BaseActivity{
 
         fabMenu.setVisibility(View.VISIBLE);
 
-        HttpService.getInstance().getNotification("b0LHV-KZrgiyNSoy_Djbe2hX75TINJeU", new Callback<BaseResponse<ArrayList<NotificationData>>>() {
+        HttpService.getInstance().getNotification(getUserToken(), new Callback<BaseResponse<ArrayList<NotificationData>>>() {
 			@Override
 			public void success(BaseResponse<ArrayList<NotificationData>> notificationDataBaseResponse, Response response) {
                 hideProgressHUDInLayout();
