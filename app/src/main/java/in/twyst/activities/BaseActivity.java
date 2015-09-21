@@ -276,29 +276,17 @@ public abstract class BaseActivity extends ActionBarActivity
         invite.setSelectedIcon(R.drawable.drawer_item_icon_invite_friends_selected);
         drawerItems.add(invite);
 
-        faq = new DrawerItem();
-        faq.setTitle("FAQs");
-        faq.setIcon(R.drawable.drawer_item_icon_faqs);
-        faq.setSelectedIcon(R.drawable.drawer_item_icon_faqs_selected);
-        drawerItems.add(faq);
-
-        wallet = new DrawerItem();
-        wallet.setTitle("MY WALLET");
-        wallet.setIcon(R.drawable.drawer_item_icon_wallet);
-        wallet.setSelectedIcon(R.drawable.drawer_item_icon_wallet_selected);
-        drawerItems.add(wallet);
-
         bill = new DrawerItem();
         bill.setTitle("UPLOAD BILL");
         bill.setIcon(R.drawable.drawer_item_icon_upload_bill);
         bill.setSelectedIcon(R.drawable.drawer_item_icon_upload_bill_selected);
         drawerItems.add(bill);
 
-        notifications = new DrawerItem();
-        notifications.setTitle("NOTIFICATIONS");
-        notifications.setIcon(R.drawable.drawer_item_icon_notifications);
-        notifications.setSelectedIcon(R.drawable.drawer_item_icon_notifications_selected);
-        drawerItems.add(notifications);
+        wallet = new DrawerItem();
+        wallet.setTitle("MY WALLET");
+        wallet.setIcon(R.drawable.drawer_item_icon_wallet);
+        wallet.setSelectedIcon(R.drawable.drawer_item_icon_wallet_selected);
+        drawerItems.add(wallet);
 
         submitOffer = new DrawerItem();
         submitOffer.setTitle("SUBMIT AN OFFER");
@@ -317,6 +305,18 @@ public abstract class BaseActivity extends ActionBarActivity
         write.setIcon(R.drawable.drawer_item_icon_write_to_us);
         write.setSelectedIcon(R.drawable.drawer_item_icon_write_to_us_selected);
         drawerItems.add(write);
+
+        notifications = new DrawerItem();
+        notifications.setTitle("NOTIFICATIONS");
+        notifications.setIcon(R.drawable.drawer_item_icon_notifications);
+        notifications.setSelectedIcon(R.drawable.drawer_item_icon_notifications_selected);
+        drawerItems.add(notifications);
+
+        faq = new DrawerItem();
+        faq.setTitle("FAQs");
+        faq.setIcon(R.drawable.drawer_item_icon_faqs);
+        faq.setSelectedIcon(R.drawable.drawer_item_icon_faqs_selected);
+        drawerItems.add(faq);
 
         rate = new DrawerItem();
         rate.setTitle("RATE TWYST");
@@ -468,8 +468,13 @@ public abstract class BaseActivity extends ActionBarActivity
 
                 switch (position) {
                     case 0:
+                        intent = new Intent(getBaseContext(), EditProfileActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        intent.putExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, true);
+                        startActivity(intent);
+                        break;
                         //header image click
-                        return;
+//                        return;
 
                     case 1:
                         //invite friends
@@ -478,9 +483,8 @@ public abstract class BaseActivity extends ActionBarActivity
                         break;
 
                     case 2:
-                        //faq
-                        intent = new Intent(getBaseContext(), FaqActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        //upload bill
+                        intent = new Intent(getBaseContext(), UploadBillActivity.class);
                         break;
 
                     case 3:
@@ -490,30 +494,31 @@ public abstract class BaseActivity extends ActionBarActivity
                         break;
 
                     case 4:
-                        //upload bill
-                        intent = new Intent(getBaseContext(), UploadBillActivity.class);
-                        break;
-
-                    case 5:
-                        //notification
-                        intent = new Intent(getBaseContext(), NotificationActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        break;
-
-                    case 6:
                         //submit an offer
                         intent = new Intent(getBaseContext(), SubmitOfferActivity.class);
                         break;
 
-                    case 7:
+                    case 5:
                         //suggest an outlet
                         intent = new Intent(getBaseContext(), SuggestOutletActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         break;
 
-                    case 8:
+                    case 6:
                         //write to us
                         intent = new Intent(getBaseContext(), WriteToUsActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        break;
+
+                    case 7:
+                        //notification
+                        intent = new Intent(getBaseContext(), NotificationActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        break;
+
+                    case 8:
+                        //faq
+                        intent = new Intent(getBaseContext(), FaqActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         break;
 
@@ -764,7 +769,7 @@ public abstract class BaseActivity extends ActionBarActivity
     }
 
     private void rateApp() {
-        Uri uri = Uri.parse("market://details?id=in.twyst");
+        Uri uri = Uri.parse("market://details?id=" + getApplication().getPackageName());
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
         try {
             startActivity(goToMarket);
