@@ -3,7 +3,9 @@ package in.twyst.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
+import android.text.Html;
 import android.view.Gravity;
+import android.widget.TextView;
 
 import in.twyst.R;
 import in.twyst.util.AppConstants;
@@ -30,6 +32,8 @@ public class FaqActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         fromDrawer = getIntent().getBooleanExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, false);
 
+        TextView tvFAQ = (TextView)findViewById(R.id.tvFAQ);
+        tvFAQ.setText(Html.fromHtml(getString(R.string.faq_body)));
     }
 
     @Override

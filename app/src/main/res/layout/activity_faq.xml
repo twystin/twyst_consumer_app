@@ -5,88 +5,63 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white">
+
         <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar" />
 
         <ScrollView
-            android:layout_below="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp"
-            android:orientation="vertical"
-            android:background="@android:color/white">
-
-            <TextView
-                android:id="@+id/textView1"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textSize="14sp"
-                android:text="How to Twyst?"
-                android:textColor="#555" />
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/tvFAQ"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:textColor="#555"
+                    android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textSize="14sp"
-                android:text="1. What are Twyst Bucks and what do I use them for?
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
 
-Twyst Bucks are the currency you need to use some of the offers on Twyst. You earn Twyst
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/faq_support_text"
+                        android:textColor="#555"
+                        android:textSize="14sp" />
 
-Bucks by inviting friends to Twyst, checking-in to outlets on Twyst, submitting offers and so on.
+                    <TextView
+                        android:id="@+id/tvSupportMail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:text="@string/faq_support_mail"
+                        android:textColor="#555"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
-You spend Twyst Bucks to use some offers, extend your coupons and grab your friends’ coupons.
+            </LinearLayout>
 
-More detail below."
-                android:textColor="#555"/>
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textSize="14sp"
-                android:text="2. Why should I upload the bill? Can I upload from home?
-
-Uploading a bill is a way of letting Twyst know that you visited / order from a Twyst outlet. You
-
-can upload your bills whether you went out to eat or ordered in. When an uploaded bill is
-
-approved, you get a check-in at that outlet, and some Twyst Bucks!
-
-One bill can be uploaded only once for approval. When we receive the bill, it goes through a 2-
-
-part approval process, by Twyst and the outlet. The bill may be rejected for a variety of reasons,
-
-and we will notify you of the reason for rejection."
-                android:textColor="#555"/>
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textSize="14sp"
-                android:text="3. Lorem ipsum"
-                android:textColor="#555"/>
-        </LinearLayout>
         </ScrollView>
-
-
-
     </RelativeLayout>
+
     <include
         android:id="@+id/drawer_list"
         layout="@layout/drawer_list" />
