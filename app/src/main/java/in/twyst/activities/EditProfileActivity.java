@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.GravityCompat;
@@ -14,15 +13,12 @@ import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -50,13 +46,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import in.twyst.R;
@@ -68,6 +62,7 @@ import in.twyst.service.HttpService;
 import in.twyst.util.AppConstants;
 import in.twyst.util.RoundedTransformation;
 import in.twyst.util.TwystProgressHUD;
+import in.twyst.util.Utils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -75,13 +70,12 @@ import retrofit.client.Response;
 /**
  * Created by rahuls on 2/9/15.
  */
-public class EditProfileActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+public class EditProfileActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private boolean fromDrawer;
-    private String source;
+    private String source = "";
     private CallbackManager callbackManager;
     private static final int RC_SIGN_IN = 0;
-    private ProfileTracker profileTracker;
     private AccessTokenTracker accessTokenTracker;
     private GoogleApiClient mGoogleApiClient;
     private EditText email;
@@ -92,15 +86,35 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
     private String dob;
     private String city;
     private String socialEmail;
-    private String id,fbid,linkUri;
+    private String id, fbid, linkUri;
+    private String facebookUri = "", googleplusUri = "";
     private Friend friend;
     private List<Friend.Friends> friendsList;
     private Friend.Friends friends;
     /* Is there a ConnectionResult resolution in progress? */
     private boolean mIsResolving = false;
 
+    private ProfileTracker profileTracker;
+    Profile profile;
     /* Should we automatically resolve ConnectionResults when possible? */
     private boolean mShouldResolve = false;
+
+    TextView editProfileMail;
+    EditText editProfileDob;
+    EditText editProfileAnniversary;
+    EditText editProfileCity;
+    TextView profileName;
+    TextView editProfileMoNo;
+    ImageView editEmail;
+    ImageView dobEditbtn;
+    ImageView anniversaryEditBtn;
+    ImageView cityEditBtn;
+    SwitchCompat facebookSwitchBTn;
+    SwitchCompat googlePlusSwitchBtn;
+    SwitchCompat pushSwitchBtn;
+    TextView facebookTxt;
+    TextView googleTxt;
+    TextView pushNotifiyTxt;
 
 
     @Override
@@ -116,17 +130,17 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FacebookSdk.sdkInitialize(getApplicationContext());
-        setupAsChild=true;
+        setupAsChild = true;
         super.onCreate(savedInstanceState);
         callbackManager = CallbackManager.Factory.create();
         fromDrawer = getIntent().getBooleanExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, false);
-        SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
         final String name = prefs.getString(AppConstants.PREFERENCE_USER_FULL_NAME, "");
         final String pic = prefs.getString(AppConstants.PREFERENCE_USER_PIC, "");
 
-        ImageView backImage = (ImageView)findViewById(R.id.editProfileBackImage);
-        final ImageView image = (ImageView)findViewById(R.id.editProfileUserImage);
-        if(!TextUtils.isEmpty(pic)){
+        ImageView backImage = (ImageView) findViewById(R.id.editProfileBackImage);
+        final ImageView image = (ImageView) findViewById(R.id.editProfileUserImage);
+        if (!TextUtils.isEmpty(pic)) {
             backImage.setVisibility(View.VISIBLE);
             image.setVisibility(View.VISIBLE);
             Picasso picasso = Picasso.with(this);
@@ -135,40 +149,38 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
             picasso.load(pic)
                     .noFade()
                     .centerCrop()
-                    .resize(150,150)
+                    .resize(150, 150)
                     .transform(new RoundedTransformation(100, 0))
                     .into(image);
 
-        }else {
+        } else {
             backImage.setVisibility(View.GONE);
             image.setVisibility(View.VISIBLE);
         }
-        final EditText editProfileMail = (EditText)findViewById(R.id.editProfileMail);
-        final EditText editProfileDob = (EditText)findViewById(R.id.editProfileDob);
-        final EditText editProfileAnniversary = (EditText)findViewById(R.id.editProfileAnniversary);
-        final EditText editProfileCity = (EditText)findViewById(R.id.editProfileCity);
-        final TextView profileName = (TextView)findViewById(R.id.profileName);
-        final TextView editProfileMoNo = (TextView)findViewById(R.id.editProfileMoNo);
-        final ImageView editEmail = (ImageView)findViewById(R.id.editEmail);
-        final ImageView dobEditbtn = (ImageView)findViewById(R.id.dobEditbtn);
-        final ImageView anniversaryEditBtn = (ImageView)findViewById(R.id.anniversaryEditBtn);
-        final ImageView cityEditBtn = (ImageView)findViewById(R.id.cityEditBtn);
-        final SwitchCompat facebookSwitchBTn = (SwitchCompat)findViewById(R.id.facebookSwitchBTn);
-        final SwitchCompat googlePlusSwitchBtn = (SwitchCompat)findViewById(R.id.googlePlusSwitchIcon);
-        final SwitchCompat pushSwitchBtn = (SwitchCompat)findViewById(R.id.pushNotificationSwitch);
-        final TextView facebookTxt = (TextView)findViewById(R.id.facebookTxt);
-        final TextView googleTxt = (TextView)findViewById(R.id.googleTxt);
-        final TextView pushNotifiyTxt = (TextView)findViewById(R.id.pushNotificTxt);
+        editProfileMail = (EditText) findViewById(R.id.editProfileMail);
+        editProfileDob = (EditText) findViewById(R.id.editProfileDob);
+        editProfileAnniversary = (EditText) findViewById(R.id.editProfileAnniversary);
+        editProfileCity = (EditText) findViewById(R.id.editProfileCity);
+        profileName = (TextView) findViewById(R.id.profileName);
+        editProfileMoNo = (TextView) findViewById(R.id.editProfileMoNo);
+        editEmail = (ImageView) findViewById(R.id.editEmail);
+        dobEditbtn = (ImageView) findViewById(R.id.dobEditbtn);
+        anniversaryEditBtn = (ImageView) findViewById(R.id.anniversaryEditBtn);
+        cityEditBtn = (ImageView) findViewById(R.id.cityEditBtn);
+        facebookSwitchBTn = (SwitchCompat) findViewById(R.id.facebookSwitchBTn);
+        googlePlusSwitchBtn = (SwitchCompat) findViewById(R.id.googlePlusSwitchIcon);
+        pushSwitchBtn = (SwitchCompat) findViewById(R.id.pushNotificationSwitch);
+        facebookTxt = (TextView) findViewById(R.id.facebookTxt);
+        googleTxt = (TextView) findViewById(R.id.googleTxt);
+        pushNotifiyTxt = (TextView) findViewById(R.id.pushNotificTxt);
 
         final InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-
         sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
+
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
                 AccessToken accessToken = loginResult.getAccessToken();
-
                 GraphRequestBatch batch = new GraphRequestBatch(GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject jsonObject, GraphResponse response) {
@@ -186,49 +198,51 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
                         } catch (JSONException jsone) {
                             jsone.printStackTrace();
                         }
+                        setFacebookConnected(true);
 
                     }
                 }),
-                    GraphRequest.newMyFriendsRequest(accessToken, new GraphRequest.GraphJSONArrayCallback() {
-                        @Override
-                        public void onCompleted(JSONArray jsonArray, GraphResponse response) {
+                        GraphRequest.newMyFriendsRequest(accessToken, new GraphRequest.GraphJSONArrayCallback() {
+                            @Override
+                            public void onCompleted(JSONArray jsonArray, GraphResponse response) {
 
-                            friendsList = new ArrayList<Friend.Friends>();
+                                friendsList = new ArrayList<Friend.Friends>();
 
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                try {
-                                    friends = new Friend.Friends();
-                                    friends.setId(jsonArray.getJSONObject(i).getString("id"));
-                                    friends.setName(jsonArray.getJSONObject(i).getString("name"));
-                                    friends.setPhone(null);
-                                    friendsList.add(friends);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    try {
+                                        friends = new Friend.Friends();
+                                        friends.setId(jsonArray.getJSONObject(i).getString("id"));
+                                        friends.setName(jsonArray.getJSONObject(i).getString("name"));
+                                        friends.setPhone(null);
+                                        friendsList.add(friends);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
-                        }
-                    })
+                        })
                 );
                 batch.addCallback(new GraphRequestBatch.Callback() {
                     @Override
                     public void onBatchCompleted(GraphRequestBatch graphRequests) {
                         // Application code for when the batch finishes
-                       // updateUserEmail();TODO
+                        updateUserEmail();
 
                     }
                 });
                 batch.executeAsync();
 
-
             }
 
             @Override
             public void onCancel() {
+                setFacebookConnected(false);
                 System.out.println("LoginActivity.onCancel called");
             }
 
             @Override
             public void onError(FacebookException e) {
+                setFacebookConnected(false);
                 e.printStackTrace();
             }
         });
@@ -246,11 +260,13 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
                 linkUri = String.valueOf(currentProfile.getLinkUri());
                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_PIC, String.valueOf(currentProfile.getProfilePictureUri(250, 250)));
                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_NAME, currentProfile.getFirstName());
-                sharedPreferences.putString(AppConstants.PREFERENCE_USER_FULL_NAME,currentProfile.getName());
+                sharedPreferences.putString(AppConstants.PREFERENCE_USER_FULL_NAME, currentProfile.getName());
                 sharedPreferences.apply();
             }
 
         };
+
+        profileTracker.startTracking();
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -265,7 +281,7 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
 
                 if (profileBaseResponse.isResponse()) {
                     hideProgressHUDInLayout();
-                    Profile profile = profileBaseResponse.getData();
+                    profile = profileBaseResponse.getData();
                     profileName.setText(name);
 
                     findViewById(R.id.layout).setVisibility(View.VISIBLE);
@@ -320,74 +336,65 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
                         }
                     });
 
-                    if (profileBaseResponse.getData().isFacebookConnect()) {
-                        facebookTxt.setText("Connected");
-                        facebookTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.edit_profile_image_facebook_icon_blue), null, null, null);
-                    } else {
-                        facebookTxt.setText("Connect");
-                        facebookTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.edit_profile_image_facebook_icon_gray), null, null, null);
-                    }
-
-                    if (profileBaseResponse.getData().isGoogleConnect()) {
-                        googleTxt.setText("Connected");
-                        googleTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.edit_profile_google_plus_red), null, null, null);
-                    } else {
-                        googleTxt.setText("Connect");
-                        googleTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.edit_profile_google_plus_white_icon), null, null, null);
-                    }
+                    setFacebookConnected(prefs.getBoolean(AppConstants.PREFERENCE_IS_FACEBOOK_CONNECTED, false));
+                    setGoogleConnected(prefs.getBoolean(AppConstants.PREFERENCE_IS_GOOGLE_CONNECTED, false));
+                    setPushEnabled(prefs.getBoolean(AppConstants.PREFERENCE_IS_PUSH_ENABLED, false));
 
                     facebookSwitchBTn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            if (!isChecked && profileBaseResponse.getData().isFacebookConnect()) {
-                                facebookTxt.setText("Connect");
-                                facebookTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.edit_profile_image_facebook_icon_gray), null, null, null);
-                                profileBaseResponse.getData().setFacebookConnect(false);
-                            } else if (isChecked && profileBaseResponse.getData().isFacebookConnect()) {
-                                facebookTxt.setText("Connected");
-                                facebookTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.edit_profile_image_facebook_icon_blue), null, null, null);
-                                profileBaseResponse.getData().setFacebookConnect(false);
+//                            if (!isChecked && profile.isFacebookConnect()) {
+//                                facebookTxt.setText("Connect");
+//                                facebookTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.edit_profile_image_facebook_icon_gray), null, null, null);
+////                                LoginManager.getInstance().logOut();
+//                            } else if (isChecked && profile.isFacebookConnect()) {
+//                                facebookTxt.setText("Connected");
+//                                facebookTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.edit_profile_image_facebook_icon_blue), null, null, null);
+//                            }
+                            if (!isChecked) {
+                                profileTracker.stopTracking();
+                                LoginManager.getInstance().logOut();
                             } else {
                                 source = "FACEBOOK";
                                 facebookLogin();
-                                facebookTxt.setText("Connected");
-                                facebookTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.edit_profile_image_facebook_icon_blue), null, null, null);
-                                profileBaseResponse.getData().setFacebookConnect(true);
                             }
+                            setFacebookConnected(isChecked);
                         }
                     });
 
                     googlePlusSwitchBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            if (!isChecked && profileBaseResponse.getData().isGoogleConnect()) {
-                                googleTxt.setText("Connect");
-                                googleTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.edit_profile_google_plus_white_icon), null, null, null);
-                                profileBaseResponse.getData().setGoogleConnect(false);
-                            }else if(isChecked && profileBaseResponse.getData().isGoogleConnect()){
-                                googleTxt.setText("Connected");
-                                googleTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.edit_profile_google_plus_red), null, null, null);
-                            }
-                            else {
+//                            if (!isChecked && profile.isGoogleConnect()) {
+//                                googleTxt.setText("Connect");
+//                                googleTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.edit_profile_google_plus_white_icon), null, null, null);
+//                                if (mGoogleApiClient.isConnected()) {
+//                                    mGoogleApiClient.disconnect();
+//                                }
+//                            } else if (isChecked && profile.isGoogleConnect()) {
+//                                googleTxt.setText("Connected");
+//                                googleTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.edit_profile_google_plus_red), null, null, null);
+//                            }
+                            if (!isChecked) {
+                                if (mGoogleApiClient.isConnected()) {
+                                    mGoogleApiClient.disconnect();
+                                }
+                            } else {
                                 source = "GOOGLE";
                                 mShouldResolve = true;
                                 mGoogleApiClient.connect();
                                 googleTxt.setText("Connected");
                                 googleTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.edit_profile_google_plus_red), null, null, null);
-                                profileBaseResponse.getData().setGoogleConnect(true);
+                                profile.setGoogleConnect(true);
                             }
+                            setGoogleConnected(isChecked);
                         }
                     });
 
                     pushSwitchBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            if (isChecked) {
-                                pushNotifiyTxt.setTextColor(getResources().getColor(R.color.edit_profile_text_color));
-
-                            } else {
-                                pushNotifiyTxt.setTextColor(getResources().getColor(R.color.edit_profile_hint_color));
-                            }
+                            setPushEnabled(isChecked);
                         }
                     });
 
@@ -410,6 +417,9 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
             }
         });
 
+        city = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).getString(AppConstants.PREFERENCE_LOCALITY_SHOWN_DRAWER, "");
+        editProfileCity.setText(city);
+
     }
 
     @Override
@@ -425,11 +435,13 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
 
         System.out.println("LoginActivity.onConnected google email : " + email);
 
+        profile.setGoogleConnect(true);
+        setGoogleConnected(true);
         try {
             if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
                 Person currentPerson = Plus.PeopleApi
                         .getCurrentPerson(mGoogleApiClient);
-                String personFullName =currentPerson.getDisplayName();
+                String personFullName = currentPerson.getDisplayName();
                 String personName = currentPerson.getName().getGivenName();
                 String personPhotoUrl = currentPerson.getImage().getUrl();
                 linkUri = currentPerson.getUrl();
@@ -444,13 +456,13 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
                 id = currentPerson.getId();
                 sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_PIC, personPhotoUrl);
-                sharedPreferences.putString(AppConstants.PREFERENCE_USER_NAME,personName);
-                sharedPreferences.putString(AppConstants.PREFERENCE_USER_FULL_NAME,personFullName);
+                sharedPreferences.putString(AppConstants.PREFERENCE_USER_NAME, personName);
+                sharedPreferences.putString(AppConstants.PREFERENCE_USER_FULL_NAME, personFullName);
                 sharedPreferences.apply();
 //
 
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -471,7 +483,7 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
                             friendsList.add(friends);
                         }
 
-                        //updateUserEmail();TODO
+                        updateUserEmail();
 
                     } finally {
                         personBuffer.close();
@@ -487,6 +499,7 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
 
     @Override
     public void onConnectionSuspended(int i) {
+        setGoogleConnected(false);
 
     }
 
@@ -497,6 +510,7 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
         // ConnectionResult to see possible error codes.
         Log.d(getTagName(), "onConnectionFailed:" + connectionResult);
 
+        setGoogleConnected(false);
         if (!mIsResolving && mShouldResolve) {
             if (connectionResult.hasResolution()) {
                 try {
@@ -531,6 +545,7 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
+        profileTracker.stopTracking();
     }
 
     public static class DobDatePickerFragment extends DialogFragment
@@ -555,7 +570,7 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             Log.d(getClass().getSimpleName(), "year=" + year + ", month=" + month + ", day=" + day);
-            TextView editProfileDob = (EditText)getActivity().findViewById(R.id.editProfileDob);
+            TextView editProfileDob = (EditText) getActivity().findViewById(R.id.editProfileDob);
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, month);
@@ -590,7 +605,7 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             Log.d(getClass().getSimpleName(), "year=" + year + ", month=" + month + ", day=" + day);
-            TextView editProfileAnniversary = (EditText)getActivity().findViewById(R.id.editProfileAnniversary);
+            TextView editProfileAnniversary = (EditText) getActivity().findViewById(R.id.editProfileAnniversary);
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, month);
@@ -632,102 +647,64 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
             mIsResolving = false;
             mGoogleApiClient.connect();
         }
-
     }
 
-    public void facebookLogin() {
-
+    private void facebookLogin() {
         Collection<String> permissions = Arrays.asList("email", "user_friends", "public_profile", "user_birthday");
         LoginManager.getInstance().logInWithReadPermissions(this, permissions);
-
     }
 
-    public void updateProfile(){
-
-    }
-
-    private void updateUserEmail() {
-        final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-
-        String deviceId = prefs.getString(AppConstants.PREFERENCE_REGISTRATION_ID,"");
-        StringBuilder builder = new StringBuilder();
-
-        Field[] fields = Build.VERSION_CODES.class.getFields();
-        for (Field field : fields) {
-            String fieldName = field.getName();
-            int fieldValue = -1;
-
-            try {
-                fieldValue = field.getInt(new Object());
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-
-            if (fieldValue == Build.VERSION.SDK_INT) {
-                builder.append(fieldName).append(" : ").append(Build.VERSION.RELEASE);
-                break;
-            }
-        }
-
+    private void updateProfile() {
+        String deviceId = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).getString(AppConstants.PREFERENCE_REGISTRATION_ID, "");
         final TwystProgressHUD twystProgressHUD = TwystProgressHUD.show(this, false, null);
-        final String email;
-        if(TextUtils.isEmpty(socialEmail)){
-            email = "";
-        }else {
-            email = socialEmail;
-        }
-        city = prefs.getString(AppConstants.PREFERENCE_LOCALITY_SHOWN_DRAWER,"");
-        Log.i("dob", dob + " firstName" + firstName + " lastName" + lastName + " middleName" + middleName + " city" + city + " image" + userImage);
-        JSONObject facebookdata = new JSONObject();
-        JSONObject googledata = new JSONObject();
-        if(source.equalsIgnoreCase("FACEBOOK")) {
-            try {
-                facebookdata.put("id", fbid);
-                facebookdata.put("linkUri", linkUri);
-                googledata.put("linkUri", null);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }else if(source.equalsIgnoreCase("GOOGLE")){
 
-            try {
-                facebookdata.put("id", null);
-                facebookdata.put("linkUri", null);
-                googledata.put("linkUri", linkUri);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-      /*  HttpService.getInstance().updateProfile(token, email, userImage, firstName, middleName, lastName, city,id,source,facebookdata,googledata, deviceId, builder.toString(), android.os.Build.DEVICE, android.os.Build.MODEL, android.os.Build.PRODUCT, new Callback<BaseResponse<ProfileUpdate>>() {
+        HttpService.getInstance().updateProfile(getUserToken(), editProfileMail.getText().toString(), userImage, firstName, middleName, lastName, editProfileCity.getText().toString(), id, source, facebookUri, googleplusUri, deviceId, Utils.getbuildVersionStringBuilder().toString(), android.os.Build.DEVICE, android.os.Build.MODEL, android.os.Build.PRODUCT, new Callback<BaseResponse<ProfileUpdate>>() {
             @Override
-            public void success(BaseResponse<ProfileUpdate> loginDataBaseResponse, Response response) {
+            public void success(final BaseResponse<ProfileUpdate> profileUpdateBaseResponse, Response response) {
                 twystProgressHUD.dismiss();
-                if (loginDataBaseResponse.isResponse()) {
-
-
-                    final String code = prefs.getString(AppConstants.PREFERENCE_USER_REFERRAL, "");
-                    if (!TextUtils.isEmpty(code)) {
-                        postReferral(token, code);
-                    } else {
-                        updateSocialFriendList(token);
-                    }
-
-                } else {
-                    Log.d(getTagName(), "" + loginDataBaseResponse.getMessage());
+                if (profileUpdateBaseResponse.isResponse()) {
                 }
             }
 
             @Override
             public void failure(RetrofitError error) {
+//                hideProgressHUDInLayout();
                 twystProgressHUD.dismiss();
                 handleRetrofitError(error);
             }
-        });*/
+        });
+    }
+
+    private void updateUserEmail() {
+
+        if (source.equalsIgnoreCase("FACEBOOK")) {
+            facebookUri = linkUri;
+
+        } else if (source.equalsIgnoreCase("GOOGLE")) {
+            googleplusUri = linkUri;
+        }
+
+        updateProfile();
+//        JSONObject facebookdata = new JSONObject();
+//        JSONObject googledata = new JSONObject();
+//        if(source.equalsIgnoreCase("FACEBOOK")) {
+//            try {
+//                facebookdata.put("id", fbid);
+//                facebookdata.put("linkUri", linkUri);
+//                googledata.put("linkUri", null);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }else if(source.equalsIgnoreCase("GOOGLE")){
+//
+//            try {
+//                facebookdata.put("id", null);
+//                facebookdata.put("linkUri", null);
+//                googledata.put("linkUri", linkUri);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
     }
 
@@ -755,4 +732,50 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
         });
 
     }
+
+    private void setFacebookConnected(boolean enabled) {
+        final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        profile.setFacebookConnect(enabled);
+        if (enabled) {
+            facebookSwitchBTn.setChecked(true);
+            facebookTxt.setText("Connected");
+            facebookTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.edit_profile_image_facebook_icon_blue), null, null, null);
+            prefs.edit().putBoolean(AppConstants.PREFERENCE_IS_FACEBOOK_CONNECTED, true).apply();
+        } else {
+            facebookSwitchBTn.setChecked(false);
+            facebookTxt.setText("Connect");
+            facebookTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.edit_profile_image_facebook_icon_gray), null, null, null);
+            prefs.edit().putBoolean(AppConstants.PREFERENCE_IS_FACEBOOK_CONNECTED, false).apply();
+        }
+    }
+
+    private void setGoogleConnected(boolean enabled) {
+        profile.setGoogleConnect(enabled);
+        final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        if (enabled) {
+            googlePlusSwitchBtn.setChecked(true);
+            googleTxt.setText("Connected");
+            googleTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.edit_profile_google_plus_red), null, null, null);
+            prefs.edit().putBoolean(AppConstants.PREFERENCE_IS_GOOGLE_CONNECTED, true).apply();
+        } else {
+            googlePlusSwitchBtn.setChecked(false);
+            googleTxt.setText("Connect");
+            googleTxt.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.edit_profile_google_plus_white_icon), null, null, null);
+            prefs.edit().putBoolean(AppConstants.PREFERENCE_IS_GOOGLE_CONNECTED, false).apply();
+        }
+    }
+
+    private void setPushEnabled(boolean enabled) {
+        final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        if (enabled) {
+            pushSwitchBtn.setChecked(true);
+            pushNotifiyTxt.setTextColor(getResources().getColor(R.color.edit_profile_text_color));
+            prefs.edit().putBoolean(AppConstants.PREFERENCE_IS_PUSH_ENABLED, true).apply();
+        } else {
+            pushSwitchBtn.setChecked(false);
+            pushNotifiyTxt.setTextColor(getResources().getColor(R.color.edit_profile_hint_color));
+            prefs.edit().putBoolean(AppConstants.PREFERENCE_IS_PUSH_ENABLED, false).apply();
+        }
+    }
+
 }

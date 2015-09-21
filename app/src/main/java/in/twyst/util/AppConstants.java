@@ -6,6 +6,7 @@ package in.twyst.util;
 public class AppConstants {
 
     public static final String HOST = "http://retwyst.twyst.in";
+//    public static final String HOST = "http://staging.twyst.in";
     public static final String HOST_SECURE = "https://www.twyst.in";
 
     public static final String GCM_PROJECT_ID = "307383421400";
@@ -52,6 +53,10 @@ public class AppConstants {
     public static final String PREFERENCE_CHANGE_LOCATION_NAME = "change_location_name";
     public static final String PREFERENCE_CHANGE_LOCATION_LATITUDE = "change_location_latitude";
     public static final String PREFERENCE_CHANGE_LOCATION_LONGITUDE = "change_location_longitude";
+
+    public static final String PREFERENCE_IS_FACEBOOK_CONNECTED = "is_facebook_connected";
+    public static final String PREFERENCE_IS_GOOGLE_CONNECTED = "is_google_connected";
+    public static final String PREFERENCE_IS_PUSH_ENABLED = "is_push_enabled";
 
     public static final String SMS_FROM = "BW-TWYSTR";
 

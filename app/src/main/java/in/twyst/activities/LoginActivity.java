@@ -56,6 +56,7 @@ import in.twyst.service.HttpService;
 import in.twyst.util.AppConstants;
 import in.twyst.util.PhoneBookContacts;
 import in.twyst.util.TwystProgressHUD;
+import in.twyst.util.Utils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -283,28 +284,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
         String deviceId = null;
 
         deviceId = prefs.getString(AppConstants.PREFERENCE_REGISTRATION_ID,"");
-            StringBuilder builder = new StringBuilder();
 
-            Field[] fields = Build.VERSION_CODES.class.getFields();
-            for (Field field : fields) {
-                String fieldName = field.getName();
-                int fieldValue = -1;
-
-                try {
-                    fieldValue = field.getInt(new Object());
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
-
-                if (fieldValue == Build.VERSION.SDK_INT) {
-                    builder.append(fieldName).append(" : ").append(Build.VERSION.RELEASE);
-                    break;
-                }
-            }
 
             final TwystProgressHUD twystProgressHUD = TwystProgressHUD.show(this, false, null);
             final String email;
@@ -325,7 +305,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
         }
 
 
-        HttpService.getInstance().updateProfile(token, email, userImage, firstName, middleName, lastName, city,id,source,facebookUri,googleplusUri, deviceId, builder.toString(), android.os.Build.DEVICE, android.os.Build.MODEL, android.os.Build.PRODUCT, new Callback<BaseResponse<ProfileUpdate>>() {
+        HttpService.getInstance().updateProfile(token, email, userImage, firstName, middleName, lastName, city,id,source,facebookUri,googleplusUri, deviceId, Utils.getbuildVersionStringBuilder().toString(), android.os.Build.DEVICE, android.os.Build.MODEL, android.os.Build.PRODUCT, new Callback<BaseResponse<ProfileUpdate>>() {
             @Override
             public void success(BaseResponse<ProfileUpdate> loginDataBaseResponse, Response response) {
                 twystProgressHUD.dismiss();

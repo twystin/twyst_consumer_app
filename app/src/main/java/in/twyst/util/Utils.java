@@ -1,5 +1,8 @@
 package in.twyst.util;
 
+import android.os.Build;
+
+import java.lang.reflect.Field;
 import java.util.Calendar;
 
 /**
@@ -78,6 +81,32 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    public static StringBuilder getbuildVersionStringBuilder() {
+        StringBuilder builder = new StringBuilder();
+
+        Field[] fields = Build.VERSION_CODES.class.getFields();
+        for (Field field : fields) {
+            String fieldName = field.getName();
+            int fieldValue = -1;
+
+            try {
+                fieldValue = field.getInt(new Object());
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+
+            if (fieldValue == Build.VERSION.SDK_INT) {
+                builder.append(fieldName).append(" : ").append(Build.VERSION.RELEASE);
+                break;
+            }
+        }
+        return builder;
     }
 
 }
