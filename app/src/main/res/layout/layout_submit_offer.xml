@@ -44,7 +44,6 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/outlet_details_coupon_margin_right"
-                android:drawableLeft="@drawable/icon_offer_detail_submit_offer"
                 android:drawablePadding="7dp"
                 android:textColor="#e9573f"
                 android:text="Submit offer"
