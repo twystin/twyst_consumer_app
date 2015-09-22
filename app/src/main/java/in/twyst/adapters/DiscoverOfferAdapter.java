@@ -91,7 +91,6 @@ public class DiscoverOfferAdapter extends RecyclerView.Adapter<RecyclerView.View
             final Offer offer = items.get(position);
             final View view = holder.itemView;
 
-
             holder.text1.setText(offer.getHeader());
 
             if (TextUtils.isEmpty(offer.getLine1())) {
@@ -107,7 +106,6 @@ public class DiscoverOfferAdapter extends RecyclerView.Adapter<RecyclerView.View
                 holder.text3.setVisibility(View.VISIBLE);
                 holder.text3.setText(offer.getLine2());
             }
-
 
             String expiryText = "";
             String lapseText = "";
@@ -247,19 +245,30 @@ public class DiscoverOfferAdapter extends RecyclerView.Adapter<RecyclerView.View
 
 
             } else if ("pool".equalsIgnoreCase(offer.getType())) {
-                view.setBackgroundResource(R.drawable.card_yellow);
                 holder.time.setText(expiryText);
                 holder.text1.setTextColor(resources.getColor(R.color.offer_color_yellow));
                 holder.text2.setTextColor(resources.getColor(R.color.offer_color_yellow));
                 holder.text3.setTextColor(resources.getColor(R.color.offer_color_yellow));
 
-                holder.footerText.setText("grab offer");
-                holder.footerImageView.setVisibility(View.GONE);
-                holder.buckTextImage.setVisibility(View.VISIBLE);
-                holder.buckTextImage.setText("");//TODO offer.getcouponcost
-                holder.detailLayout.setVisibility(View.VISIBLE);
-                holder.detailIcon.setBackground(resources.getDrawable(R.drawable.icon_discover_offer_socialpool_grey));
-                holder.detailText.setText(""); //TODO offer.getcouponsource(user)
+                if (offer.isAvailableNow()) {
+                    view.setBackgroundResource(R.drawable.card_yellow);
+                    holder.footerText.setText("grab offer");
+                    holder.buckTextImage.setVisibility(View.VISIBLE);
+                    holder.buckTextImage.setText(String.valueOf(100));
+
+                    if(offer.getSourceName()!=null && !TextUtils.isEmpty(offer.getSourceName())){
+                        holder.detailLayout.setVisibility(View.VISIBLE);
+                        holder.detailIcon.setBackground(resources.getDrawable(R.drawable.icon_discover_offer_socialpool_grey));
+                        holder.detailText.setText("from " + offer.getSourceName());
+                    }else {
+                        holder.detailLayout.setVisibility(View.GONE);
+                    }
+
+                } else {
+                    view.setBackgroundResource(R.drawable.card_gray);
+                    holder.footerText.setText("remind me");
+                    holder.footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_discover_offer_clock_white));
+                }
 
             } else if ("offer".equalsIgnoreCase(offer.getType())) {
                 holder.text1.setTextColor(resources.getColor(R.color.offer_color_green));
@@ -314,9 +323,14 @@ public class DiscoverOfferAdapter extends RecyclerView.Adapter<RecyclerView.View
                 holder.text2.setTextColor(resources.getColor(R.color.offer_color_blue));
                 holder.text3.setTextColor(resources.getColor(R.color.offer_color_blue));
                 holder.footerImageView.setVisibility(View.GONE);
-                holder.detailLayout.setVisibility(View.GONE);
-                holder.detailIcon.setBackground(resources.getDrawable(R.drawable.icon_discover_offer_bank_creditcard_grey));
-                holder.detailText.setText(""); //TODO offer.getbankdetail()
+
+                if(offer.getSource()!=null && !TextUtils.isEmpty(offer.getSource())){
+                    holder.detailLayout.setVisibility(View.VISIBLE);
+                    holder.detailIcon.setBackground(resources.getDrawable(R.drawable.icon_discover_offer_bank_creditcard_grey));
+                    holder.detailText.setText(offer.getSource());
+                }else {
+                    holder.detailLayout.setVisibility(View.GONE);
+                }
 
                 if(offer.getOfferCost()>0){
                     holder.buckTextImage.setVisibility(View.VISIBLE);

@@ -49,6 +49,7 @@ import in.twyst.alarm.NotificationPublisherReceiver;
 import in.twyst.model.AvailableNext;
 import in.twyst.model.BaseResponse;
 import in.twyst.model.EventMeta;
+import in.twyst.model.GrabOffer;
 import in.twyst.model.LikeOffer;
 import in.twyst.model.LikeOfferMeta;
 import in.twyst.model.Offer;
@@ -665,18 +666,6 @@ public class OfferDetailActivity extends BaseActivity {
                                 Toast.makeText(OfferDetailActivity.this,"Please pick a location before proceeding!",Toast.LENGTH_SHORT).show();
                             }
                         }
-
-                     /*   if(locationText.length()!=0) {
-                            if (offer.getOutletList() == null) {
-                                String id = offer.getIssuedBy();
-                                redeemConfirmationCoupon(id);
-                            } else {
-                                redeemConfirmationCoupon(idValue);
-                            }
-                        }else {
-                            Toast.makeText(OfferDetailActivity.this,"Please pick a location before proceeding!",Toast.LENGTH_SHORT).show();
-                        }*/
-
                     }
                 });
 
@@ -749,37 +738,85 @@ public class OfferDetailActivity extends BaseActivity {
             type_offer.setTextColor(getResources().getColor(R.color.offer_color_yellow));
             coupon_text1.setTextColor(getResources().getColor(R.color.offer_color_yellow));
             coupon_text2.setTextColor(getResources().getColor(R.color.offer_color_yellow));
-            buckText.setVisibility(View.VISIBLE);
-            buckText.setText("");
-            btntext.setText("grab offer");
-            buttonImage.setVisibility(View.GONE);
-            int sdk = android.os.Build.VERSION.SDK_INT;
-            if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                loginBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_yellow));
-            } else {
-                loginBtn.setBackground(getResources().getDrawable(R.drawable.button_yellow));
-            }
-            loginBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                    int bucks = getTwystBucks();
-                    if (bucks >= offer.getOfferCost()) {
-                        grabOffer();
-                    } else {
-                        grabOfferError();
-                    }
+            if (offer.isAvailableNow()) {
+                TextView bankcard = (TextView)findViewById(R.id.bankcard);
+                buckText.setVisibility(View.VISIBLE);
+                buckText.setText("100");
+                btntext.setText("grab offer");
+
+                if(offer.getSourceName()!=null && !TextUtils.isEmpty(offer.getSourceName())){
+                    bankcard.setVisibility(View.VISIBLE);
+                    bankcard.setText("from " + offer.getSourceName());
+                    bankcard.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.icon_discover_offer_socialpool_grey), null, null, null);
+                }else {
+                    bankcard.setVisibility(View.GONE);
                 }
-            });
-            buttonAct.setVisibility(View.INVISIBLE);
-                /*buttonAct.setImageDrawable(getResources().getDrawable(R.drawable.remind_me_button_offer_detail));
+
+                buttonImage.setVisibility(View.GONE);
+                int sdk = android.os.Build.VERSION.SDK_INT;
+                if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                    loginBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_yellow));
+                } else {
+                    loginBtn.setBackground(getResources().getDrawable(R.drawable.button_yellow));
+                }
+                loginBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        int bucks = getTwystBucks();
+                        if (bucks >= 100) {
+                            grabOffer();
+                        } else {
+                            grabOfferError();
+                        }
+                    }
+                });
+                buttonAct.setVisibility(View.INVISIBLE);
+
+            } else {
+
+                int sdk = android.os.Build.VERSION.SDK_INT;
+                if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                    loginBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_grey));
+                } else {
+                    loginBtn.setBackground(getResources().getDrawable(R.drawable.button_grey));
+                }
+                btntext.setText("remind me");
+
+                loginBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!TextUtils.isEmpty(day) && !TextUtils.isEmpty(time)) {
+
+                            setReminder(calendar, time);
+                        } else {
+                            Toast.makeText(OfferDetailActivity.this, "Available next day and time are null!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+                buttonImage.setImageDrawable(getResources().getDrawable(R.drawable.offer_detail_remind_me));
+                buttonAct.setImageDrawable(getResources().getDrawable(R.drawable.button_extend));
+                buttonAct.setVisibility(View.VISIBLE);
                 buttonAct.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        setReminderWithoutProirInfo();
-                    }
-                });*/
+                        int bucks = getTwystBucks();
+                        if (bucks >= 150) {
+                            if (extendDate.equals(lapsedDate)) {
+                                Toast.makeText(getBaseContext(), "You have already extend voucher to its expiry date", Toast.LENGTH_SHORT).show();
+                            } else {
+                                extendVoucher();
+                            }
+                        } else {
+                            extendVoucherError("coupon");
+                        }
 
+                    }
+                });
+
+            }
 
         } else if ("offer".equalsIgnoreCase(offer.getType())) {
             type_offer.setTextColor(getResources().getColor(R.color.offer_color_green));
@@ -938,13 +975,6 @@ public class OfferDetailActivity extends BaseActivity {
                 });
                 buckText.setVisibility(View.GONE);
                 buttonAct.setVisibility(View.INVISIBLE);
-                /*buttonAct.setImageDrawable(getResources().getDrawable(R.drawable.remind_me_button_offer_detail));
-                buttonAct.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        setReminderWithoutProirInfo();
-                    }
-                });*/
             } else {
                 buttonImage.setVisibility(View.VISIBLE);
                 int sdk = android.os.Build.VERSION.SDK_INT;
@@ -1551,6 +1581,33 @@ public class OfferDetailActivity extends BaseActivity {
         dialogView.findViewById(R.id.grabCouponBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                GrabOffer grabOffer = new GrabOffer();
+                GrabOffer.GrabOfferMeta grabOfferMeta = new GrabOffer.GrabOfferMeta();
+
+                grabOfferMeta.setCode(offer.getCode());
+                grabOffer.setOutletID(outlet.get_id());
+                grabOffer.setGrabOfferMeta(grabOfferMeta);
+
+                HttpService.getInstance().grabOffer(getUserToken(), grabOffer, new Callback<BaseResponse>() {
+                    @Override
+                    public void success(BaseResponse baseResponse, Response response) {
+
+                        dialog.dismiss();
+                        if (baseResponse.isResponse()) {
+                            Toast.makeText(OfferDetailActivity.this, "Offer grabbed", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(OfferDetailActivity.this, baseResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                        handleRetrofitError(error);
+                        dialog.dismiss();
+                    }
+                });
 
 
             }

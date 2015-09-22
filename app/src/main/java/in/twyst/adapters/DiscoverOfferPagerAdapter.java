@@ -104,7 +104,6 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                 text3.setText(offer.getLine2());
             }
 
-
             String expiryText = "";
             String lapseText = "";
             if ("coupon".equalsIgnoreCase(offer.getType())) {
@@ -195,7 +194,8 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
 
                             if (!offer.isAvailableNow() && !TextUtils.isEmpty(offer.getAvailableNext().getDay()) && !TextUtils.isEmpty(offer.getAvailableNext().getTime())) {
 
-                                expiryText = offer.getAvailableNext().getDay() + ", " + offer.getAvailableNext().getTime();
+                                expiryText
+                                        = offer.getAvailableNext().getDay() + ", " + offer.getAvailableNext().getTime();
 
                             } else {
                                 expiryText = null;
@@ -272,25 +272,45 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
 
 
             } else if ("pool".equalsIgnoreCase(offer.getType())) {
-                itemView.setBackgroundResource(R.drawable.card_yellow);
                 time.setText(expiryText);
                 text1.setTextColor(resources.getColor(R.color.offer_color_yellow));
                 text2.setTextColor(resources.getColor(R.color.offer_color_yellow));
                 text3.setTextColor(resources.getColor(R.color.offer_color_yellow));
-                params.weight = 1.0f;
-                parentView.setWeightSum(1f);
-                availabilityLayout.setLayoutParams(params);
-                parentView.removeAllViews();
-                parentView.addView(availabilityLayout);
-                detailLayout.setVisibility(View.GONE);
 
-                footerText.setText("grab offer");
-                footerImageView.setVisibility(View.GONE);
-                buckTextImage.setVisibility(View.VISIBLE);
-                buckTextImage.setText("");//TODO offer.getcouponcost
-                detailLayout.setVisibility(View.VISIBLE);
-                detailIcon.setBackground(resources.getDrawable(R.drawable.icon_discover_offer_socialpool_grey));
-                detailText.setText(""); //TODO offer.getcouponsource(user)
+                if (offer.isAvailableNow()) {
+                    itemView.setBackgroundResource(R.drawable.card_yellow);
+                    footerText.setText("grab offer");
+//                    footerImageView.setVisibility(View.GONE);
+                    buckTextImage.setVisibility(View.VISIBLE);
+                    buckTextImage.setText(String.valueOf(100));
+
+                    footerImageView.setVisibility(View.GONE);
+
+                    if(offer.getSourceName()!=null && !TextUtils.isEmpty(offer.getSourceName())){
+                        detailIcon.setBackground(resources.getDrawable(R.drawable.icon_discover_offer_socialpool_grey));
+                        detailText.setText("from " + offer.getSourceName());
+                        params.weight = 0.5f;
+                        parentView.setWeightSum(1f);
+                        availabilityLayout.setLayoutParams(params);
+                        detailLayout.setLayoutParams(params);
+                        parentView.removeAllViews();
+                        parentView.addView(availabilityLayout);
+                        parentView.addView(detailLayout);
+                        detailLayout.setVisibility(View.VISIBLE);
+                    }else {
+                        detailLayout.setVisibility(View.GONE);
+                        params.weight = 1.0f;
+                        parentView.setWeightSum(1f);
+                        availabilityLayout.setLayoutParams(params);
+                        parentView.removeAllViews();
+                        parentView.addView(availabilityLayout);
+                    }
+
+                } else {
+                    itemView.setBackgroundResource(R.drawable.card_gray);
+                    footerText.setText("remind me");
+                    footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_discover_offer_clock_white));
+                }
 
             } else if ("offer".equalsIgnoreCase(offer.getType())) {
                 text1.setTextColor(resources.getColor(R.color.offer_color_green));
@@ -430,8 +450,10 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                 });
 
             } else {
-                footerText.setText("submit offer");
-                footerText.setOnClickListener(new View.OnClickListener() {
+//                footerText.setText("submit offer");
+                footerText.setText("");
+                emptyLayout.setBackgroundResource(R.drawable.submit_offer_card_front);
+                emptyLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(v.getContext(), SubmitOfferActivity.class);

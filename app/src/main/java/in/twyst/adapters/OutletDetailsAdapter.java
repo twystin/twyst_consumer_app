@@ -114,7 +114,6 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
             final View view = holder.itemView;
             Resources resources = view.getContext().getResources();
 
-
             String expiryText = "";
             String lapseText = "";
             if("coupon".equalsIgnoreCase(offer.getType())){
@@ -241,24 +240,39 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
 
             } else if ("pool".equalsIgnoreCase(offer.getType())) {
-                holder.couponBg.setBackgroundResource(R.color.outlet_coupon_bg_color_white);
+                holder.card_user_img.setBackgroundResource(R.drawable.icon_discover_offer_socialpool_grey);
+
+                if(offer.getSourceName()!=null && !TextUtils.isEmpty(offer.getSourceName())){
+                    holder.cardDetails.setText("from " + offer.getSourceName());
+                    holder.cardDetails.setVisibility(View.VISIBLE);
+                    holder.card_user_img.setVisibility(View.VISIBLE);
+                }else {
+                    holder.cardDetails.setVisibility(View.INVISIBLE);
+                    holder.card_user_img.setVisibility(View.INVISIBLE);
+                }
+
+                holder.time.setText(expiryText);
                 holder.typeOffer.setTextColor(resources.getColor(R.color.offer_color_yellow));
                 holder.text2.setTextColor(resources.getColor(R.color.offer_color_yellow));
                 holder.text3.setTextColor(resources.getColor(R.color.offer_color_yellow));
                 holder.eclipseDot.setTextColor(resources.getColor(R.color.offer_color_yellow));
                 holder.footerBckGrd.setBackgroundResource(R.drawable.button_yellow);
 
-                //holder.couponLine.setBackgroundResource(R.drawable.outlet_detail_coupon_line_white);
-                //holder.footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_outlet_detail_rounded_rectangle));
-                holder.footerText.setText("grab offer");
-                holder.outlet500.setVisibility(View.VISIBLE);
-                holder.footerImageView.setVisibility(View.GONE);
-                holder.time.setText(expiryText);
-                holder.card_user_img.setBackgroundResource(R.drawable.icon_outlet_detail_icon_person_grey);
-                holder.cardDetails.setText("from Rebecca N");
-                holder.cardDetails.setVisibility(View.VISIBLE);
-                holder.card_user_img.setVisibility(View.VISIBLE);
+                if(offer.isAvailableNow()){
+                    holder.footerBckGrd.setBackgroundResource(R.drawable.button_blue);
+                    holder.outlet500.setVisibility(View.VISIBLE);
+                    holder.outlet500.setText(String.valueOf(100));
+                    holder.footerImageView.setVisibility(View.GONE);
+                    holder.footerText.setText("grab offer");
 
+                }else {
+                    holder.footerBckGrd.setBackgroundResource(R.drawable.button_grey);
+                    holder.outlet500.setVisibility(View.GONE);
+                    holder.couponBg.setBackgroundResource(R.color.outlet_coupon_bg_color_white);
+                    holder.footerImageView.setVisibility(View.VISIBLE);
+                    holder.footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_outlet_detail_coupon_forma));
+                    holder.footerText.setText("remind me");
+                }
 
             } else if ("offer".equalsIgnoreCase(offer.getType())) {
                 holder.typeOffer.setTextColor(resources.getColor(R.color.offer_color_green));
@@ -421,10 +435,11 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
             SubmitViewHolder holder = (SubmitViewHolder) holder1;
             final View view = holder.itemView;
             Resources resources = view.getContext().getResources();
-            holder.submitOffer.setText("submit offer!");
+//            holder.submitOffer.setText("submit offer!");
+            holder.submitOffer.setText("");
 
-            holder.submitOffer.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.outlet_detail_header_type1_text));
-            holder.submitOffer.setOnClickListener(new View.OnClickListener() {
+//            holder.submitOffer.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.outlet_detail_header_type1_text));
+            view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
 
@@ -503,6 +518,7 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
             super(view);
             submitOffer = (TextView) view.findViewById(R.id.submitOffer);
             submitOffer.setText("");
+            view.findViewById(R.id.coupon_bg).setBackgroundResource(R.drawable.submit_offer_card);
         }
     }
 

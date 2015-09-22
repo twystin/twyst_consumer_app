@@ -66,6 +66,17 @@ public class Offer implements Serializable {
     @SerializedName("issued_by")
     private String issuedBy;
 
+    @SerializedName("source_name")
+    private String sourceName;
+
+    public String getSourceName() {
+        return sourceName;
+    }
+
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
+    }
+
     public String getIssuedBy() {
         return issuedBy;
     }

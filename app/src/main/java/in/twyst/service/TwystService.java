@@ -9,6 +9,7 @@ import in.twyst.model.BaseResponse;
 import in.twyst.model.CheckinData;
 import in.twyst.model.Data;
 import in.twyst.model.Friend;
+import in.twyst.model.GrabOffer;
 import in.twyst.model.NotificationData;
 import in.twyst.model.Profile;
 import in.twyst.model.Referral;
@@ -105,6 +106,9 @@ public interface TwystService {
 
     @POST("/api/v4/offer/extend")
     public void extendVoucher(@Query("token") String token, @Body() Voucher voucher, Callback<BaseResponse> callback);
+
+    @POST("/api/v4/coupon/grab")
+    public void grabOffer(@Query("token") String token, @Body() GrabOffer grabOffer, Callback<BaseResponse> callback);
 
     @POST("/api/v4/checkin/bill")
     public void uploadBill(@Query("token") String token, @Body() UploadBill uploadBill, Callback<BaseResponse> callback);

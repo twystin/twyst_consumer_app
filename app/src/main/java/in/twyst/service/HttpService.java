@@ -19,6 +19,7 @@ import in.twyst.model.Data;
 import in.twyst.model.DiscoverData;
 import in.twyst.model.Feedback;
 import in.twyst.model.Friend;
+import in.twyst.model.GrabOffer;
 import in.twyst.model.NotificationData;
 import in.twyst.model.Profile;
 import in.twyst.model.LikeOffer;
@@ -101,7 +102,7 @@ public class HttpService {
     }
 
     public void updateProfile(String token, String email, String image, String fname, String mname, String lname, String city,String id, String source,String facebookUri,String googleplusUri, String deviceId, String version, String device, String model, String product,Callback<BaseResponse<ProfileUpdate>> callback) {
-        twystService.updateProfile(token, email, image, fname, mname, lname, city,id,source,facebookUri, googleplusUri, deviceId, version, device, model, product, callback);
+        twystService.updateProfile(token, email, image, fname, mname, lname, city, id, source, facebookUri, googleplusUri, deviceId, version, device, model, product, callback);
     }
 
     public void getRecommendedOutlets(String userToken, int start,String lat, String lng, String date, String time, Callback<BaseResponse<DiscoverData>> callback) {
@@ -165,6 +166,10 @@ public class HttpService {
 
     public void extendVoucher(String token, Voucher voucher, Callback<BaseResponse> callback){
         twystService.extendVoucher(token, voucher, callback);
+    }
+
+    public void grabOffer(String token, GrabOffer grabOffer, Callback<BaseResponse> callback) {
+        twystService.grabOffer(token, grabOffer, callback);
     }
 
     public void uploadBill(String token, UploadBill uploadBill, Callback<BaseResponse> callback){
