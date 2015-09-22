@@ -79,7 +79,7 @@ public class CheckInSuccessActivity extends BaseActivity {
                 + " <font color='"
                 + getResources().getColor(R.color.colorPrimaryDark) + "'><b>" + outletname
                 + "</b></font>"
-                + " and unlock a reward!";
+                + " and unlocked a reward!";
         checkInOutletName.setText(Html.fromHtml(outletName),
                 TextView.BufferType.SPANNABLE);
 
