@@ -393,7 +393,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             super(itemView);
             notifyCircle =(RelativeLayout)itemView.findViewById(R.id.notifyCircle);
             notificationBtn = (ImageView) itemView.findViewById(R.id.notificationBtn);
-            notifyClick = (LinearLayout) itemView.findViewById(R.id.notifyClick);
+//            notifyClick = (LinearLayout) itemView.findViewById(R.id.notifyClick);
             notifyHeader = (TextView) itemView.findViewById(R.id.notifyHeader);
             notifyDetail = (TextView) itemView.findViewById(R.id.notifyDetail);
 

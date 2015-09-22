@@ -91,7 +91,7 @@
     <dimen name="login_margin_left">52sp</dimen>
     <dimen name="dialog_button_text">14sp</dimen>
     <dimen name="dialog_header_text">16sp</dimen>
-    <dimen name="dialog_content_text">12sp</dimen>
+    <dimen name="dialog_content_text">14sp</dimen>
     <dimen name="discover_offer_padding_right">20dp</dimen>
     <dimen name="phone_verification_edittext_size">16sp</dimen>
     <dimen name="notification_item_height">105dp</dimen>
@@ -99,7 +99,7 @@
     <dimen name="invite_friend_text">14sp</dimen>
     <dimen name="invite_friend_padding">10dp</dimen>
     <dimen name="invite_friend_button_width">260dp</dimen>
-    <dimen name="invite_friend_button_text">16sp</dimen>
+    <dimen name="invite_friend_button_text">20sp</dimen>
     <dimen name="invite_friend_button_height">45dp</dimen>
     <dimen name="invite_friend_list_text">16sp</dimen>
     <dimen name="invite_friend_list_padding">20dp</dimen>
