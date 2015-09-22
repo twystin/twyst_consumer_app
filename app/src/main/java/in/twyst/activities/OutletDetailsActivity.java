@@ -148,13 +148,14 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
         outlet_view_map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent1 = new Intent(OutletDetailsActivity.this, MapViewActivity.class);
-//                intent1.putExtra(AppConstants.INTENT_PARAM_OUTLET_LOCATION_LAT, outlet.getLat());
-//                intent1.putExtra(AppConstants.INTENT_PARAM_OUTLET_LOCATION_LONG, outlet.getLng());
-//                intent1.putExtra(AppConstants.INTENT_PARAM_OUTLET_NAME, outlet.getName());
-//                startActivity(intent1);
+                Intent intent1 = new Intent(OutletDetailsActivity.this, MapViewActivity.class);
+                intent1.putExtra(AppConstants.INTENT_PARAM_OUTLET_LOCATION_LAT, outlet.getLat());
+                intent1.putExtra(AppConstants.INTENT_PARAM_OUTLET_LOCATION_LONG, outlet.getLng());
+                intent1.putExtra(AppConstants.INTENT_PARAM_OUTLET_NAME, outlet.getName());
+                startActivity(intent1);
 
-                Float latSource = Float.parseFloat(appLocationLatiude);
+                // To open GoogleNavigation
+                /*Float latSource = Float.parseFloat(appLocationLatiude);
                 Float lonSource = Float.parseFloat(appLocationLongitude);
                 Float latDest = Float.parseFloat(outlet.getLat());
                 Float lonDest = Float.parseFloat(outlet.getLng());
@@ -165,7 +166,7 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
 
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                 intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
-                startActivity(intent);
+                startActivity(intent);*/
 
             }
         });
