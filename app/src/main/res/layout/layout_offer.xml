@@ -54,8 +54,7 @@
                 android:id="@+id/detailIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:src="@drawable/icon_discover_offer_bank_creditcard_grey" />
+                android:layout_gravity="top" />
 
             <TextView
                 android:id="@+id/detailText"
