@@ -1507,7 +1507,6 @@ public class OfferDetailActivity extends BaseActivity {
                 HttpService.getInstance().grabOffer(getUserToken(), grabOffer, new Callback<BaseResponse>() {
                     @Override
                     public void success(BaseResponse baseResponse, Response response) {
-
                         dialog.dismiss();
                         if (baseResponse.isResponse()) {
                             Toast.makeText(OfferDetailActivity.this, "Offer grabbed", Toast.LENGTH_SHORT).show();
@@ -1553,6 +1552,7 @@ public class OfferDetailActivity extends BaseActivity {
         dialogView.findViewById(R.id.grabErrorBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialog.dismiss();
                 showEarnMoreInstructions();
             }
         });
@@ -1644,8 +1644,8 @@ public class OfferDetailActivity extends BaseActivity {
         dialogView.findViewById(R.id.extendBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
+                dialog.dismiss();
+                showEarnMoreInstructions();
             }
         });
 
