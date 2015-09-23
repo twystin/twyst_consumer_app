@@ -1279,11 +1279,13 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         day1.setTextColor(Color.WHITE);
         dateSelected = true;
 
-        Double latitude = Double.valueOf(lat);
-        Double longitude = Double.valueOf(lng);
-        placeNameSelectedAndUsed = findNearestOutletName(latitude, longitude);
-        latitudeStrSelectedAndUsed = String.valueOf(latitude);
-        longitudeStrSelectedAndUsed = String.valueOf(longitude);
+        if (lat!=null && !TextUtils.isEmpty(lat) && lng!=null && !TextUtils.isEmpty(lng)){
+            Double latitude = Double.valueOf(lat);
+            Double longitude = Double.valueOf(lng);
+            placeNameSelectedAndUsed = findNearestOutletName(latitude, longitude);
+            latitudeStrSelectedAndUsed = String.valueOf(latitude);
+            longitudeStrSelectedAndUsed = String.valueOf(longitude);
+        }
         placeNameSelected = placeNameSelectedAndUsed;
         latitudeStrSelected = latitudeStrSelectedAndUsed;
         longitudeStrSelected = longitudeStrSelectedAndUsed;
