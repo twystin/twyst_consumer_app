@@ -35,6 +35,8 @@ import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -80,14 +82,9 @@ public class OfferDetailActivity extends BaseActivity {
     private String time;
     private Outlet outlet;
     private Calendar calendar;
-    private String term1 = null;
-    private String term2 = null;
-    private String term3 = null;
-    private String term4 = null;
     boolean image1clicked = false;
     boolean image2clicked = false;
     boolean image3clicked = false;
-    int count;
     private String extendDate, extendDate2,lapsedDate;
     private View reportProblemLayout;
     private boolean isPanelShown;
@@ -1011,44 +1008,12 @@ public class OfferDetailActivity extends BaseActivity {
             coupon_text2.setText(offer.getLine2());
         }
 
-        TextView viewMore = (TextView) findViewById(R.id.viewMore1);
-        final TextView terms1 = (TextView) findViewById(R.id.terms1);
-        final TextView terms2 = (TextView) findViewById(R.id.terms2);
+        ((TextView) findViewById(R.id.tvTermsConditions)).setText(getFormattedTermsConditions(offer.getTerms()));
 
-
-        if (!TextUtils.isEmpty(offer.getTerms())) {
-            String[] splitStr = new String[0];
-
-            if (offer.getTerms().contains(";") || !offer.getTerms().isEmpty()) {
-                splitStr = offer.getTerms().trim().split("\\s*;\\s*");
-                for (int i = 0; i < splitStr.length; i++) {
-                    term1 = splitStr[0];
-                    if (offer.getTerms().contains(";") &&!TextUtils.isEmpty(splitStr[1])) {
-                        term2 = splitStr[1];
-                        terms2.setVisibility(View.VISIBLE);
-                    } else {
-                        terms2.setVisibility(View.GONE);
-                    }
-                }
-
-            } else {
-                term1 = offer.getTerms();
-            }
-        }
-
-        if (!TextUtils.isEmpty(term1)) {
-            terms1.setText(term1.toString().trim());
-            terms1.setVisibility(View.VISIBLE);
-        }
-        if (!TextUtils.isEmpty(term2)) {
-            terms2.setText(term2.toString().trim());
-            terms2.setVisibility(View.VISIBLE);
-        }
-
-        viewMore.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.layoutTermsConditions).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewMoreDialog();
+                viewMoreDialog(getFormattedTermsConditions(offer.getTerms()));
             }
         });
 
@@ -1225,56 +1190,6 @@ public class OfferDetailActivity extends BaseActivity {
         });
 
     }*/
-
-    private void viewMoreDialog() {
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View dialogView = li.inflate(R.layout.dialog_viewmore_tnc_offer_details, null);
-        TextView termsD1 = (TextView) dialogView.findViewById(R.id.termsd1);
-        TextView termsD2 = (TextView) dialogView.findViewById(R.id.termsd2);
-        TextView termsD3 = (TextView) dialogView.findViewById(R.id.termsd3);
-        TextView termsD4 = (TextView) dialogView.findViewById(R.id.termsd4);
-        TextView termsD5 = (TextView) dialogView.findViewById(R.id.termsd5);
-        TextView termsD6 = (TextView) dialogView.findViewById(R.id.termsd6);
-        TextView termsD7 = (TextView) dialogView.findViewById(R.id.termsd7);
-        TextView termsD8 = (TextView) dialogView.findViewById(R.id.termsd8);
-
-        termsD1.setText("1. Offers (2 or more) cannot be clubbed.");
-        termsD2.setText("2. Offers are not valid on specially priced combinations e.g. any other buffet brunch deal corporate dining rate happy hours etc.");
-        termsD3.setText("3. Only 1 voucher offer can be used per bill generated.");
-        termsD4.setText("4. In certain cases, specific items may be part of the offer.");
-        termsD5.setText("5. The availability of the specific items is not guaranteed and must be checked with the outlet before using the offer.");
-        termsD6.setText("6. The offers are provided at the sole discretion of the merchant,and the merchant reserves the right to alter or withdraw the offer at any time.");
-        termsD7.setText("7. Offers vouchers consisting of alcohol alcohol-based products will be available only to individuals above legal drinking age.");
-        termsD8.setText("8. The establishment reserves the right to verify the customer's age before providing such reward.");
-
-
-        builder.setView(dialogView);
-
-        final AlertDialog dialog = builder.create();
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
-
-        dialogView.findViewById(R.id.extendBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-
-
-            }
-        });
-
-        dialogView.findViewById(R.id.cancelExtendBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-    }
 
     public void setReminder(Calendar day, String time) {
         try {

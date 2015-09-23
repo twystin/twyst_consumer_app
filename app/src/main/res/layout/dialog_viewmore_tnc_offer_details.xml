@@ -34,9 +34,8 @@
             android:orientation="vertical"
             android:padding="15dp">
 
-
             <TextView
-                android:id="@+id/termsd1"
+                android:id="@+id/tvTerms"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/termsCondition"
@@ -44,66 +43,6 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:textColor="#7d7d7d"
-                android:textSize="@dimen/outlet_details_coupon_txt"
-                android:visibility="visible" />
-
-            <TextView
-                android:id="@+id/termsd2"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:textSize="@dimen/outlet_details_coupon_txt"
-                android:visibility="visible" />
-
-            <TextView
-                android:id="@+id/termsd3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:textSize="@dimen/outlet_details_coupon_txt"
-                android:visibility="visible" />
-
-            <TextView
-                android:id="@+id/termsd4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:textSize="@dimen/outlet_details_coupon_txt"
-                android:visibility="visible" />
-            <TextView
-                android:id="@+id/termsd5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:textSize="@dimen/outlet_details_coupon_txt"
-                android:visibility="visible" />
-            <TextView
-                android:id="@+id/termsd6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:textSize="@dimen/outlet_details_coupon_txt"
-                android:visibility="visible" />
-
-            <TextView
-                android:id="@+id/termsd7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:textSize="@dimen/outlet_details_coupon_txt"
-                android:visibility="visible" />
-
-            <TextView
-                android:id="@+id/termsd8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
                 android:textSize="@dimen/outlet_details_coupon_txt"
                 android:visibility="visible" />
 
@@ -115,29 +54,7 @@
                 android:gravity="end|right">
 
                 <com.balysv.materialripple.MaterialRippleLayout
-                    android:id="@+id/cancelExtendBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="14dp"
-                    android:layout_toLeftOf="@+id/extendBtn"
-                    android:layout_toStartOf="@+id/extendBtn"
-                    android:visibility="invisible"
-                    app:mrl_rippleOverlay="true">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:background="#fafafa"
-                        android:gravity="center_vertical|center_horizontal"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:text="NOT NOW"
-                        android:textColor="#959595"
-                        android:textSize="12sp" />
-                </com.balysv.materialripple.MaterialRippleLayout>
-
-                <com.balysv.materialripple.MaterialRippleLayout
-                    android:id="@+id/extendBtn"
+                    android:id="@+id/closeButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

@@ -879,4 +879,43 @@ public abstract class BaseActivity extends ActionBarActivity
         });
     }
 
+    public void viewMoreDialog(String termsToShow) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View dialogView = li.inflate(R.layout.dialog_viewmore_tnc_offer_details, null);
+        TextView tvTerms = (TextView) dialogView.findViewById(R.id.tvTerms);
+        tvTerms.setText(termsToShow);
+
+        builder.setView(dialogView);
+
+        final AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+
+        dialogView.findViewById(R.id.closeButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    public String getFormattedTermsConditions(String termsFromOffer) {
+        String terms;
+
+        Character newLine = '\n';
+        Character bullet = '\u2022';
+        String space = " ";
+        if (!TextUtils.isEmpty(termsFromOffer)) {
+            if (termsFromOffer.contains(newLine.toString())){
+                termsFromOffer = termsFromOffer.replace(newLine.toString(),newLine.toString()+ space + bullet.toString() + space);
+            }
+            terms = space + bullet + space + termsFromOffer + newLine + space + getString(R.string.terms_conditions);
+        } else {
+            terms = space + getString(R.string.terms_conditions);
+        }
+        return terms;
+    }
+
 }

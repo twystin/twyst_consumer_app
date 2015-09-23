@@ -55,6 +55,14 @@
  <string name="account">Accounts</string>
  <string name="connected_account">Connected Accounts</string>
 
+ <string name="terms_conditions">
+     &#8226; Offers (2 or more) cannot be clubbed.\n
+     &#8226; Offers are not valid on specially priced combinations e.g. any other buffet/brunch deal/corporate dining rate/happy hours etc.\n
+     &#8226; Only 1 voucher/offer can be used per bill generated.\n
+     &#8226; In certain cases, specific items may be part of the offer. The availability of the specific items is not guaranteed and must be checked with the outlet before using the offer.\n
+     &#8226; The offers are provided at the sole discretion of the merchant, and the merchant reserves the right to alter or withdraw the offer at any time.\n
+     &#8226; Offers/ vouchers consisting of alcohol/alcohol-based products will be available only to individuals above legal drinking age. The establishment reserves the right to verify the customer\'s age before providing such reward.</string>
+
  <string name="faq_support_text">For more, write to us at </string>
  <string name="faq_support_mail">support@twyst.in</string>
 
@@ -83,16 +91,14 @@
 ]]>
  </string><string name="earn_more_body">
      <![CDATA[
-<p>Upload your bill every time you visit or order from a Twyst
+<p>&middot; &nbsp; Upload your bill every time you visit or order from a Twyst
 outlet.</p>
-<p>Invite friends to join you on Twyst – get Twyst bucks for
+<p>&middot; &nbsp; Invite friends to join you on Twyst – get Twyst bucks for
 each friend who joins.</p>
-<p>&nbsp;</p>
-<p>Submit offers!</p>
-<p>Suggest outlets you want on Twyst!</p>
-<p>&nbsp;</p>
-<p>Favourite an outlet.</p>
-<p>Like an offer.</p>
+<p>&middot; &nbsp; Submit offers!</p>
+<p>&middot; &nbsp; Suggest outlets you want on Twyst!</p>
+<p>&middot; &nbsp; Favourite an outlet.</p>
+<p>&middot; &nbsp; Like an offer.</p>
 ]]>
  </string>
 
