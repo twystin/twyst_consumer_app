@@ -1,5 +1,6 @@
 package in.twyst.adapters;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -221,6 +222,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
                 intent.putExtra(AppConstants.INTENT_PARAM_OUTLET_OBJECT,outlet);
                 intent.putExtra(AppConstants.INTENT_PARAM_OFFER_OBJECT, offer);
                 view.getContext().startActivity(intent);
+                ((Activity)view.getContext()).finish();
 
             }
         });

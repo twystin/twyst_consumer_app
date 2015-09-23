@@ -668,7 +668,11 @@ public class OfferDetailActivity extends BaseActivity {
 
                 buttonAct.setImageDrawable(getResources().getDrawable(R.drawable.remind_me_button_offer_detail));
                 buttonAct.setImageDrawable(getResources().getDrawable(R.drawable.button_extend));
-                buttonAct.setVisibility(View.VISIBLE);
+                if(extendDate.equals(lapsedDate)) {
+                    buttonAct.setVisibility(View.GONE);
+                }else{
+                    buttonAct.setVisibility(View.VISIBLE);
+                }
                 buttonAct.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -710,7 +714,11 @@ public class OfferDetailActivity extends BaseActivity {
 
                 buttonImage.setImageDrawable(getResources().getDrawable(R.drawable.offer_detail_remind_me));
                 buttonAct.setImageDrawable(getResources().getDrawable(R.drawable.button_extend));
-                buttonAct.setVisibility(View.VISIBLE);
+                if(extendDate.equals(lapsedDate)) {
+                    buttonAct.setVisibility(View.GONE);
+                }else{
+                    buttonAct.setVisibility(View.VISIBLE);
+                }
                 buttonAct.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -795,7 +803,11 @@ public class OfferDetailActivity extends BaseActivity {
 
                 buttonImage.setImageDrawable(getResources().getDrawable(R.drawable.offer_detail_remind_me));
                 buttonAct.setImageDrawable(getResources().getDrawable(R.drawable.button_extend));
-                buttonAct.setVisibility(View.VISIBLE);
+                if(extendDate.equals(lapsedDate)) {
+                    buttonAct.setVisibility(View.GONE);
+                }else{
+                    buttonAct.setVisibility(View.VISIBLE);
+                }
                 buttonAct.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1323,10 +1335,9 @@ public class OfferDetailActivity extends BaseActivity {
                         if (baseResponse.isResponse()) {
                             dialog.dismiss();
                             Toast.makeText(OfferDetailActivity.this, "Coupon redeemed successfully!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(OfferDetailActivity.this, RedeemVoucherActivity.class);
-                            intent.putExtra(AppConstants.INTENT_PARAM_OUTLET_OBJECT, outlet);
-                            intent.putExtra(AppConstants.INTENT_PARAM_OFFER_OBJECT, offer);
+                            Intent intent = new Intent(getApplicationContext(), WalletActivity.class);
                             startActivity(intent);
+                            OfferDetailActivity.this.finish();
                         } else {
                             dialog.dismiss();
                             Toast.makeText(OfferDetailActivity.this, "Unable to redeem coupon!", Toast.LENGTH_SHORT).show();
