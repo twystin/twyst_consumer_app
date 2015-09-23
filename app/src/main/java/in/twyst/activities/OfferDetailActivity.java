@@ -1335,8 +1335,8 @@ public class OfferDetailActivity extends BaseActivity {
                         if (baseResponse.isResponse()) {
                             dialog.dismiss();
                             Toast.makeText(OfferDetailActivity.this, "Coupon redeemed successfully!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), WalletActivity.class);
-                            startActivity(intent);
+                            Intent i = new Intent();
+                            setResult(RESULT_OK, i);
                             OfferDetailActivity.this.finish();
                         } else {
                             dialog.dismiss();

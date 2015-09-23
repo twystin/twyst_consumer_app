@@ -221,8 +221,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
                 Intent intent = new Intent(view.getContext(), OfferDetailActivity.class);
                 intent.putExtra(AppConstants.INTENT_PARAM_OUTLET_OBJECT,outlet);
                 intent.putExtra(AppConstants.INTENT_PARAM_OFFER_OBJECT, offer);
-                view.getContext().startActivity(intent);
-                ((Activity)view.getContext()).finish();
+                ((WalletActivity) view.getContext()).startActivityForResult(intent, WalletActivity.REQ_CODE);
 
             }
         });

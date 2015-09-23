@@ -70,6 +70,7 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
     private boolean firstLoad;
     private RelativeLayout hideSpinner;
     private boolean fromDrawer;
+    final public static int REQ_CODE = 1;
 
     @Override
     protected String getTagName() {
@@ -125,6 +126,15 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         fromDrawer = intent.getBooleanExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, false);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQ_CODE) {
+            if (resultCode == RESULT_OK) {
+                fetchCoupons();
+            }
+        }
     }
 
     private void fetchCoupons() {
