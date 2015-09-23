@@ -1,5 +1,6 @@
 package in.twyst.activities;
 
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -18,10 +19,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -853,4 +856,27 @@ public abstract class BaseActivity extends ActionBarActivity
         return prefs.getString(AppConstants.PREFERENCE_USER_TOKEN, "");
 
     }
+
+    public void showEarnMoreInstructions() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View dialogView = li.inflate(R.layout.dialog_earn_more, null);
+        TextView tvEarnMore = (TextView) dialogView.findViewById(R.id.tvEarnMore);
+        tvEarnMore.setText(Html.fromHtml(getString(R.string.earn_more_body)));
+
+        builder.setView(dialogView);
+
+        final AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+
+        dialogView.findViewById(R.id.okButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
+
 }

@@ -1638,8 +1638,7 @@ public class OfferDetailActivity extends BaseActivity {
         dialogView.findViewById(R.id.grabErrorBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
+                showEarnMoreInstructions();
             }
         });
 

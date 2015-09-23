@@ -81,6 +81,19 @@
 <p>If you have unlocked a coupon, and the lapse date is coming up, but you do not wish your friends to be able to grab it (it&rsquo;s good to be selfish sometimes!), you can extend the coupon till its expiry date. When you extend it, your friends do not get to see or grab your coupon.</p>
 <p>You need to use Twyst Bucks to grab as well as extend coupons.</p>
 ]]>
+ </string><string name="earn_more_body">
+     <![CDATA[
+<p>Upload your bill every time you visit or order from a Twyst
+outlet.</p>
+<p>Invite friends to join you on Twyst – get Twyst bucks for
+each friend who joins.</p>
+<p>&nbsp;</p>
+<p>Submit offers!</p>
+<p>Suggest outlets you want on Twyst!</p>
+<p>&nbsp;</p>
+<p>Favourite an outlet.</p>
+<p>Like an offer.</p>
+]]>
  </string>
 
 </resources>
