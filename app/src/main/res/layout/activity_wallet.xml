@@ -191,6 +191,33 @@
 
         </LinearLayout>
 
+        <RelativeLayout
+            android:id="@+id/noVoucherLayout"
+            android:visibility="gone"
+            android:layout_below="@+id/twystBucksLayout"
+            android:layout_margin="6dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvNoVoucher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#959191"
+                android:textSize="18sp"
+                android:layout_centerInParent="true"
+                android:text="You have no active vouchers"
+                />
+            <ImageButton
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginBottom="13dp"
+                android:layout_above="@+id/tvNoVoucher"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/no_voucher"
+                />
+        </RelativeLayout>
+
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"

@@ -67,7 +67,7 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
     private RelativeLayout obstructor;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ObservableRecyclerView recyclerView;
-    private boolean firstLoad;
+//    private boolean firstLoad;
     private RelativeLayout hideSpinner;
     private boolean fromDrawer;
     final public static int REQ_CODE = 1;
@@ -114,10 +114,10 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
             }
         });
 
-        if(!firstLoad) {
-            fetchCoupons();
-            firstLoad = true;
-        }
+//        if(!firstLoad) {
+//            fetchCoupons();
+//            firstLoad = true;
+//        }
 
 
     }
@@ -309,147 +309,150 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
 
 
                         sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                                                  @Override
+                                                                  public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                                if (position == 0) {
+                                                                      if (position == 0) {
 
-                                    Collections.sort(walletAdapter.getItems(), new Comparator<Outlet>() {
-                                        @Override
-                                        public int compare(Outlet lhs, Outlet rhs) {
-                                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                                            Date expiryDate1 = null;
-                                            try {
-                                                Log.i(getTagName(), "lhs.getOffer" + lhs.getOffers());
-                                                Log.d(getClass().getSimpleName(), "expiry " + lhs.getOffers().get(0).getExpiry());
-                                                expiryDate1 = sdf.parse(lhs.getOffers().get(0).getExpiry());
-                                            } catch (ParseException e) {
-                                                e.printStackTrace();
-                                            }
-                                            Date expiryDate2 = null;
-                                            try {
-                                                expiryDate2 = sdf.parse(rhs.getOffers().get(0).getExpiry());
-                                            } catch (ParseException e) {
-                                                e.printStackTrace();
-                                            }
-                                            return expiryDate1.compareTo(expiryDate2);
-                                        }
-                                    });
-                                    walletAdapter.notifyDataSetChanged();
+                                                                          Collections.sort(walletAdapter.getItems(), new Comparator<Outlet>() {
+                                                                              @Override
+                                                                              public int compare(Outlet lhs, Outlet rhs) {
+                                                                                  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                                                                                  Date expiryDate1 = null;
+                                                                                  try {
+                                                                                      Log.i(getTagName(), "lhs.getOffer" + lhs.getOffers());
+                                                                                      Log.d(getClass().getSimpleName(), "expiry " + lhs.getOffers().get(0).getExpiry());
+                                                                                      expiryDate1 = sdf.parse(lhs.getOffers().get(0).getExpiry());
+                                                                                  } catch (ParseException e) {
+                                                                                      e.printStackTrace();
+                                                                                  }
+                                                                                  Date expiryDate2 = null;
+                                                                                  try {
+                                                                                      expiryDate2 = sdf.parse(rhs.getOffers().get(0).getExpiry());
+                                                                                  } catch (ParseException e) {
+                                                                                      e.printStackTrace();
+                                                                                  }
+                                                                                  return expiryDate1.compareTo(expiryDate2);
+                                                                              }
+                                                                          });
+                                                                          walletAdapter.notifyDataSetChanged();
 
-                                } else if (position == 1) {
-                                        Collections.sort(walletAdapter.getItems(), new Comparator<Outlet>() {
-                                            @Override
-                                            public int compare(Outlet lhs, Outlet rhs) {
-                                                if(!TextUtils.isEmpty(lhs.getDistance()) && !TextUtils.isEmpty(rhs.getDistance())){
-                                                    return Integer.valueOf(lhs.getDistance()).compareTo(Integer.valueOf(rhs.getDistance()));
-                                                }else {
-                                                    return 0;
-                                                }
+                                                                      } else if (position == 1) {
+                                                                          Collections.sort(walletAdapter.getItems(), new Comparator<Outlet>() {
+                                                                              @Override
+                                                                              public int compare(Outlet lhs, Outlet rhs) {
+                                                                                  if (!TextUtils.isEmpty(lhs.getDistance()) && !TextUtils.isEmpty(rhs.getDistance())) {
+                                                                                      return Integer.valueOf(lhs.getDistance()).compareTo(Integer.valueOf(rhs.getDistance()));
+                                                                                  } else {
+                                                                                      return 0;
+                                                                                  }
 
-                                            }
-                                        });
-                                        walletAdapter.notifyDataSetChanged();
-
-
-                                    } else if (position == 2) {
-
-                                        ArrayList<Outlet> availableNowList = new ArrayList<>();
-                                        ArrayList<Outlet> notAvailableList = new ArrayList<>();
-                                        //sort both list
-                                        Utils utils = new Utils();
-                                        calendar = Calendar.getInstance();
-                                        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-                                        for (Outlet outlet : walletAdapter.getItems()) {
-                                            if (outlet.getOffers().get(0).isAvailableNow()) {
-                                                availableNowList.add(outlet);
-                                                if (!TextUtils.isEmpty(outlet.getDistance())) {
-                                                    Collections.sort(availableNowList, new Comparator<Outlet>() {
-                                                        @Override
-                                                        public int compare(Outlet lhs, Outlet rhs) {
-                                                            return Integer.valueOf(lhs.getDistance()).compareTo(Integer.valueOf(rhs.getDistance()));
-                                                        }
-                                                    });
-                                                }
+                                                                              }
+                                                                          });
+                                                                          walletAdapter.notifyDataSetChanged();
 
 
-                                            }
-                                            if (!outlet.getOffers().get(0).isAvailableNow()) {
+                                                                      } else if (position == 2) {
 
-                                                if (outlet.getOffers().get(0).getAvailableNext() != null) {
+                                                                          ArrayList<Outlet> availableNowList = new ArrayList<>();
+                                                                          ArrayList<Outlet> notAvailableList = new ArrayList<>();
+                                                                          //sort both list
+                                                                          Utils utils = new Utils();
+                                                                          calendar = Calendar.getInstance();
+                                                                          int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                                                                          for (Outlet outlet : walletAdapter.getItems()) {
+                                                                              if (outlet.getOffers().get(0).isAvailableNow()) {
+                                                                                  availableNowList.add(outlet);
+                                                                                  if (!TextUtils.isEmpty(outlet.getDistance())) {
+                                                                                      Collections.sort(availableNowList, new Comparator<Outlet>() {
+                                                                                          @Override
+                                                                                          public int compare(Outlet lhs, Outlet rhs) {
+                                                                                              return Integer.valueOf(lhs.getDistance()).compareTo(Integer.valueOf(rhs.getDistance()));
+                                                                                          }
+                                                                                      });
+                                                                                  }
 
-                                                    if (outlet.getOffers().get(0).getAvailableNext().getDay().equalsIgnoreCase("SUN")) {
-                                                        calendar = utils.nextDayOfWeek(dayOfWeek);
-                                                    } else if (outlet.getOffers().get(0).getAvailableNext().getDay().equalsIgnoreCase("MON")) {
-                                                        calendar = utils.nextDayOfWeek(dayOfWeek);
-                                                    } else if (outlet.getOffers().get(0).getAvailableNext().getDay().equalsIgnoreCase("TUE")) {
-                                                        calendar = utils.nextDayOfWeek(dayOfWeek);
-                                                    } else if (outlet.getOffers().get(0).getAvailableNext().getDay().equalsIgnoreCase("WED")) {
-                                                        calendar = utils.nextDayOfWeek(dayOfWeek);
-                                                    } else if (outlet.getOffers().get(0).getAvailableNext().getDay().equalsIgnoreCase("THU")) {
-                                                        calendar = utils.nextDayOfWeek(dayOfWeek);
-                                                    } else if (outlet.getOffers().get(0).getAvailableNext().getDay().equalsIgnoreCase("FRI")) {
-                                                        calendar = utils.nextDayOfWeek(dayOfWeek);
-                                                    } else if (outlet.getOffers().get(0).getAvailableNext().getDay().equalsIgnoreCase("SAT")) {
-                                                        calendar = utils.nextDayOfWeek(dayOfWeek);
-                                                    }
 
-                                                    notAvailableList.add(outlet);
+                                                                              }
+                                                                              if (!outlet.getOffers().get(0).isAvailableNow()) {
 
-                                                    Collections.sort(notAvailableList, new Comparator<Outlet>() {
-                                                        @Override
-                                                        public int compare(Outlet lhs, Outlet rhs) {
-                                                            Calendar date = Calendar.getInstance();
-                                                            return date.compareTo(calendar);
-                                                        }
-                                                    });
+                                                                                  if (outlet.getOffers().get(0).getAvailableNext() != null) {
 
-                                                }
-                                            }
-                                        }
+                                                                                      if (outlet.getOffers().get(0).getAvailableNext().getDay().equalsIgnoreCase("SUN")) {
+                                                                                          calendar = utils.nextDayOfWeek(dayOfWeek);
+                                                                                      } else if (outlet.getOffers().get(0).getAvailableNext().getDay().equalsIgnoreCase("MON")) {
+                                                                                          calendar = utils.nextDayOfWeek(dayOfWeek);
+                                                                                      } else if (outlet.getOffers().get(0).getAvailableNext().getDay().equalsIgnoreCase("TUE")) {
+                                                                                          calendar = utils.nextDayOfWeek(dayOfWeek);
+                                                                                      } else if (outlet.getOffers().get(0).getAvailableNext().getDay().equalsIgnoreCase("WED")) {
+                                                                                          calendar = utils.nextDayOfWeek(dayOfWeek);
+                                                                                      } else if (outlet.getOffers().get(0).getAvailableNext().getDay().equalsIgnoreCase("THU")) {
+                                                                                          calendar = utils.nextDayOfWeek(dayOfWeek);
+                                                                                      } else if (outlet.getOffers().get(0).getAvailableNext().getDay().equalsIgnoreCase("FRI")) {
+                                                                                          calendar = utils.nextDayOfWeek(dayOfWeek);
+                                                                                      } else if (outlet.getOffers().get(0).getAvailableNext().getDay().equalsIgnoreCase("SAT")) {
+                                                                                          calendar = utils.nextDayOfWeek(dayOfWeek);
+                                                                                      }
 
-                                        availableNowList.addAll(notAvailableList);
+                                                                                      notAvailableList.add(outlet);
 
-                                        walletAdapter.setItems(availableNowList);
-                                        walletAdapter.notifyDataSetChanged();
+                                                                                      Collections.sort(notAvailableList, new Comparator<Outlet>() {
+                                                                                          @Override
+                                                                                          public int compare(Outlet lhs, Outlet rhs) {
+                                                                                              Calendar date = Calendar.getInstance();
+                                                                                              return date.compareTo(calendar);
+                                                                                          }
+                                                                                      });
 
-                                    } else if (position == 3) {
+                                                                                  }
+                                                                              }
+                                                                          }
 
-                                        Collections.sort(walletAdapter.getItems(), new Comparator<Outlet>() {
-                                            @Override
-                                            public int compare(Outlet lhs, Outlet rhs) {
-                                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                                                Date issueDate1 = null;
-                                                try {
-                                                    issueDate1 = sdf.parse(lhs.getOffers().get(0).getIssuedDate());
-                                                } catch (ParseException e) {
-                                                    e.printStackTrace();
-                                                }
-                                                Date issueDate2 = null;
-                                                try {
-                                                    issueDate2 = sdf.parse(rhs.getOffers().get(0).getIssuedDate());
-                                                } catch (ParseException e) {
-                                                    e.printStackTrace();
-                                                }
-                                                return issueDate2.compareTo(issueDate1);
-                                            }
-                                        });
-                                        walletAdapter.notifyDataSetChanged();
-                                    }
-                                }
+                                                                          availableNowList.addAll(notAvailableList);
 
-                                @Override
-                                public void onNothingSelected (AdapterView < ? > parent){
+                                                                          walletAdapter.setItems(availableNowList);
+                                                                          walletAdapter.notifyDataSetChanged();
 
-                                }
-                            }
+                                                                      } else if (position == 3) {
 
-                            );
+                                                                          Collections.sort(walletAdapter.getItems(), new Comparator<Outlet>() {
+                                                                              @Override
+                                                                              public int compare(Outlet lhs, Outlet rhs) {
+                                                                                  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                                                                                  Date issueDate1 = null;
+                                                                                  try {
+                                                                                      issueDate1 = sdf.parse(lhs.getOffers().get(0).getIssuedDate());
+                                                                                  } catch (ParseException e) {
+                                                                                      e.printStackTrace();
+                                                                                  }
+                                                                                  Date issueDate2 = null;
+                                                                                  try {
+                                                                                      issueDate2 = sdf.parse(rhs.getOffers().get(0).getIssuedDate());
+                                                                                  } catch (ParseException e) {
+                                                                                      e.printStackTrace();
+                                                                                  }
+                                                                                  return issueDate2.compareTo(issueDate1);
+                                                                              }
+                                                                          });
+                                                                          walletAdapter.notifyDataSetChanged();
+                                                                      }
+                                                                  }
 
+                                                                  @Override
+                                                                  public void onNothingSelected(AdapterView<?> parent) {
+
+                                                                  }
+                                                              }
+
+                        );
+
+                        findViewById(R.id.noVoucherLayout).setVisibility(View.GONE);
 
                         }else{
-                             hideSpinner.setVisibility(View.GONE);
-                             Toast.makeText(WalletActivity.this, arrayListBaseResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        hideSpinner.setVisibility(View.GONE);
+                        findViewById(R.id.noVoucherLayout).setVisibility(View.VISIBLE);
+//                             Toast.makeText(WalletActivity.this, arrayListBaseResponse.getMessage(), Toast.LENGTH_SHORT).show();
+
                         }
 
                     } else {
@@ -483,11 +486,11 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
     @Override
     protected void onResume() {
         super.onResume();
-        if(!firstLoad) {
+//        if(!firstLoad) {
             fetchCoupons();
-        }else {
-            firstLoad = false;
-        }
+//        }else {
+//            firstLoad = false;
+//        }
     }
 
 
