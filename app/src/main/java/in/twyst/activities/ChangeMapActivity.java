@@ -65,9 +65,9 @@ public class ChangeMapActivity extends FragmentActivity implements LocationListe
         Criteria criteria = new Criteria();
         String bestProvider = locationManager.getBestProvider(criteria, true);
         final Location location = locationManager.getLastKnownLocation(bestProvider);
-        if (location != null) {
+//        if (location != null) {
             onLocationChanged(location);
-        }
+//        }
         locationManager.requestLocationUpdates(bestProvider, 20000, 0, this);
 
 
@@ -132,14 +132,31 @@ public class ChangeMapActivity extends FragmentActivity implements LocationListe
 
     @Override
     public void onLocationChanged(Location location) {
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
-        LatLng latLng = new LatLng(latitude, longitude);
+        double latitude,longitude;
+        LatLng latLng;
+        if (location != null){
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+            latLng = new LatLng(latitude, longitude);
 
-        locationName = latLng.toString();
-        locationData.setLat(String.valueOf(latLng.latitude));
-        locationData.setLng(String.valueOf(latLng.longitude));
+            locationName = latLng.toString();
+            locationData.setLat(String.valueOf(latLng.latitude));
+            locationData.setLng(String.valueOf(latLng.longitude));
+        } else{
 
+            SharedPreferences preferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+            String lastLatitude = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, "");
+            String lastLongitude = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, "");
+
+            latitude = Double.parseDouble(lastLatitude);
+            longitude = Double.parseDouble(lastLongitude);
+            latLng = new LatLng(latitude, longitude);
+
+            locationName = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, "");
+            locationData.setLat(String.valueOf(latLng.latitude));
+            locationData.setLng(String.valueOf(latLng.longitude));
+
+        }
         googleMap.addMarker(new MarkerOptions().position(latLng));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
