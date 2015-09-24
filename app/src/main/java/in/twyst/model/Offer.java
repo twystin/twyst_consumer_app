@@ -66,15 +66,15 @@ public class Offer implements Serializable {
     @SerializedName("issued_by")
     private String issuedBy;
 
-    @SerializedName("source_name")
-    private String sourceName;
+    @SerializedName("lapsed_coupon_source")
+    private LapsedCouponSource lapsedCouponSource;
 
-    public String getSourceName() {
-        return sourceName;
+    public LapsedCouponSource getLapsedCouponSource() {
+        return lapsedCouponSource;
     }
 
-    public void setSourceName(String sourceName) {
-        this.sourceName = sourceName;
+    public void setLapsedCouponSource(LapsedCouponSource lapsedCouponSource) {
+        this.lapsedCouponSource = lapsedCouponSource;
     }
 
     public String getIssuedBy() {

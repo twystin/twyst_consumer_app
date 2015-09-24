@@ -256,10 +256,16 @@ public class DiscoverOfferAdapter extends RecyclerView.Adapter<RecyclerView.View
                     holder.buckTextImage.setVisibility(View.VISIBLE);
                     holder.buckTextImage.setText(String.valueOf(100));
 
-                    if(offer.getSourceName()!=null && !TextUtils.isEmpty(offer.getSourceName())){
+                    if(offer.getLapsedCouponSource()!=null){
                         holder.detailLayout.setVisibility(View.VISIBLE);
+                        String toDisplay;
+                        if (offer.getLapsedCouponSource().getName()!=null && !TextUtils.isEmpty(offer.getLapsedCouponSource().getName())){
+                            toDisplay = offer.getLapsedCouponSource().getName();
+                        }else{
+                            toDisplay = offer.getLapsedCouponSource().getPhone();
+                        }
                         holder.detailIcon.setBackground(resources.getDrawable(R.drawable.icon_discover_offer_socialpool_grey));
-                        holder.detailText.setText("from " + offer.getSourceName());
+                        holder.detailText.setText("from " + toDisplay);
                     }else {
                         holder.detailLayout.setVisibility(View.GONE);
                     }

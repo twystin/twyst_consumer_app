@@ -242,8 +242,14 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
             } else if ("pool".equalsIgnoreCase(offer.getType())) {
                 holder.card_user_img.setBackgroundResource(R.drawable.icon_discover_offer_socialpool_grey);
 
-                if(offer.getSourceName()!=null && !TextUtils.isEmpty(offer.getSourceName())){
-                    holder.cardDetails.setText("from " + offer.getSourceName());
+                if(offer.getLapsedCouponSource()!=null){
+                    String toDisplay;
+                    if (offer.getLapsedCouponSource().getName()!=null && !TextUtils.isEmpty(offer.getLapsedCouponSource().getName())){
+                        toDisplay = offer.getLapsedCouponSource().getName();
+                    }else{
+                        toDisplay = offer.getLapsedCouponSource().getPhone();
+                    }
+                    holder.cardDetails.setText("from " + toDisplay);
                     holder.cardDetails.setVisibility(View.VISIBLE);
                     holder.card_user_img.setVisibility(View.VISIBLE);
                 }else {

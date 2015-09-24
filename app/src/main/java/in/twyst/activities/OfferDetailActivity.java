@@ -750,9 +750,15 @@ public class OfferDetailActivity extends BaseActivity {
                 buckText.setText("100");
                 btntext.setText("grab offer");
 
-                if(offer.getSourceName()!=null && !TextUtils.isEmpty(offer.getSourceName())){
+                if(offer.getLapsedCouponSource()!=null){
                     bankcard.setVisibility(View.VISIBLE);
-                    bankcard.setText("from " + offer.getSourceName());
+                    String toDisplay;
+                    if (offer.getLapsedCouponSource().getName()!=null && !TextUtils.isEmpty(offer.getLapsedCouponSource().getName())){
+                        toDisplay = offer.getLapsedCouponSource().getName();
+                    }else{
+                        toDisplay = offer.getLapsedCouponSource().getPhone();
+                    }
+                    bankcard.setText("from " + toDisplay);
                     bankcard.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.icon_discover_offer_socialpool_grey), null, null, null);
                 }else {
                     bankcard.setVisibility(View.GONE);

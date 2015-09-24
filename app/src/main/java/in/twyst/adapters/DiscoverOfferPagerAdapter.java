@@ -286,9 +286,15 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
 
                     footerImageView.setVisibility(View.GONE);
 
-                    if(offer.getSourceName()!=null && !TextUtils.isEmpty(offer.getSourceName())){
+                    if(offer.getLapsedCouponSource()!=null){
                         detailIcon.setBackground(resources.getDrawable(R.drawable.icon_discover_offer_socialpool_grey));
-                        detailText.setText("from " + offer.getSourceName());
+                        String toDisplay;
+                        if (offer.getLapsedCouponSource().getName()!=null && !TextUtils.isEmpty(offer.getLapsedCouponSource().getName())){
+                            toDisplay = offer.getLapsedCouponSource().getName();
+                        }else{
+                            toDisplay = offer.getLapsedCouponSource().getPhone();
+                        }
+                        detailText.setText("from " + toDisplay);
                         params.weight = 0.5f;
                         parentView.setWeightSum(1f);
                         availabilityLayout.setLayoutParams(params);
