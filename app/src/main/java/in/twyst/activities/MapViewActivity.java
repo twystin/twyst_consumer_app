@@ -2,6 +2,7 @@ package in.twyst.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -66,6 +67,7 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
                         .isProviderEnabled(LocationManager.GPS_PROVIDER);
             } catch (Exception ex) {
             }
+
             try {
                 network_enabled = locationManager
                         .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
@@ -81,6 +83,7 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, listener);
 
         }
+
 
 
     }
@@ -117,6 +120,10 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
                 .title(outletName));
         map.setMyLocationEnabled(true);
 
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latitude, longitude)));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+
+        listener.onLocationChanged(null);
 
     }
 
@@ -125,17 +132,34 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
 
         @Override
         public void onLocationChanged(Location location) {
-            latlng = new LatLng(location.getLatitude(),
-                    location.getLongitude());
+            if (location != null) {
+                latlng = new LatLng(location.getLatitude(),
+                        location.getLongitude());
 
-            if (map != null) {
-                map.addMarker(new MarkerOptions()
-                        .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                        .title("current Location"));
-                zoomMapInitial(new LatLng(latitude, longitude), latlng);
+                if (map != null) {
+                    map.addMarker(new MarkerOptions()
+                            .position(latlng)
+                            .title("Current Location"));
+                    zoomMapInitial(new LatLng(latitude, longitude), latlng);
+                }
+            } else {
 
+                SharedPreferences preferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+                String lastLatitude = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, "");
+                String lastLongitude = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, "");
+
+                latlng = new LatLng(Double.parseDouble(lastLatitude), Double.parseDouble(lastLongitude));
+
+                String locationName = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, "");
+                if (map != null) {
+                    map.addMarker(new MarkerOptions()
+                            .position(latlng)
+                            .title(locationName));
+                    zoomMapInitial(new LatLng(latitude, longitude), latlng);
+                }
 
             }
+
         }
 
         @Override
