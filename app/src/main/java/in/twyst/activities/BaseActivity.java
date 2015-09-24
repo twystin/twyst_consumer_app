@@ -78,6 +78,7 @@ public abstract class BaseActivity extends ActionBarActivity
     private DrawerItem invite,faq,bill,wallet,notifications,submitOffer,suggestOutlet,write,rate;
     protected SharedPreferences.Editor sharedPreferences;
 
+    TextView localityDrawer;
     protected abstract String getTagName();
 
     protected abstract int getLayoutResource();
@@ -171,12 +172,12 @@ public abstract class BaseActivity extends ActionBarActivity
         SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
         String name = prefs.getString(AppConstants.PREFERENCE_USER_NAME, "");
         String pic = prefs.getString(AppConstants.PREFERENCE_USER_PIC, "");
-        String locality = prefs.getString(AppConstants.PREFERENCE_LOCALITY_SHOWN_DRAWER, "");
+        String locality = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, "");
         TextView userName = (TextView) list_header.findViewById(R.id.userName);
         ImageView backImage = (ImageView) list_header.findViewById(R.id.backImage);
         ImageView userImage = (ImageView) list_header.findViewById(R.id.userImage);
         TextView editProfile = (TextView) list_header.findViewById(R.id.editProfile);
-        TextView localityDrawer = (TextView) list_header.findViewById(R.id.localityDrawer);
+        localityDrawer = (TextView) list_header.findViewById(R.id.localityDrawer);
         localityDrawer.setText(locality);
         userName.setText(name);
 
@@ -476,7 +477,7 @@ public abstract class BaseActivity extends ActionBarActivity
                         intent.putExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, true);
                         startActivity(intent);
                         break;
-                        //header image click
+                    //header image click
 //                        return;
 
                     case 1:

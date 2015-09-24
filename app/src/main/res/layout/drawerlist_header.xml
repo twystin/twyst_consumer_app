@@ -46,12 +46,15 @@
 
             <TextView
                 android:id="@+id/userName"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingRight="7dp"
                 android:text="Rahul"
-                android:lines="1"
                 android:ellipsize="end"
+                android:maxLines="1"
+                android:maxEms="6"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
                 android:textColor="@android:color/white"
                 android:textSize="20sp" />
 
@@ -73,8 +76,13 @@
                     android:id="@+id/localityDrawer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                     android:textAllCaps="true"
-                    android:textColor="#d0452e"
+                    android:textAllCaps="true"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:maxEms="12"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
                     android:textSize="14sp" />
             </LinearLayout>
 

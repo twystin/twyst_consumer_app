@@ -269,6 +269,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 } else {
                     selectedLocationTxt.setText(placeNameSelectedAndUsed);
                 }
+                localityDrawer.setText(placeNameSelectedAndUsed);
                 collapse(planAheadContent);
                 locationText.setVisibility(View.GONE);
                 fabMenu.setVisibility(View.VISIBLE);
@@ -298,9 +299,9 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                     editTextView.setVisibility(View.VISIBLE);
                     closeBtn.setVisibility(View.GONE);
                 }
-                if (planAheadChanged) {
-                    refreshDateTimeLoc();
-                }
+//                if (planAheadChanged) {
+//                    refreshDateTimeLoc();
+//                }
                 if (closeBtn.getVisibility() == View.VISIBLE) {
                     editTextView.setVisibility(View.VISIBLE);
                     closeBtn.setVisibility(View.GONE);
@@ -310,11 +311,11 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
 
                 fabMenu.setVisibility(View.VISIBLE);
                 fabMenu.setEnabled(true);
-                if (planAheadLocation.getText().toString().contains("(current)")) {
-                    selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
-                } else {
-                    selectedLocationTxt.setText(placeNameSelectedAndUsed);
-                }
+//                if (planAheadLocation.getText().toString().contains("(current)")) {
+//                    selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
+//                } else {
+//                    selectedLocationTxt.setText(placeNameSelectedAndUsed);
+//                }
 
             }
         });
@@ -810,7 +811,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                     sharedPreferences.commit();
 
                     selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
-
+                    localityDrawer.setText(placeNameSelectedAndUsed);
                     planAheadLocation.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#636363\">(current)</font></b>"));
 
                     findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
@@ -1011,6 +1012,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
             sharedPreferences.commit();
 
             selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
+            localityDrawer.setText(placeNameSelectedAndUsed);
 
             planAheadLocation.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#636363\">(current)</font></b>"));
 
@@ -1296,6 +1298,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         sharedPreferences.commit();
 
         selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
+        localityDrawer.setText(placeNameSelectedAndUsed);
 
         planAheadLocation.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#636363\">(current)</font></b>"));
 
