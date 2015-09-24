@@ -494,6 +494,10 @@
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
         <include
+            android:id="@+id/blankDataLayout"
+            layout="@layout/blank_data" />
+
+        <include
             android:id="@+id/circularProgressBar"
             layout="@layout/twyst_progress_hud" />
 

@@ -446,11 +446,13 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
 
                         );
 
-                        findViewById(R.id.noVoucherLayout).setVisibility(View.GONE);
+                        findViewById(R.id.blankDataLayout).setVisibility(View.GONE);
 
                         }else{
                         hideSpinner.setVisibility(View.GONE);
-                        findViewById(R.id.noVoucherLayout).setVisibility(View.VISIBLE);
+                        findViewById(R.id.ivNoData).setBackgroundResource(R.drawable.no_voucher);
+                        ((TextView) findViewById(R.id.tvNoData)).setText("You have no active vouchers!");
+                        findViewById(R.id.blankDataLayout).setVisibility(View.VISIBLE);
 //                             Toast.makeText(WalletActivity.this, arrayListBaseResponse.getMessage(), Toast.LENGTH_SHORT).show();
 
                         }
