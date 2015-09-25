@@ -1247,7 +1247,7 @@ public class OfferDetailActivity extends BaseActivity {
             timeDelay = calendarDest.getTime().getTime() - calendarToday.getTime().getTime();
             scheduleNotification(getNotification(outlet.getName()), timeDelay);
             Log.d("OfferDetailActivity", "reminder set for " + timeDelay / 1000 + " seconds");
-            Toast.makeText(OfferDetailActivity.this, "Reminder set", Toast.LENGTH_SHORT).show();
+            Toast.makeText(OfferDetailActivity.this, "Reminder set for " + date.getText().toString(), Toast.LENGTH_SHORT).show();
         } catch (ParseException e) {
             e.printStackTrace();
         }
