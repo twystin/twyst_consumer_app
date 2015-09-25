@@ -4,8 +4,7 @@ package in.twyst.util;
  * Created by vivek on 06/08/15.
  */
 public class GoogleConstants {
-//    public static String CLIENT_ID = "294028196551-74pbbkp0e2sav1dsb92g7s2akrf95i9s.apps.googleusercontent.com";
-    public static String CLIENT_ID = "307383421400-7643uun9od7bu0rvali0a9nseda8rsnl.apps.googleusercontent.com";
+    public static String CLIENT_ID = "216832068690-n9mpffn55blmja0r0bjv9mn5iv0jg0vg.apps.googleusercontent.com";
     // Use your own client id
 
     public static String CLIENT_SECRET = "dxGAMA3lWQInqHziNonWUyWu";

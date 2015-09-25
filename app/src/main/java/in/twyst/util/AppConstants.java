@@ -9,7 +9,7 @@ public class AppConstants {
 //    public static final String HOST = "http://staging.twyst.in";
     public static final String HOST_SECURE = "https://www.twyst.in";
 
-    public static final String GCM_PROJECT_ID = "307383421400";
+    public static final String GCM_PROJECT_ID = "216832068690";
     public static final String GOOGLE_ANALYTICS_ID = "UA-54317262-1";
 
     public static final boolean IS_DEVELOPMENT = false;
