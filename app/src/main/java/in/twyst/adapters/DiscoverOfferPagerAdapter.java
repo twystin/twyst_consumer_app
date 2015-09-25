@@ -262,11 +262,12 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                     itemView.setBackgroundResource(R.drawable.card_red);
 
 
-                    footerText.setText("use offer");
+
+                    footerText.setText(resources.getString(R.string.use_offer));
                     footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_discover_offer_coupon_wallet));
                 } else {
                     itemView.setBackgroundResource(R.drawable.card_gray);
-                    footerText.setText("remind me");
+                    footerText.setText(resources.getString(R.string.remind_me));
                     footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_discover_offer_clock_white));
                 }
 
@@ -279,7 +280,7 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
 
                 if (offer.isAvailableNow()) {
                     itemView.setBackgroundResource(R.drawable.card_yellow);
-                    footerText.setText("grab offer");
+                    footerText.setText(resources.getString(R.string.grab_offer));
 //                    footerImageView.setVisibility(View.GONE);
                     buckTextImage.setVisibility(View.VISIBLE);
                     buckTextImage.setText(String.valueOf(100));
@@ -314,7 +315,7 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
 
                 } else {
                     itemView.setBackgroundResource(R.drawable.card_gray);
-                    footerText.setText("remind me");
+                    footerText.setText(resources.getString(R.string.remind_me));
                     footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_discover_offer_clock_white));
                 }
 
@@ -332,7 +333,7 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                 if (offer.isAvailableNow()) {
                     itemView.setBackgroundResource(R.drawable.card_green);
 
-                    footerText.setText("use offer");
+                    footerText.setText(resources.getString(R.string.use_offer));
                     if (offer.getOfferCost() > 0) {
                         buckTextImage.setVisibility(View.VISIBLE);
                         buckTextImage.setText(String.valueOf(offer.getOfferCost()));
@@ -342,7 +343,7 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                     footerImageView.setVisibility(View.GONE);
                 } else {
                     itemView.setBackgroundResource(R.drawable.card_gray);
-                    footerText.setText("remind me");
+                    footerText.setText(resources.getString(R.string.remind_me));
                     footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_discover_offer_clock_white));
                 }
 
@@ -361,12 +362,12 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                 if (offer.isAvailableNow()) {
                     itemView.setBackgroundResource(R.drawable.card_green);
                     footerImageView.setVisibility(View.GONE);
-                    footerText.setText("use offer");
+                    footerText.setText(resources.getString(R.string.use_offer));
                     buckTextImage.setVisibility(View.GONE);
 
                 } else {
                     itemView.setBackgroundResource(R.drawable.card_gray);
-                    footerText.setText("remind me");
+                    footerText.setText(resources.getString(R.string.remind_me));
                     footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_discover_offer_clock_white));
                 }
 
@@ -400,11 +401,11 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                     itemView.setBackgroundResource(R.drawable.card_blue);
                     footerImageView.setVisibility(View.GONE);
                     buckTextImage.setVisibility(View.GONE);
-                    footerText.setText("use offer");
+                    footerText.setText(resources.getString(R.string.use_offer));
 
                 }else {
                     itemView.setBackgroundResource(R.drawable.card_gray);
-                    footerText.setText("remind me");
+                    footerText.setText(resources.getString(R.string.remind_me));
                     footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_discover_offer_clock_white));
                 }
             }

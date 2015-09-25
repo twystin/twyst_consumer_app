@@ -264,7 +264,7 @@
                                         android:layout_toRightOf="@+id/coupon_img_icon"
                                         android:layout_centerVertical="true"
                                         android:gravity="center"
-                                        android:text="use coupon"
+                                        android:text="@string/use_offer"
                                         android:textColor="@color/abc_primary_text_disable_only_material_dark"
                                         android:textSize="@dimen/outlet_details_coupon_btn_txt" />
                                 </RelativeLayout>

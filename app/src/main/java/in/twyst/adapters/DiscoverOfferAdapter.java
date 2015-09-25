@@ -235,11 +235,11 @@ public class DiscoverOfferAdapter extends RecyclerView.Adapter<RecyclerView.View
                     view.setBackgroundResource(R.drawable.card_red);
 
 
-                    holder.footerText.setText("use offer");
+                    holder.footerText.setText(resources.getString(R.string.use_offer));
                     holder.footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_discover_offer_coupon_wallet));
                 } else {
                     view.setBackgroundResource(R.drawable.card_gray);
-                    holder.footerText.setText("remind me");
+                    holder.footerText.setText(resources.getString(R.string.remind_me));
                     holder.footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_discover_offer_clock_white));
                 }
 
@@ -252,7 +252,7 @@ public class DiscoverOfferAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                 if (offer.isAvailableNow()) {
                     view.setBackgroundResource(R.drawable.card_yellow);
-                    holder.footerText.setText("grab offer");
+                    holder.footerText.setText(resources.getString(R.string.grab_offer));
                     holder.buckTextImage.setVisibility(View.VISIBLE);
                     holder.buckTextImage.setText(String.valueOf(100));
 
@@ -272,7 +272,7 @@ public class DiscoverOfferAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                 } else {
                     view.setBackgroundResource(R.drawable.card_gray);
-                    holder.footerText.setText("remind me");
+                    holder.footerText.setText(resources.getString(R.string.remind_me));
                     holder.footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_discover_offer_clock_white));
                 }
 
@@ -284,7 +284,7 @@ public class DiscoverOfferAdapter extends RecyclerView.Adapter<RecyclerView.View
                 if (offer.isAvailableNow()) {
                     view.setBackgroundResource(R.drawable.card_green);
 
-                    holder.footerText.setText("use offer");
+                    holder.footerText.setText(resources.getString(R.string.use_offer));
                     if(offer.getOfferCost()>0) {
                         holder.buckTextImage.setVisibility(View.VISIBLE);
                         holder.buckTextImage.setText(String.valueOf(offer.getOfferCost()));
@@ -294,7 +294,7 @@ public class DiscoverOfferAdapter extends RecyclerView.Adapter<RecyclerView.View
                     holder.footerImageView.setVisibility(View.GONE);
                 } else {
                     view.setBackgroundResource(R.drawable.card_gray);
-                    holder.footerText.setText("remind me");
+                    holder.footerText.setText(resources.getString(R.string.remind_me));
                     holder.footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_discover_offer_clock_white));
                 }
 
@@ -308,7 +308,7 @@ public class DiscoverOfferAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                     view.setBackgroundResource(R.drawable.card_green);
                     holder.footerImageView.setVisibility(View.GONE);
-                    holder.footerText.setText("use offer");
+                    holder.footerText.setText(resources.getString(R.string.use_offer));
                     if(offer.getOfferCost()>0) {
                         holder.buckTextImage.setVisibility(View.VISIBLE);
                         holder.buckTextImage.setText(String.valueOf(offer.getOfferCost()));
@@ -318,7 +318,7 @@ public class DiscoverOfferAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                 } else {
                     view.setBackgroundResource(R.drawable.card_gray);
-                    holder.footerText.setText("remind me");
+                    holder.footerText.setText(resources.getString(R.string.remind_me));
                     holder.footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_discover_offer_clock_white));
                 }
 
@@ -344,7 +344,7 @@ public class DiscoverOfferAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }else {
                     holder.buckTextImage.setVisibility(View.GONE);
                 }
-                holder.footerText.setText("use offer");
+                holder.footerText.setText(resources.getString(R.string.use_offer));
             }
 
 

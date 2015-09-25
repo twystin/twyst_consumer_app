@@ -173,7 +173,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
             holder.footer_bckgrd.setBackgroundColor(resources.getColor(R.color.offer_color_red));
             holder.line.setImageDrawable(resources.getDrawable(R.drawable.wallet_vertical_red_divider));
             holder.coupon_img_icon.setImageDrawable(resources.getDrawable(R.drawable.icon_outlet_detail_coupon_wallet_white));
-            holder.coupon__btn_txt.setText("use coupon");
+            holder.coupon__btn_txt.setText(resources.getString(R.string.use_offer));
         }
 
         if(outlet.isFollowing()){

@@ -102,4 +102,8 @@ each friend who joins.</p>
 ]]>
  </string>
 
+    <string name="use_offer">Use Offer</string>
+    <string name="remind_me">Remind Me</string>
+    <string name="grab_offer">Grab Offer</string>
+
 </resources>

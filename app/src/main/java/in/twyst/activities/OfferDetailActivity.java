@@ -645,7 +645,7 @@ public class OfferDetailActivity extends BaseActivity {
                     loginBtn.setBackground(getResources().getDrawable(R.drawable.button_red));
                 }
 
-                btntext.setText("use offer");
+                btntext.setText(getResources().getString(R.string.use_offer));
                 buttonImage.setImageDrawable(getResources().getDrawable(R.drawable.offer_detail_coupon_icon));
                 loginBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -698,7 +698,7 @@ public class OfferDetailActivity extends BaseActivity {
                 } else {
                     loginBtn.setBackground(getResources().getDrawable(R.drawable.button_grey));
                 }
-                btntext.setText("remind me");
+                btntext.setText(getResources().getString(R.string.remind_me));
 
                 loginBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -748,7 +748,7 @@ public class OfferDetailActivity extends BaseActivity {
                 TextView bankcard = (TextView)findViewById(R.id.bankcard);
                 buckText.setVisibility(View.VISIBLE);
                 buckText.setText("100");
-                btntext.setText("grab offer");
+                btntext.setText(getResources().getString(R.string.grab_offer));
 
                 if(offer.getLapsedCouponSource()!=null){
                     bankcard.setVisibility(View.VISIBLE);
@@ -793,7 +793,7 @@ public class OfferDetailActivity extends BaseActivity {
                 } else {
                     loginBtn.setBackground(getResources().getDrawable(R.drawable.button_grey));
                 }
-                btntext.setText("remind me");
+                btntext.setText(getResources().getString(R.string.remind_me));
 
                 loginBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -840,7 +840,7 @@ public class OfferDetailActivity extends BaseActivity {
             date.setText(expiryText);
             if (offer.isAvailableNow()) {
 
-                btntext.setText("use offer");
+                btntext.setText(getResources().getString(R.string.use_offer));
                 buttonImage.setVisibility(View.GONE);
                 int sdk = android.os.Build.VERSION.SDK_INT;
                 if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
@@ -878,7 +878,7 @@ public class OfferDetailActivity extends BaseActivity {
 
             } else {
                 buttonImage.setVisibility(View.VISIBLE);
-                btntext.setText("remind me");
+                btntext.setText(getResources().getString(R.string.remind_me));
                 int sdk = android.os.Build.VERSION.SDK_INT;
                 if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
                     loginBtn.setBackgroundDrawable(getResources().getDrawable(R.drawable.button_grey));
@@ -917,7 +917,7 @@ public class OfferDetailActivity extends BaseActivity {
                     loginBtn.setBackground(getResources().getDrawable(R.drawable.button_offer_green));
                 }
                 buttonImage.setVisibility(View.GONE);
-                btntext.setText("use offer");
+                btntext.setText(getResources().getString(R.string.use_offer));
                 loginBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -943,7 +943,7 @@ public class OfferDetailActivity extends BaseActivity {
                 } else {
                     loginBtn.setBackground(getResources().getDrawable(R.drawable.button_grey));
                 }
-                btntext.setText("remind me");
+                btntext.setText(getResources().getString(R.string.remind_me));
                 loginBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -980,7 +980,7 @@ public class OfferDetailActivity extends BaseActivity {
                 } else {
                     loginBtn.setBackground(getResources().getDrawable(R.drawable.button_blue));
                 }
-                btntext.setText("use offer");
+                btntext.setText(getResources().getString(R.string.use_offer));
                 loginBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -998,7 +998,7 @@ public class OfferDetailActivity extends BaseActivity {
                 } else {
                     loginBtn.setBackground(getResources().getDrawable(R.drawable.button_grey));
                 }
-                btntext.setText("remind me");
+                btntext.setText(getResources().getString(R.string.remind_me));
                 loginBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

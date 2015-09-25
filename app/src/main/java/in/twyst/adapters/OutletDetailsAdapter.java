@@ -229,12 +229,12 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     holder.footerBckGrd.setBackgroundResource(R.drawable.button_red);
 
                     holder.footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_outlet_detail_coupon_wallet_white));
-                    holder.footerText.setText("use coupon");
+                    holder.footerText.setText(resources.getString(R.string.use_offer));
 
                 } else {
                     holder.footerBckGrd.setBackgroundResource(R.drawable.button_grey);
                     holder.footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_outlet_detail_coupon_forma));
-                    holder.footerText.setText("remind me");
+                    holder.footerText.setText(resources.getString(R.string.remind_me));
 
                 }
 
@@ -269,7 +269,7 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     holder.outlet500.setVisibility(View.VISIBLE);
                     holder.outlet500.setText(String.valueOf(100));
                     holder.footerImageView.setVisibility(View.GONE);
-                    holder.footerText.setText("grab offer");
+                    holder.footerText.setText(resources.getString(R.string.grab_offer));
 
                 }else {
                     holder.footerBckGrd.setBackgroundResource(R.drawable.button_grey);
@@ -277,7 +277,7 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     holder.couponBg.setBackgroundResource(R.color.outlet_coupon_bg_color_white);
                     holder.footerImageView.setVisibility(View.VISIBLE);
                     holder.footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_outlet_detail_coupon_forma));
-                    holder.footerText.setText("remind me");
+                    holder.footerText.setText(resources.getString(R.string.remind_me));
                 }
 
             } else if ("offer".equalsIgnoreCase(offer.getType())) {
@@ -291,7 +291,7 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 if (offer.isAvailableNow()) {
                     holder.footerBckGrd.setBackgroundResource(R.drawable.button_green);
                     holder.footerImageView.setVisibility(View.GONE);
-                    holder.footerText.setText("use offer");
+                    holder.footerText.setText(resources.getString(R.string.use_offer));
                     if(offer.getOfferCost()>0) {
                         holder.outlet500.setVisibility(View.VISIBLE);
                         holder.outlet500.setText(String.valueOf(offer.getOfferCost()));
@@ -303,7 +303,7 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     holder.footerImageView.setVisibility(View.VISIBLE);
                     holder.outlet500.setVisibility(View.GONE);
                     holder.footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_outlet_detail_coupon_forma));
-                    holder.footerText.setText("remind me");
+                    holder.footerText.setText(resources.getString(R.string.remind_me));
                 }
 
 
@@ -320,7 +320,7 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     holder.footerBckGrd.setBackgroundResource(R.drawable.button_green);
                     holder.outlet500.setVisibility(View.GONE);
                     holder.footerImageView.setVisibility(View.GONE);
-                    holder.footerText.setText("use offer");
+                    holder.footerText.setText(resources.getString(R.string.use_offer));
 
                 } else {
                     holder.footerBckGrd.setBackgroundResource(R.drawable.button_grey);
@@ -328,7 +328,7 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     holder.couponBg.setBackgroundResource(R.color.outlet_coupon_bg_color_white);
                     holder.footerImageView.setVisibility(View.VISIBLE);
                     holder.footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_outlet_detail_coupon_forma));
-                    holder.footerText.setText("remind me");
+                    holder.footerText.setText(resources.getString(R.string.remind_me));
 
                 }
 
@@ -355,7 +355,7 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     holder.footerBckGrd.setBackgroundResource(R.drawable.button_blue);
                     holder.outlet500.setVisibility(View.GONE);
                     holder.footerImageView.setVisibility(View.GONE);
-                    holder.footerText.setText("use offer");
+                    holder.footerText.setText(resources.getString(R.string.use_offer));
 
                 }else {
                     holder.footerBckGrd.setBackgroundResource(R.drawable.button_grey);
@@ -363,7 +363,7 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     holder.couponBg.setBackgroundResource(R.color.outlet_coupon_bg_color_white);
                     holder.footerImageView.setVisibility(View.VISIBLE);
                     holder.footerImageView.setImageDrawable(resources.getDrawable(R.drawable.icon_outlet_detail_coupon_forma));
-                    holder.footerText.setText("remind me");
+                    holder.footerText.setText(resources.getString(R.string.remind_me));
                 }
             } else if("checkin".equalsIgnoreCase(offer.getType())){
 
