@@ -4,16 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +42,8 @@ public class NotificationActivity extends BaseActivity{
     private FloatingActionButton checkinFab;
     private FloatingActionsMenu fabMenu;
     private RelativeLayout obstructor;
-    private boolean fromDrawer;
+    private boolean fromDrawer, fromPushNotificationClicked;
+
     @Override
     protected String getTagName() {
         return null;
@@ -72,32 +76,6 @@ public class NotificationActivity extends BaseActivity{
 
         fabMenu.setVisibility(View.VISIBLE);
 
-        HttpService.getInstance().getNotification(getUserToken(), new Callback<BaseResponse<ArrayList<NotificationData>>>() {
-			@Override
-			public void success(BaseResponse<ArrayList<NotificationData>> notificationDataBaseResponse, Response response) {
-                hideProgressHUDInLayout();
-				if(notificationDataBaseResponse.isResponse()){
-					List<NotificationData> notificationData = notificationDataBaseResponse.getData();
-					if(notificationData.size()>0){
-						adapter.setItems(notificationData);
-						adapter.notifyDataSetChanged();
-
-					}else {
-						Toast.makeText(NotificationActivity.this,"You have no notification!",Toast.LENGTH_SHORT).show();
-					}
-
-				}else {
-
-					Toast.makeText(NotificationActivity.this,notificationDataBaseResponse.getMessage(),Toast.LENGTH_SHORT).show();
-				}
-			}
-
-			@Override
-			public void failure(RetrofitError error) {
-                hideProgressHUDInLayout();
-                handleRetrofitError(error);
-			}
-		});
 
         fabMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
 			@Override
@@ -214,12 +192,58 @@ public class NotificationActivity extends BaseActivity{
                 }, 100);
             }
         });
+
+        getNotifications();
+
+    }
+
+    private void getNotifications(){
+        HttpService.getInstance().getNotification(getUserToken(), new Callback<BaseResponse<ArrayList<NotificationData>>>() {
+            @Override
+            public void success(BaseResponse<ArrayList<NotificationData>> notificationDataBaseResponse, Response response) {
+                hideProgressHUDInLayout();
+                if(notificationDataBaseResponse.isResponse()){
+                    List<NotificationData> notificationData = notificationDataBaseResponse.getData();
+                    if(notificationData.size()>0){
+                        adapter.setItems(notificationData);
+                        adapter.notifyDataSetChanged();
+
+                        findViewById(R.id.blankDataLayout).setVisibility(View.GONE);
+
+                    }else {
+                        findViewById(R.id.ivNoData).setBackgroundResource(R.drawable.no_notification);
+                        ((TextView) findViewById(R.id.tvNoData)).setText("You have no notifications!");
+                        findViewById(R.id.blankDataLayout).setVisibility(View.VISIBLE);
+//                        Toast.makeText(NotificationActivity.this,"You have no notifications!",Toast.LENGTH_SHORT).show();
+                    }
+
+                }else {
+
+                    Toast.makeText(NotificationActivity.this,notificationDataBaseResponse.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                hideProgressHUDInLayout();
+                if (error.getKind() == RetrofitError.Kind.NETWORK) {
+                    handleRetrofitError(error);
+                } else {
+                    buildAndShowSnackbarWithMessage("Unable to load notifications!");
+                }
+            }
+        });
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         fromDrawer = intent.getBooleanExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, false);
+        fromPushNotificationClicked = intent.getBooleanExtra(AppConstants.INTENT_PARAM_FROM_PUSH_NOTIFICATION_CLICKED, false);
+        if (fromPushNotificationClicked){
+            getNotifications();
+        }
+
     }
 
 
@@ -228,7 +252,7 @@ public class NotificationActivity extends BaseActivity{
         if (drawerOpened) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            if (fromDrawer) {
+            if (fromDrawer || fromPushNotificationClicked) {
                 //clear history and go to discover
                 Intent intent = new Intent(getBaseContext(), DiscoverActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

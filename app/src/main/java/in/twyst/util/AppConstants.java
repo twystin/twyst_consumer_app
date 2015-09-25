@@ -10,7 +10,7 @@ public class AppConstants {
     public static final String HOST_SECURE = "https://www.twyst.in";
 
     public static final String GCM_PROJECT_ID = "216832068690";
-    public static final String GOOGLE_ANALYTICS_ID = "UA-54317262-1";
+    public static final String GOOGLE_ANALYTICS_ID = "UA-51763503-1";
 
     public static final boolean IS_DEVELOPMENT = false;
     public static final boolean DEGUG_PICASSO = false;
@@ -69,6 +69,7 @@ public class AppConstants {
 
     public static final String INTENT_PARAM_SUMIT_OFFER_OUTLET_NAME = "outlet_names";
     public static final String INTENT_PARAM_FROM_DRAWER = "from_drawer";
+    public static final String INTENT_PARAM_FROM_PUSH_NOTIFICATION_CLICKED = "from_push_notification";
     public static final String INTENT_PARAM_SUMIT_OFFER_OUTLET_ADDRESS ="address" ;
     public static final String PREFERENCE_LOCALITY_SHOWN_DRAWER = "locality";
     public static final String PREFERENCE_PREVIOUS_LOCALITY_SHOWN_DRAWER = "previous_locality";

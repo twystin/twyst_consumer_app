@@ -67,7 +67,6 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
     private RelativeLayout obstructor;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ObservableRecyclerView recyclerView;
-//    private boolean firstLoad;
     private RelativeLayout hideSpinner;
     private boolean fromDrawer;
     final public static int REQ_CODE = 1;
@@ -99,13 +98,6 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
 
         mSwipeRefreshLayout.setColorScheme(R.color.button_orange);
 
-        findViewById(R.id.earnMoreBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showEarnMoreInstructions();
-            }
-        });
-
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -114,12 +106,12 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
             }
         });
 
-//        if(!firstLoad) {
-//            fetchCoupons();
-//            firstLoad = true;
-//        }
-
-
+        findViewById(R.id.earnMoreBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showEarnMoreInstructions();
+            }
+        });
     }
 
     @Override

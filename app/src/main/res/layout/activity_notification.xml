@@ -74,6 +74,11 @@
         <include
             android:id="@+id/circularProgressBar"
             layout="@layout/twyst_progress_hud" />
+
+        <include
+            android:id="@+id/blankDataLayout"
+            layout="@layout/blank_data" />
+
         <RelativeLayout
             android:id="@+id/checkinObstructor2"
             android:layout_width="match_parent"

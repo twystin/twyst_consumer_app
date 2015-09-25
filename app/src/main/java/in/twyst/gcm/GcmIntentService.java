@@ -20,6 +20,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import in.twyst.R;
 import in.twyst.activities.DiscoverActivity;
 import in.twyst.activities.NotificationActivity;
+import in.twyst.util.AppConstants;
 
 /**
  * Created by satish on 03/01/15.
@@ -82,7 +83,10 @@ public class GcmIntentService extends IntentService {
     private void sendNotification(String title, String message, String url) {
         NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, NotificationActivity.class), 0);
+        Intent notificationIntent = new Intent(this, NotificationActivity.class);
+        notificationIntent.putExtra(AppConstants.INTENT_PARAM_FROM_PUSH_NOTIFICATION_CLICKED, true);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
         String notificationTitle = TextUtils.isEmpty(title) ? getString(R.string.app_name) : title;
 
         NotificationCompat.Style style = null;
