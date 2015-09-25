@@ -1621,7 +1621,8 @@ public class OfferDetailActivity extends BaseActivity {
 
                         dialog.dismiss();
                         if (baseResponse.isResponse()) {
-                            date.setText("valid till" + extendDate);
+                            date.setText("valid till " + extendDate);
+                            findViewById(R.id.buttonAct).setVisibility(View.GONE);
 
                             Toast.makeText(OfferDetailActivity.this, "Offer extended to its maximum date!", Toast.LENGTH_SHORT).show();
                         } else {
