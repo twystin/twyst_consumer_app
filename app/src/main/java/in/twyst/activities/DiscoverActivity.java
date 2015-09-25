@@ -954,6 +954,8 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                         findViewById(R.id.blankDataLayout).setVisibility(View.GONE);
 
                     } else {
+                        onItemsLoadComplete();
+                        hideProgressHUDInLayout();
                         findViewById(R.id.ivNoData).setBackgroundResource(R.drawable.no_search);
                         ((TextView) findViewById(R.id.tvNoData)).setText("Sorry - we couldn't find anything for that query. Please try a different search term");
                         findViewById(R.id.blankDataLayout).setVisibility(View.VISIBLE);
@@ -964,6 +966,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 @Override
                 public void failure(RetrofitError error) {
                     handleRetrofitError(error);
+                    onItemsLoadComplete();
                     hideProgressHUDInLayout();
                 }
             });
