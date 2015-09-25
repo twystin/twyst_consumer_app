@@ -311,8 +311,8 @@ public class OfferDetailActivity extends BaseActivity {
         findViewById(R.id.outletShare).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text2 = "https://play.google.com/store/apps/details?id="+getApplication().getPackageName()+"&ah=-smMDxRK7pmXEK32N7mSNcbZ2ZM";
-                String text = "Hey Checkout the offers being offered by " + outlet.getName() + " outlet on \"Twyst\" app.\n" + "Download Now:"+text2;
+                String text2 = "https://play.google.com/store/apps/details?id=" + getApplication().getPackageName() + "&ah=-smMDxRK7pmXEK32N7mSNcbZ2ZM";
+                String text = "Hey Checkout the offers being offered by " + outlet.getName() + " outlet on \"Twyst\" app.\n" + "Download Now:" + text2;
                 showShareIntents("Share using", text);
 
 
@@ -1341,9 +1341,12 @@ public class OfferDetailActivity extends BaseActivity {
                         if (baseResponse.isResponse()) {
                             dialog.dismiss();
                             Toast.makeText(OfferDetailActivity.this, "Coupon redeemed successfully!", Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent();
-                            setResult(RESULT_OK, i);
-                            OfferDetailActivity.this.finish();
+                            Intent intent = new Intent(OfferDetailActivity.this, WalletActivity.class);
+                            startActivity(intent);
+                            finish();
+//                            Intent i = new Intent();
+//                            setResult(RESULT_OK, i);
+//                            OfferDetailActivity.this.finish();
                         } else {
                             dialog.dismiss();
                             Toast.makeText(OfferDetailActivity.this, "Unable to redeem coupon!", Toast.LENGTH_SHORT).show();
@@ -1404,11 +1407,14 @@ public class OfferDetailActivity extends BaseActivity {
                             UseOfferData useOfferData = gson.fromJson(json, UseOfferData.class);
 
                             Toast.makeText(OfferDetailActivity.this, "Offer used successfully!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(OfferDetailActivity.this, RedeemVoucherActivity.class);
-                            intent.putExtra(AppConstants.INTENT_PARAM_OUTLET_OBJECT, outlet);
-                            intent.putExtra(AppConstants.INTENT_PARAM_OFFER_OBJECT, offer);
-                            intent.putExtra(AppConstants.INTENT_PARAM_USE_OFFER_DATA_OBJECT, useOfferData);
+                            Intent intent = new Intent(OfferDetailActivity.this, WalletActivity.class);
                             startActivity(intent);
+                            finish();
+//                            Intent intent = new Intent(OfferDetailActivity.this, RedeemVoucherActivity.class);
+//                            intent.putExtra(AppConstants.INTENT_PARAM_OUTLET_OBJECT, outlet);
+//                            intent.putExtra(AppConstants.INTENT_PARAM_OFFER_OBJECT, offer);
+//                            intent.putExtra(AppConstants.INTENT_PARAM_USE_OFFER_DATA_OBJECT, useOfferData);
+//                            startActivity(intent);
                         } else {
                             dialog.dismiss();
                             String[] split = baseResponse.getData().toString().split("\\s*-\\s*");
@@ -1615,7 +1621,8 @@ public class OfferDetailActivity extends BaseActivity {
 
                         dialog.dismiss();
                         if (baseResponse.isResponse()) {
-                            date.setText(expiryTextCoupon);
+                            date.setText("valid till" + extendDate);
+
                             Toast.makeText(OfferDetailActivity.this, "Offer extended to its maximum date!", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(OfferDetailActivity.this, baseResponse.getMessage(), Toast.LENGTH_SHORT).show();
