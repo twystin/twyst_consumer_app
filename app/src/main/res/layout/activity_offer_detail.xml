@@ -298,72 +298,72 @@
 
                     </RelativeLayout>
 
-                    <RelativeLayout
-                        android:id="@+id/relativeLayoutPicLoc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_above="@+id/view"
-                        android:layout_marginTop="@dimen/offer_detail_report_padding_top"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="3dp"
-                        android:visibility="visible">
+                    <!--<RelativeLayout-->
+                        <!--android:id="@+id/relativeLayoutPicLoc"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_above="@+id/view"-->
+                        <!--android:layout_marginTop="@dimen/offer_detail_report_padding_top"-->
+                        <!--android:paddingBottom="5dp"-->
+                        <!--android:paddingTop="3dp"-->
+                        <!--android:visibility="visible">-->
 
-                        <TextView
-                            android:id="@+id/loc_pic"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginLeft="2dp"
-                            android:drawableLeft="@drawable/offer_detail_loc_grey"
-                            android:drawablePadding="8dp"
-                            android:text="SELECT LOCATION: "
-                            android:textAllCaps="true"
-                            android:textColor="#636363"
-                            android:textSize="@dimen/outlet_details_coupon_txt"
-                            android:textStyle="bold"
-                            android:visibility="visible" />
+                        <!--<TextView-->
+                            <!--android:id="@+id/loc_pic"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentLeft="true"-->
+                            <!--android:layout_alignParentStart="true"-->
+                            <!--android:layout_alignParentTop="true"-->
+                            <!--android:layout_marginLeft="2dp"-->
+                            <!--android:drawableLeft="@drawable/offer_detail_loc_grey"-->
+                            <!--android:drawablePadding="8dp"-->
+                            <!--android:text="SELECT LOCATION: "-->
+                            <!--android:textAllCaps="true"-->
+                            <!--android:textColor="#636363"-->
+                            <!--android:textSize="@dimen/outlet_details_coupon_txt"-->
+                            <!--android:textStyle="bold"-->
+                            <!--android:visibility="visible" />-->
 
-                        <RelativeLayout
-                            android:id="@+id/locationView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
-                            android:layout_toRightOf="@+id/loc_pic">
+                        <!--<RelativeLayout-->
+                            <!--android:id="@+id/locationView"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginRight="5dp"-->
+                            <!--android:layout_toRightOf="@+id/loc_pic">-->
 
-                            <TextView
-                                android:id="@+id/textView20"
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_alignBottom="@+id/locationText"
-                                android:layout_marginBottom="4dp"
-                                android:layout_marginRight="7dp"
-                                android:background="#78797a"
-                                android:gravity="bottom"
-                                android:visibility="visible" />
+                            <!--<TextView-->
+                                <!--android:id="@+id/textView20"-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="1dp"-->
+                                <!--android:layout_alignBottom="@+id/locationText"-->
+                                <!--android:layout_marginBottom="4dp"-->
+                                <!--android:layout_marginRight="7dp"-->
+                                <!--android:background="#78797a"-->
+                                <!--android:gravity="bottom"-->
+                                <!--android:visibility="visible" />-->
 
-                            <TextView
-                                android:id="@+id/locationText"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:drawablePadding="10dp"
-                                android:paddingLeft="5dp"
-                                android:textSize="@dimen/offer_detail_text1"
-                                android:visibility="invisible" />
+                            <!--<TextView-->
+                                <!--android:id="@+id/locationText"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_centerVertical="true"-->
+                                <!--android:drawablePadding="10dp"-->
+                                <!--android:paddingLeft="5dp"-->
+                                <!--android:textSize="@dimen/offer_detail_text1"-->
+                                <!--android:visibility="invisible" />-->
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:src="@drawable/icon_offer_detail_grey_arrow" />
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_alignParentRight="true"-->
+                                <!--android:layout_centerVertical="true"-->
+                                <!--android:src="@drawable/icon_offer_detail_grey_arrow" />-->
 
-                        </RelativeLayout>
+                        <!--</RelativeLayout>-->
 
 
-                    </RelativeLayout>
+                    <!--</RelativeLayout>-->
 
                     <com.balysv.materialripple.MaterialRippleLayout
                         android:id="@+id/view"

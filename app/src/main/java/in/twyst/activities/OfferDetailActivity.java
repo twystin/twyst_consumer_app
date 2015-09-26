@@ -95,10 +95,12 @@ public class OfferDetailActivity extends BaseActivity {
     List<String> values = new ArrayList<>();
     List<String> outletID = new ArrayList<>();
     int itemPosition = -2;
-    TextView locationText;
+//    TextView locationText;
     boolean flag;
     String expiryTextCoupon = "";
     TextView date;
+
+    private String selectedLocation = "";
 
     @Override
     protected String getTagName() {
@@ -141,7 +143,7 @@ public class OfferDetailActivity extends BaseActivity {
         LinearLayout loginBtn = (LinearLayout) findViewById(R.id.loginBtn);
         final TextView likeText = (TextView) findViewById(R.id.likeText);
         ImageView buttonAct = (ImageView) findViewById(R.id.buttonAct);
-        locationText = (TextView)findViewById(R.id.locationText);
+//        locationText = (TextView)findViewById(R.id.locationText);
         reportProblemLayout = findViewById(R.id.reportProblemLayout);
         obstructor = findViewById(R.id.obstructor);
         obstructor2 = findViewById(R.id.obstructor2);
@@ -634,11 +636,24 @@ public class OfferDetailActivity extends BaseActivity {
                                 redeemConfirmationCoupon(id);
                             }
                         }else {
-                            if(locationText.length()!=0) {
+
+                            if(selectedLocation.length()!=0) {
                                 redeemConfirmationCoupon(idValue);
                             }else {
-                                Toast.makeText(OfferDetailActivity.this,"Please pick a location before proceeding!",Toast.LENGTH_SHORT).show();
+                                List<Offer.OutletList> outletList = offer.getOutletList();
+
+                                values.clear();
+                                outletID.clear();
+
+                                pickLocDialog(outletList);
+//                                Toast.makeText(OfferDetailActivity.this,"Please pick a location before proceeding!",Toast.LENGTH_SHORT).show();
                             }
+
+//                            if(locationText.length()!=0) {
+//                                redeemConfirmationCoupon(idValue);
+//                            }else {
+//                                Toast.makeText(OfferDetailActivity.this,"Please pick a location before proceeding!",Toast.LENGTH_SHORT).show();
+//                            }
                         }
                     }
                 });
@@ -1012,27 +1027,27 @@ public class OfferDetailActivity extends BaseActivity {
             }
         });
 
-        RelativeLayout relativeLayoutPicLoc = (RelativeLayout)findViewById(R.id.relativeLayoutPicLoc);
-        relativeLayoutPicLoc.setVisibility(View.GONE);
+//        RelativeLayout relativeLayoutPicLoc = (RelativeLayout)findViewById(R.id.relativeLayoutPicLoc);
+//        relativeLayoutPicLoc.setVisibility(View.GONE);
 
-        if("coupon".equalsIgnoreCase(offer.getType())){
-            if(offer.getOutletList()!=null){
-                relativeLayoutPicLoc.setVisibility(View.VISIBLE);
-
-                findViewById(R.id.locationView).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        List<Offer.OutletList> outletList = offer.getOutletList();
-
-                        values.clear();
-                        outletID.clear();
-
-                        pickLocDialog(outletList);
-
-                    }
-                });
-            }
-        }
+//        if("coupon".equalsIgnoreCase(offer.getType())){
+//            if(offer.getOutletList()!=null){
+//                relativeLayoutPicLoc.setVisibility(View.VISIBLE);
+//
+//                findViewById(R.id.locationView).setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        List<Offer.OutletList> outletList = offer.getOutletList();
+//
+//                        values.clear();
+//                        outletID.clear();
+//
+//                        pickLocDialog(outletList);
+//
+//                    }
+//                });
+//            }
+//        }
 
 
         if (!TextUtils.isEmpty(outlet.getDistance())) {
@@ -1082,10 +1097,12 @@ public class OfferDetailActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if (flag) {
-                    findViewById(R.id.textView20).setVisibility(View.GONE);
-                    locationText.setVisibility(View.VISIBLE);
-                    locationText.setText(itemValue);
+//                    findViewById(R.id.textView20).setVisibility(View.GONE);
+//                    locationText.setVisibility(View.VISIBLE);
+//                    locationText.setText(itemValue);
+                    selectedLocation = itemValue;
                     dialog.dismiss();
+                    redeemConfirmationCoupon(idValue);
                 } else {
                     Toast.makeText(OfferDetailActivity.this, "Please pick a location!", Toast.LENGTH_SHORT).show();
                 }
@@ -1096,11 +1113,11 @@ public class OfferDetailActivity extends BaseActivity {
         dialogView.findViewById(R.id.locCancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (locationText.length() > 0) {
-                    findViewById(R.id.textView20).setVisibility(View.GONE);
+                if (selectedLocation.length() > 0) {
+//                    findViewById(R.id.textView20).setVisibility(View.GONE);
                 } else {
                     flag = false;
-                    findViewById(R.id.textView20).setVisibility(View.VISIBLE);
+//                    findViewById(R.id.textView20).setVisibility(View.VISIBLE);
                 }
                 dialog.dismiss();
             }

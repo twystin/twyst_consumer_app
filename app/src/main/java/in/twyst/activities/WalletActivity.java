@@ -124,6 +124,9 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQ_CODE) {
             if (resultCode == RESULT_OK) {
+                if (walletAdapter!=null){
+                    walletAdapter.notifyDataSetChanged();
+                }
                 fetchCoupons();
             }
         }
@@ -485,6 +488,9 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
     @Override
     protected void onResume() {
         super.onResume();
+        if (walletAdapter!=null){
+            walletAdapter.notifyDataSetChanged();
+        }
 //        if(!firstLoad) {
             fetchCoupons();
 //        }else {
