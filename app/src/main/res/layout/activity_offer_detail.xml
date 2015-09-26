@@ -266,7 +266,7 @@
                         android:id="@+id/relativeLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_above="@+id/relativeLayoutPicLoc"
+                        android:layout_above="@+id/view"
                         android:layout_marginTop="@dimen/offer_detail_report_padding_top">
 
                         <TextView
