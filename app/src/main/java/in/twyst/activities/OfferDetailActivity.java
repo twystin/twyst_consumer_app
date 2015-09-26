@@ -1407,14 +1407,13 @@ public class OfferDetailActivity extends BaseActivity {
                             UseOfferData useOfferData = gson.fromJson(json, UseOfferData.class);
 
                             Toast.makeText(OfferDetailActivity.this, "Offer used successfully!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(OfferDetailActivity.this, WalletActivity.class);
+
+                            Intent intent = new Intent(OfferDetailActivity.this, RedeemVoucherActivity.class);
+                            intent.putExtra(AppConstants.INTENT_PARAM_OUTLET_OBJECT, outlet);
+                            intent.putExtra(AppConstants.INTENT_PARAM_OFFER_OBJECT, offer);
+                            intent.putExtra(AppConstants.INTENT_PARAM_USE_OFFER_DATA_OBJECT, useOfferData);
                             startActivity(intent);
                             finish();
-//                            Intent intent = new Intent(OfferDetailActivity.this, RedeemVoucherActivity.class);
-//                            intent.putExtra(AppConstants.INTENT_PARAM_OUTLET_OBJECT, outlet);
-//                            intent.putExtra(AppConstants.INTENT_PARAM_OFFER_OBJECT, offer);
-//                            intent.putExtra(AppConstants.INTENT_PARAM_USE_OFFER_DATA_OBJECT, useOfferData);
-//                            startActivity(intent);
                         } else {
                             dialog.dismiss();
                             String[] split = baseResponse.getData().toString().split("\\s*-\\s*");

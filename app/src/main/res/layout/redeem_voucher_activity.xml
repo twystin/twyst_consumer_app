@@ -179,7 +179,7 @@
                             android:layout_below="@+id/voucherCodetext"
                             android:layout_marginTop="@dimen/redeem_padding"
                             android:gravity="center_horizontal"
-                            android:text="Please present the code to the outlet\nin the next 60  in to avail the offer"
+                            android:text="Please present the code to the outlet\nin the next 60 min to avail the offer"
                             android:textColor="#7d7d7d"
                             android:textSize="@dimen/outlet_detail_distance" />
 
@@ -220,14 +220,14 @@
                             </RelativeLayout>
 
                             <TextView
-                                android:id="@+id/text"
+                                android:id="@+id/tvRedeemGetBucks"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="7dp"
                                 android:layout_marginRight="7dp"
                                 android:gravity="center"
-                                android:text="Upload your bill and\nget 500 Twyst bucks"
+                                android:text="@string/redeem_code_get_twyst_bucks"
                                 android:textColor="@color/abc_primary_text_disable_only_material_dark"
                                 android:textSize="@dimen/offer_detail_text1" />
 
@@ -283,7 +283,7 @@
                             android:layout_below="@+id/redshapeLayout"
                             android:layout_marginTop="4dp"
                             android:gravity="center_horizontal"
-                            android:text="free"
+                            android:text="Free"
                             android:textColor="#7d7d7d"
                             android:textSize="@dimen/offer_detail_text3" />
 
@@ -293,7 +293,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/free"
                             android:gravity="center_horizontal"
-                            android:text="Glass of ouse blew"
+                            android:text="Glass of House Brew"
                             android:textColor="#7d7d7d"
                             android:textSize="@dimen/offer_detail_text1" />
 
@@ -304,7 +304,7 @@
                             android:layout_below="@+id/offerDetail1"
                             android:layout_marginBottom="10dp"
                             android:gravity="center_horizontal"
-                            android:text="Glass of ouse blew"
+                            android:text="on a spend of Rs. 500"
                             android:textColor="#7d7d7d"
                             android:textSize="@dimen/offer_detail_text1" />
 
@@ -318,11 +318,9 @@
                     android:id="@+id/layoutTermsConditions"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="10dp"
                     android:layout_below="@+id/relativeLayout2"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:visibility="visible">
+                    android:orientation="vertical">
 
                 <TextView
                         android:id="@+id/termsCondition"

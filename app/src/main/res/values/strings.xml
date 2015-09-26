@@ -106,4 +106,6 @@ each friend who joins.</p>
     <string name="remind_me">Remind Me</string>
     <string name="grab_offer">Grab Offer</string>
 
+    <string name="redeem_code_get_twyst_bucks">Upload your bill and\nget %1$d Twyst bucks</string>
+
 </resources>

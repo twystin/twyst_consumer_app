@@ -51,6 +51,7 @@ public class RedeemVoucherActivity extends BaseActivity{
     private boolean isPanelShown;
     private View obstructor,obstructor2;
     private String issueReport;
+    private TextView tvRedeemGetBucks;
 
     @Override
     protected String getTagName() {
@@ -77,6 +78,7 @@ public class RedeemVoucherActivity extends BaseActivity{
         TextView free = (TextView)findViewById(R.id.free);
         TextView offerDetail1 = (TextView)findViewById(R.id.offerDetail1);
         TextView offerDetail2 = (TextView)findViewById(R.id.offerDetail2);
+        TextView tvRedeemGetBucks = (TextView)findViewById(R.id.tvRedeemGetBucks);
         ImageView outletImage =(ImageView)findViewById(R.id.outletImage);
         reportProblemLayout = findViewById(R.id.reportProblemLayout);
         obstructor = findViewById(R.id.obstructor);
@@ -298,10 +300,13 @@ public class RedeemVoucherActivity extends BaseActivity{
             voucherCodetext.setText(offer.getCode());
         }
         free.setText(offer.getHeader());
+        String redeemCodeGetTwystBucks = getResources().getString(R.string.redeem_code_get_twyst_bucks);
+        String redeemCodeGetTwystBucksMsg = String.format(redeemCodeGetTwystBucks,offer.getOfferCost());
+        tvRedeemGetBucks.setText(redeemCodeGetTwystBucksMsg);
 
         if(!TextUtils.isEmpty(offer.getDescription())){
             offerDetail1.setText(offer.getDescription());
-            offerDetail1.setVisibility(View.GONE);
+            offerDetail2.setVisibility(View.GONE);
         }else{
             offerDetail1.setText(offer.getLine1());
             offerDetail2.setText(offer.getLine2());

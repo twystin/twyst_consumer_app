@@ -58,7 +58,7 @@ public class CheckInSuccessActivity extends BaseActivity {
         checkInOutletName = (TextView) findViewById(R.id.checkInOutletName);
         checkInTextHeader = (TextView) findViewById(R.id.checkInTextHeader);
         checkInBucks = (TextView) findViewById(R.id.checkInBucks);
-        checkInBucks.setText("You have earned 50 Tywst bucks for this!");
+        checkInBucks.setText("You have earned 50 Twyst bucks for this!");
 
         String walletText = "Your voucher will be available in your"
                 + " <font color='"
