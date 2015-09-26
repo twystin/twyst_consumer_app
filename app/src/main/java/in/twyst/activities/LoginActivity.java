@@ -197,6 +197,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_PIC, String.valueOf(currentProfile.getProfilePictureUri(250, 250)));
                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_NAME, currentProfile.getFirstName());
                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_FULL_NAME,currentProfile.getName());
+                sharedPreferences.putBoolean(AppConstants.PREFERENCE_IS_FACEBOOK_CONNECTED,true);
                 sharedPreferences.apply();
             }
 
@@ -438,6 +439,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
                 dob = currentPerson.getBirthday();
                 id = currentPerson.getId();
                 sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
+                sharedPreferences.putBoolean(AppConstants.PREFERENCE_IS_GOOGLE_CONNECTED, true);
                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_PIC, personPhotoUrl);
                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_NAME,personName);
                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_FULL_NAME,personFullName);
