@@ -52,6 +52,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import in.twyst.R;
 import in.twyst.model.BaseResponse;
@@ -397,11 +398,16 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
                             setPushEnabled(isChecked);
                         }
                     });
+                    final String EMAIL_REGEX = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
                     findViewById(R.id.updateProf).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            updateProfile();
+                            if (TextUtils.isEmpty(editProfileMail.getText().toString()) || !Pattern.matches(EMAIL_REGEX, editProfileMail.getText().toString())) {
+                                editProfileMail.setError("Invalid email");
+                            }else{
+                                updateProfile();
+                            }
                         }
                     });
 
