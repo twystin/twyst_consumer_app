@@ -170,6 +170,8 @@ public class Profile implements Serializable{
 
         @Override
         public String toString() {
+            if (name.equals(""))
+                return phone;
 
             return name;
         }
