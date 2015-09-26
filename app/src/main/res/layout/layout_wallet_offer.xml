@@ -220,14 +220,15 @@
                                 android:id="@+id/coupon_btn"
                                 android:layout_width="match_parent"
                                 android:gravity="bottom"
-                                android:layout_height="40dp"
+                                android:layout_alignParentBottom="true"
+                                android:layout_height="@dimen/outlet_info_bottom_height"
                                 android:layout_below="@+id/coupon_text2"
                                 android:layout_marginTop="6dp">
 
                                 <ImageView
                                     android:id="@+id/footer_bckgrd"
                                     android:layout_width="match_parent"
-                                    android:layout_height="37dp"
+                                    android:layout_height="@dimen/outlet_info_bottom_height"
                                     android:background="#636363" />
 
                                 <RelativeLayout
