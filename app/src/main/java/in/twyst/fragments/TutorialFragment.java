@@ -54,26 +54,27 @@ public class TutorialFragment extends Fragment {
         switch (position) {
             case 0:
                 centerLogo.setImageResource(R.drawable.tutorial_center_logo_1);
-                textView1.setText("TWYST = DINING OFFERS UNLTD.");
-                textView2.setText("Find the widest collection of dining offers across Delhi NCR.\nAlways hot, fresh and awesome!");
+                textView1.setText("DISCOVER THE BEST FOOD & DRINK OFFERS AROUND YOU!");
+                textView2.setText("We’re on a mission to bring you the best and the widest range of Offers & Deals on Food and Drink around you!");
                 letsTwyst.setVisibility(View.GONE);
                 break;
             case 1:
                 centerLogo.setImageResource(R.drawable.tutorial_center_logo_2);
                 textView1.setText("AND THE OFFERS GET BETTER!");
-                textView2.setText("Use coupons or check-in at your favorite places to unlock better, exclusive offers!");
+                textView2.setText("Check-in at your favourite Twyst Partner outlets and unlock exclusive offers. Its always great to get a little extra at the places you love!");
                 letsTwyst.setVisibility(View.GONE);
                 break;
             case 2:
                 centerLogo.setImageResource(R.drawable.tutorial_center_logo_3);
                 textView1.setText("AND EVEN BETTER WITH FRIENDS!");
-                textView2.setText("Set up your network on Twyst to share & use your friends' coupons!");
+                textView2.setText("Never let an exclusive offer go waste! \nSet up your network on Twyst to share offers with friends.");
                 letsTwyst.setVisibility(View.GONE);
                 break;
             case 3:
                 centerLogo.setImageResource(R.drawable.tutorial_center_logo_4);
-                textView1.setText("SMART DINING IS HERE.");
-                textView2.setText("Get Twyst-ing now!");
+                textView1.setText("TWYST BEFORE YOU EAT!");
+                textView2.setText("Now make sure you check out the offers running around you every time you eat out or order in. \n" +
+                        "Be Smart - Get More & Pay Less!");
                 letsTwyst.setVisibility(View.VISIBLE);
 
                 final TutorialActivity tutorialActivity = (TutorialActivity) view.getContext();
