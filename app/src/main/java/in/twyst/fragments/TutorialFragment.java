@@ -73,8 +73,7 @@ public class TutorialFragment extends Fragment {
             case 3:
                 centerLogo.setImageResource(R.drawable.tutorial_center_logo_4);
                 textView1.setText("TWYST BEFORE YOU EAT!");
-                textView2.setText("Now make sure you check out the offers running around you every time you eat out or order in. \n" +
-                        "Be Smart - Get More & Pay Less!");
+                textView2.setText("Now make sure you check out the offers running around you every time you eat out or order in. Be Smart - Get More & Pay Less!");
                 letsTwyst.setVisibility(View.VISIBLE);
 
                 final TutorialActivity tutorialActivity = (TutorialActivity) view.getContext();
