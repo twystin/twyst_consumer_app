@@ -642,6 +642,7 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
                 picasso.load(outlet.getBackground())
                         .noFade()
                         .fit()
+                        .centerCrop()
                         .into(outletBgImage);
 
                 if (TextUtils.isEmpty(outlet.getDistance())) {

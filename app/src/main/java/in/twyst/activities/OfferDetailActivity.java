@@ -346,6 +346,7 @@ public class OfferDetailActivity extends BaseActivity {
         picasso.load(outlet.getBackground())
                 .noFade()
                 .fit()
+                .centerCrop()
                 .into(outletImage);
 
 
