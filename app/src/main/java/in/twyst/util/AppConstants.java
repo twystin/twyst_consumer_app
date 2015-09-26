@@ -31,6 +31,7 @@ public class AppConstants {
     public static final String PREFERENCE_PARAM_SEARCH_QUERY = "SEARCH_QUERY";
 
     public static final String PREFERENCE_SHARED_PREF_NAME = "in.twyst.preferences";
+    public static final String PREFERENCE_IS_FIRST_RUN = "first_run";
     public static final String PREFERENCE_REGISTRATION_ID = "registration_id";
     public static final String PREFERENCE_DEVICE_ID = "deviceId";
     public static final String PREFERENCE_TUTORIAL_COUNT = "tutorial_count";

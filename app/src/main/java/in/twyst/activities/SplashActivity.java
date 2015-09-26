@@ -70,6 +70,14 @@ public class SplashActivity extends Activity {
             getKey();
             generateHashKey();
         }
+        SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, MODE_PRIVATE);
+        if (prefs.getBoolean(AppConstants.PREFERENCE_IS_FIRST_RUN,true)){
+            // Do first run stuff here then set 'firstrun' as false
+            // using the following line to edit/commit prefs
+            prefs.edit().putBoolean(AppConstants.PREFERENCE_IS_PUSH_ENABLED, true).apply();
+
+            prefs.edit().putBoolean(AppConstants.PREFERENCE_IS_FIRST_RUN, false).apply();
+        }
 
         context = getApplicationContext();
 
