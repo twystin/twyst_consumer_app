@@ -134,6 +134,11 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
         String lat = prefs.getString(AppConstants.PREFERENCE_CURRENT_LAT, "");
         String lng = prefs.getString(AppConstants.PREFERENCE_CURRENT_LNG, "");
 
+        if (TextUtils.isEmpty(lat) || TextUtils.isEmpty(lng)){
+            lat = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, "");
+            lng = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, "");
+        }
+
         HttpService.getInstance().getCoupons(getUserToken(),lat,lng, new Callback<BaseResponse<WalletData>>() {
             @Override
             public void success(BaseResponse<WalletData> arrayListBaseResponse, Response response) {
