@@ -51,7 +51,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
         System.out.println("LocationService.. onCreate()");
 
-        if (!AppConstants.IS_DEVELOPMENT) {
+        if (AppConstants.IS_DEVELOPMENT) {
             return;
         }
 
