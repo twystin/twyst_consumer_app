@@ -299,9 +299,17 @@ public class RedeemVoucherActivity extends BaseActivity{
         else {
             voucherCodetext.setText(offer.getCode());
         }
+
+        int amountToDisplay;
+        if(useOfferData!=null){
+            amountToDisplay = offer.getOfferCost();
+        }else{
+            amountToDisplay = 50;
+        }
+
         free.setText(offer.getHeader());
         String redeemCodeGetTwystBucks = getResources().getString(R.string.redeem_code_get_twyst_bucks);
-        String redeemCodeGetTwystBucksMsg = String.format(redeemCodeGetTwystBucks,offer.getOfferCost());
+        String redeemCodeGetTwystBucksMsg = String.format(redeemCodeGetTwystBucks,amountToDisplay);
         tvRedeemGetBucks.setText(redeemCodeGetTwystBucksMsg);
 
         if(!TextUtils.isEmpty(offer.getDescription())){
