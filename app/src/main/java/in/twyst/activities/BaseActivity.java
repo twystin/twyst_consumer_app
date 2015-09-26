@@ -594,6 +594,7 @@ public abstract class BaseActivity extends ActionBarActivity
         } else if ((getLayoutResource() == R.layout.activity_upload_bill)
                 || (getLayoutResource() == R.layout.activity_write_to_us)
                 || (getLayoutResource() == R.layout.activity_suggest_outlet)
+                || (getLayoutResource() == R.layout.checkin_succes_layout)
                 || (getLayoutResource() == R.layout.activity_submit_offer)) {
             //Hide all action buttons
             homeMenuItem.setVisible(false);

@@ -105,6 +105,7 @@ public class ScannerActivity extends ActionBarActivity implements ZXingScannerVi
                         intent.putExtra(AppConstants.INTENT_PARAM_CHECKIN_OUTLET_NAME,checkInSuccessData.getOutlet_name());
                         intent.putExtra(AppConstants.INTENT_PARAM_CHECKIN_OUTLET_ID, checkInSuccessData.getOutlet_id());
                         intent.putExtra(AppConstants.INTENT_PARAM_CHECKIN_CODE,checkInSuccessData.getCode());
+                        intent.putExtra(AppConstants.INTENT_PARAM_CHECKIN_COUNT,checkInSuccessData.getCheckins_to_go());
                         startActivity(intent);
                     } else {
 

@@ -66,6 +66,7 @@ public class AppConstants {
     public static final String INTENT_PARAM_CHECKIN_CODE = "checkin_code";
     public static final String INTENT_PARAM_CHECKIN_LINE2 = "line2";
     public static final String INTENT_PARAM_CHECKIN_OUTLET_ID = "checkin_outlet_id";
+    public static final String INTENT_PARAM_CHECKIN_COUNT = "checkin_count";
 
     public static final String INTENT_PARAM_SUMIT_OFFER_OUTLET_NAME = "outlet_names";
     public static final String INTENT_PARAM_FROM_DRAWER = "from_drawer";

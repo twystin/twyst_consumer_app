@@ -48,6 +48,7 @@ public class CheckInSuccessActivity extends BaseActivity {
         String checkInLine1=getIntent().getStringExtra(AppConstants.INTENT_PARAM_CHECKIN_LINE1);
         String checkInLine2=getIntent().getStringExtra(AppConstants.INTENT_PARAM_CHECKIN_LINE2);
         String  checkInCode=getIntent().getStringExtra(AppConstants.INTENT_PARAM_CHECKIN_CODE);
+        int checkInCount=getIntent().getIntExtra(AppConstants.INTENT_PARAM_CHECKIN_COUNT, 0);
 
         if (checkInLine2==null){
             checkInLine2=" ";
@@ -60,34 +61,54 @@ public class CheckInSuccessActivity extends BaseActivity {
         checkInBucks = (TextView) findViewById(R.id.checkInBucks);
         checkInBucks.setText("You have earned 50 Twyst bucks for this!");
 
-        String walletText = "Your voucher will be available in your"
-                + " <font color='"
-                + getResources().getColor(R.color.colorPrimaryDark) + "'><b>" + "Wallet"
-                + "</b></font>"
-                + " after 3 hours.";
+        if (checkInCount>0){ //Checkins to go
+            String outletNameText = "You have checked in at "
+                    + " <font color='"
+                    + getResources().getColor(R.color.colorPrimaryDark) + "'><b>" + outletname
+                    + "</b></font>"
+                    + " and you are "
+                    + " <font color='"
+                    + getResources().getColor(R.color.colorPrimaryDark) + "'><b>" + String.valueOf(checkInCount)
+                    + "</b></font>"
+                    + " check-ins away to unlock your reward!"
+                    ;
+            checkInOutletName.setText(Html.fromHtml(outletNameText),
+                    TextView.BufferType.SPANNABLE);
 
-        String headerText = "You get"
-                + " <font color='"
-                + getResources().getColor(R.color.colorPrimaryDark) + "'><b>" + checkInHeader+" "+checkInLine1+" "+checkInLine2
-                + "</b></font>"
-                + " on your next visit/order. "
-                +walletText;
-        checkInTextHeader.setText(Html.fromHtml(headerText),
-                TextView.BufferType.SPANNABLE);
+            checkInTextHeader.setVisibility(View.GONE);
 
-        final String outletName = "You have checked in at "
-                + " <font color='"
-                + getResources().getColor(R.color.colorPrimaryDark) + "'><b>" + outletname
-                + "</b></font>"
-                + " and unlocked a reward!";
-        checkInOutletName.setText(Html.fromHtml(outletName),
-                TextView.BufferType.SPANNABLE);
+        }else{ //Unlocked a reward
+            String outletNameText = "You have checked in at "
+                    + " <font color='"
+                    + getResources().getColor(R.color.colorPrimaryDark) + "'><b>" + outletname
+                    + "</b></font>"
+                    + " and unlocked a reward!";
+            checkInOutletName.setText(Html.fromHtml(outletNameText),
+                    TextView.BufferType.SPANNABLE);
+
+            String walletText = "Your voucher will be available in your"
+                    + " <font color='"
+                    + getResources().getColor(R.color.colorPrimaryDark) + "'><b>" + "Wallet"
+                    + "</b></font>"
+                    + " after 3 hours.";
+
+            String headerText = "You get"
+                    + " <font color='"
+                    + getResources().getColor(R.color.colorPrimaryDark) + "'><b>" + checkInHeader+" "+checkInLine1+" "+checkInLine2
+                    + "</b></font>"
+                    + " on your next visit/order. "
+                    +walletText;
+            checkInTextHeader.setText(Html.fromHtml(headerText),
+                    TextView.BufferType.SPANNABLE);
+
+        }
+
 
         findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text2 = "https://play.google.com/store/apps/details?id="+getApplication().getPackageName()+"&ah=-smMDxRK7pmXEK32N7mSNcbZ2ZM";
-                String text = "Hey Checkout the offers being offered by " + outletname + " outlet on \"Twyst\" app.\n" + "Download Now:"+text2;
+                String text2 = "https://play.google.com/store/apps/details?id=" + getApplication().getPackageName() + "&ah=-smMDxRK7pmXEK32N7mSNcbZ2ZM";
+                String text = "Hey Checkout the offers being offered by " + outletname + " outlet on \"Twyst\" app.\n" + "Download Now:" + text2;
                 showShareIntents("Share using", text);
 
                 ShareOutlet shareOutlet = new ShareOutlet();

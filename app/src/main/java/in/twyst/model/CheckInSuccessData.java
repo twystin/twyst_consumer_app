@@ -14,6 +14,15 @@ public class CheckInSuccessData implements Serializable {
     private String header;
     private String line1;
     private String line2;
+    private int checkins_to_go;
+
+    public int getCheckins_to_go() {
+        return checkins_to_go;
+    }
+
+    public void setCheckins_to_go(int checkins_to_go) {
+        this.checkins_to_go = checkins_to_go;
+    }
 
     public String getLine2() {
         return line2;
