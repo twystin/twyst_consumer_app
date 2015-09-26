@@ -559,29 +559,6 @@ public class OfferDetailActivity extends BaseActivity {
             }
         }
 
-     /*   if (!TextUtils.isEmpty(offer.getExpiry())) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            try {
-                Date expiryDate = sdf.parse(offer.getExpiry());
-                long days = TimeUnit.DAYS.convert(expiryDate.getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
-                SimpleDateFormat extendDateFormat = new SimpleDateFormat("dd-MMM yyyy");
-                extendDate = extendDateFormat.format(expiryDate);
-
-                SimpleDateFormat extendDateFormat2 = new SimpleDateFormat("dd/MM/yyyy");
-                extendDate2 = extendDateFormat2.format(expiryDate);
-
-                if (days > 7) {
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("d-MMM");
-                    expiryText = "valid till " + simpleDateFormat.format(expiryDate).toLowerCase();
-                } else {
-                    expiryText = days + ((days == 1) ? " day " : " days ") + "left";
-                }
-
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }*/
-
         calendar = Calendar.getInstance();
         if (offer.getAvailableNext() != null) {
             AvailableNext availableNext = offer.getAvailableNext();
@@ -1094,21 +1071,6 @@ public class OfferDetailActivity extends BaseActivity {
         ListAdapter adapter = new ListAdapter(this,values,outletID);
         listView.setAdapter(adapter);
 
-        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                // ListView Clicked item index
-                itemPosition = position;
-                itemValue = (String) listView.getItemAtPosition(position);
-
-            }
-
-        });*/
-
-
         builder.setView(dialogView);
 
         final AlertDialog dialog = builder.create();
@@ -1145,69 +1107,6 @@ public class OfferDetailActivity extends BaseActivity {
         });
 
     }
-
-    /*private void pickLocDialog(List<Offer.OutletList> outletList) {
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View dialogView = li.inflate(R.layout.dialog_view_outlets, null);
-        final ListView listView = (ListView) dialogView.findViewById(R.id.locList);
-        List<String> values = new ArrayList<>();
-        List<String> ids = new ArrayList<>();
-
-        for(int i=0;i<outletList.size();i++){
-            String outletIds = outletList.get(i).get_id();
-            String outlets = outletList.get(i).getName();
-            values.add(outlets);
-            ids.add(outletIds);
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.loc_picker_layout, android.R.id.text1, values);
-
-
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                // ListView Clicked item index
-                int itemPosition     = position;
-                itemValue = (String) listView.getItemAtPosition(position);
-
-            }
-
-        });
-
-
-        builder.setView(dialogView);
-
-        final AlertDialog dialog = builder.create();
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
-
-        dialogView.findViewById(R.id.locClose).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-
-
-            }
-        });
-
-        dialogView.findViewById(R.id.locCancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-    }*/
 
     public void setReminder(Calendar day, String time) {
         try {
@@ -1299,15 +1198,6 @@ public class OfferDetailActivity extends BaseActivity {
         return builder.build();
     }
 
-    public void setReminderWithoutProirInfo() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, 1);
-        Intent intent = new Intent(Intent.ACTION_INSERT)
-                .setData(CalendarContract.Events.CONTENT_URI)
-                .putExtra(CalendarContract.Events.TITLE, " Reminder: Twyst offer at " + outlet.getName());
-        startActivity(intent);
-    }
-
     private void redeemConfirmationCoupon(final String id) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -1341,12 +1231,11 @@ public class OfferDetailActivity extends BaseActivity {
                         if (baseResponse.isResponse()) {
                             dialog.dismiss();
                             Toast.makeText(OfferDetailActivity.this, "Coupon redeemed successfully!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(OfferDetailActivity.this, WalletActivity.class);
+                            Intent intent = new Intent(OfferDetailActivity.this, RedeemVoucherActivity.class);
+                            intent.putExtra(AppConstants.INTENT_PARAM_OUTLET_OBJECT, outlet);
+                            intent.putExtra(AppConstants.INTENT_PARAM_OFFER_OBJECT, offer);
                             startActivity(intent);
                             finish();
-//                            Intent i = new Intent();
-//                            setResult(RESULT_OK, i);
-//                            OfferDetailActivity.this.finish();
                         } else {
                             dialog.dismiss();
                             Toast.makeText(OfferDetailActivity.this, "Unable to redeem coupon!", Toast.LENGTH_SHORT).show();
@@ -1654,7 +1543,7 @@ public class OfferDetailActivity extends BaseActivity {
         final View dialogView = li.inflate(R.layout.dialog_extend_voucher_error, null);
         TextView costTv = (TextView) dialogView.findViewById(R.id.costTv);
         if(type.equalsIgnoreCase("offer")){
-            costTv.setText("You don't have enough Twyst Bucks to extend this voucher's validity. You need 100 twyst bucks.");
+            costTv.setText("You don't have enough Twyst Bucks to extend this voucher's validity. You need " + String.valueOf(offer.getOfferCost()) + " twyst bucks.");
         }else {
             costTv.setText("You don't have enough Twyst Bucks to extend this voucher's validity. You need 150 twyst bucks.");
         }
