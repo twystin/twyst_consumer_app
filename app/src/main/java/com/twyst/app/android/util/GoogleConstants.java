@@ -5,6 +5,10 @@ package com.twyst.app.android.util;
  */
 public class GoogleConstants {
     public static String CLIENT_ID = "216832068690-72hsih81arcfahksiq6v80c1jjaadj7n.apps.googleusercontent.com";
+
+
+    // Release android client
+//    public static String CLIENT_ID = "216832068690-ijfc8kju5dk3j0jo70ndghhlusnfhff0.apps.googleusercontent.com";
     // Use your own client id
 
     public static String CLIENT_SECRET = "dxGAMA3lWQInqHziNonWUyWu";
