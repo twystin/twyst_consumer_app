@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="in.twyst">
+    package="com.twyst.app.android">
 
     <!-- This app has permission to register and receive data message. -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
@@ -16,8 +16,8 @@
      NOTE: the permission *must* be called PACKAGE.permission.C2D_MESSAGE,
            where PACKAGE is the application's package name.
     -->
-    <permission android:name="in.twyst.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-    <uses-permission android:name="in.twyst.permission.C2D_MESSAGE" />
+    <permission android:name="com.twyst.app.android.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <uses-permission android:name="com.twyst.app.android.permission.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -44,7 +44,7 @@
         android:required="true" />
 
     <application
-        android:name="in.twyst.TwystApplication"
+        android:name=".TwystApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -85,7 +85,7 @@
             </intent-filter>
 
             <meta-data
-                android:name="android.app.default_searchable"
+                android:name=".default_searchable"
                 android:value="in.twyst.DiscoverActivity" />
 
             <meta-data
@@ -246,7 +246,7 @@
           so only GCM services can send data messages for the app.
         -->
         <receiver
-            android:name="in.twyst.gcm.GcmBroadcastReceiver"
+            android:name=".gcm.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <!-- Receives the actual messages. -->
@@ -255,22 +255,22 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name="in.twyst.sms.SmsListener">
+        <receiver android:name=".sms.SmsListener">
             <intent-filter android:priority="2147483647">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name="in.twyst.sms.ReferrerReceiver"
+            android:name=".sms.ReferrerReceiver"
             android:exported="true"
             tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
-        <receiver android:name="in.twyst.alarm.NotificationPublisherReceiver" />
-        <service android:name="in.twyst.gcm.GcmIntentService" />
-        <service android:name="in.twyst.service.LocationService" />
+        <receiver android:name=".alarm.NotificationPublisherReceiver" />
+        <service android:name=".gcm.GcmIntentService" />
+        <service android:name=".service.LocationService" />
     </application>
 
 </manifest>

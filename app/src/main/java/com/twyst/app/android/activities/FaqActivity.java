@@ -1,0 +1,56 @@
+package com.twyst.app.android.activities;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.text.Html;
+import android.widget.TextView;
+
+import com.twyst.app.android.R;
+import com.twyst.app.android.util.AppConstants;
+
+/**
+ * Created by rahuls on 20/8/15.
+ */
+public class FaqActivity extends BaseActivity {
+    private boolean fromDrawer;
+
+    @Override
+    protected String getTagName() {
+        return null;
+    }
+
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_faq;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        setupAsChild=true;
+        super.onCreate(savedInstanceState);
+        fromDrawer = getIntent().getBooleanExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, false);
+
+        TextView tvFAQ = (TextView)findViewById(R.id.tvFAQ);
+        tvFAQ.setText(Html.fromHtml(getString(R.string.faq_body)));
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerOpened) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            if (fromDrawer) {
+                //clear history and go to discover
+                Intent intent = new Intent(getBaseContext(), DiscoverActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                startActivity(intent);
+
+            } else {
+                super.onBackPressed();
+            }
+
+        }
+    }
+}

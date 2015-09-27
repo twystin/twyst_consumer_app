@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<in.twyst.util.ScrimInsetsFrameLayout
+<com.twyst.app.android.util.ScrimInsetsFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
@@ -27,4 +27,4 @@
         android:scrollbarStyle="outsideInset"
         android:overScrollFooter="@android:color/transparent"
         />
-</in.twyst.util.ScrimInsetsFrameLayout>
+</com.twyst.app.android.util.ScrimInsetsFrameLayout>
