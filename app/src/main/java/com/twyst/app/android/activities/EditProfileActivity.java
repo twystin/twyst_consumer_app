@@ -19,6 +19,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -406,6 +407,7 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
                             if (TextUtils.isEmpty(editProfileMail.getText().toString()) || !Pattern.matches(EMAIL_REGEX, editProfileMail.getText().toString())) {
                                 editProfileMail.setError("Invalid email");
                             }else{
+                                editProfileMail.setError(null);
                                 updateProfile();
                             }
                         }
@@ -669,6 +671,7 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
             public void success(final BaseResponse<ProfileUpdate> profileUpdateBaseResponse, Response response) {
                 twystProgressHUD.dismiss();
                 if (profileUpdateBaseResponse.isResponse()) {
+                    updateSocialFriendList(getUserToken());
                 }
             }
 
@@ -724,6 +727,7 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
             public void success(BaseResponse<ProfileUpdate> profileUpdateBaseResponse, Response response) {
                 twystProgressHUD.dismiss();
                 if (profileUpdateBaseResponse.isResponse()) {
+                    Toast.makeText(EditProfileActivity.this, "Profile updated successfully!",Toast.LENGTH_SHORT).show();
                     Log.d(getTagName(), "" + profileUpdateBaseResponse.getMessage());
                 } else {
                     Log.d(getTagName(), "" + profileUpdateBaseResponse.getMessage());
