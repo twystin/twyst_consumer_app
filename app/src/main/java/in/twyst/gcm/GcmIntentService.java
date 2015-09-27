@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,7 +35,7 @@ import in.twyst.util.AppConstants;
  * wake lock.
  */
 public class GcmIntentService extends IntentService {
-    public static final int NOTIFICATION_ID = 1;
+//    public static final int NOTIFICATION_ID = 1;
     //private NotificationManager mNotificationManager;
     //NotificationCompat.Builder builder;
 
@@ -134,8 +135,15 @@ public class GcmIntentService extends IntentService {
                     .setContentText(message);
 
 
-            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+            mNotificationManager.notify(getNotificationCount(), mBuilder.build());
         }
 
+    }
+
+    private int getNotificationCount() {
+        SharedPreferences prefs = this.getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        int lastCount = prefs.getInt(AppConstants.PREFERENCE_NOTIFICATION_COUNT, 0);
+        prefs.edit().putInt(AppConstants.PREFERENCE_NOTIFICATION_COUNT, lastCount + 1).apply();
+        return lastCount;
     }
 }
