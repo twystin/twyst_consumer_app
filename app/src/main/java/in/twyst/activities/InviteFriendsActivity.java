@@ -84,7 +84,7 @@ public class InviteFriendsActivity extends BaseActivity {
                 SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
                 String phone = prefs.getString(AppConstants.PREFERENCE_USER_PHONE, "");
                 String referral = "promotion%3Dappinvite%26code%3D"+phone;
-                String text = "Twyst App: https://play.google.com/store/apps/details?id="+getApplication().getPackageName()+"&ah=-smMDxRK7pmXEK32N7mSNcbZ2ZM&referrer="+referral;
+                String text = "Hey! I wanted to tell you about Twyst - a great app that shows you the best offers and deals on food and drink at places around you. I found it super useful and I think you will too! Download it using the link below and get 500 Twyst Bucks when you start - https://play.google.com/store/apps/details?id="+getApplication().getPackageName()+"&ah=-smMDxRK7pmXEK32N7mSNcbZ2ZM&referrer="+referral;
 
                 showShareIntents("Invite using", text);
             }
