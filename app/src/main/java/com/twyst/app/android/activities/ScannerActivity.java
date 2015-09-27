@@ -29,6 +29,9 @@ import com.twyst.app.android.model.CheckinCode;
 import com.twyst.app.android.model.CheckinData;
 import com.twyst.app.android.service.HttpService;
 import com.twyst.app.android.util.AppConstants;
+
+import org.w3c.dom.Text;
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -74,7 +77,12 @@ public class ScannerActivity extends ActionBarActivity implements ZXingScannerVi
         if (!TextUtils.isEmpty(rawResult.getText())) {
             CheckinData checkinData = new CheckinData();
             CheckinCode code = new CheckinCode();
-            code.setCode(rawResult.getText());
+            String result = rawResult.getText();
+            String codeRetrieved = "";
+            if (result!=null &!TextUtils.isEmpty(result)){
+                codeRetrieved = result.substring(result.length() - 6);
+            }
+            code.setCode(codeRetrieved);
             checkinData.setCheckinCode(code);
 
             HttpService.getInstance().postCheckin(getUserToken(), checkinData, new Callback<BaseResponse>() {
