@@ -1561,7 +1561,7 @@ public class OfferDetailActivity extends BaseActivity {
         final View dialogView = li.inflate(R.layout.dialog_extend_voucher_error, null);
         TextView costTv = (TextView) dialogView.findViewById(R.id.costTv);
         if(type.equalsIgnoreCase("offer")){
-            costTv.setText("You don't have enough Twyst Bucks to extend this voucher's validity. You need " + String.valueOf(offer.getOfferCost()) + " twyst bucks.");
+            costTv.setText("You don't have enough Twyst Bucks to use this offer. You need " + String.valueOf(offer.getOfferCost()) + " twyst bucks.");
         }else {
             costTv.setText("You don't have enough Twyst Bucks to extend this voucher's validity. You need 150 twyst bucks.");
         }
