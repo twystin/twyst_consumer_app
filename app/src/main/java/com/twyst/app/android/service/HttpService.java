@@ -154,7 +154,7 @@ public class HttpService {
         twystService.shareOffer(token, shareOffer, callback);
     }
 
-    public void postLikeOffer(String token, LikeOffer likeOffer, Callback<BaseResponse> callback){
+    public void postLikeOffer(String token, LikeOffer likeOffer, Callback<BaseResponse<Data>> callback){
         twystService.postLikeOffer(token, likeOffer, callback);
     }
 

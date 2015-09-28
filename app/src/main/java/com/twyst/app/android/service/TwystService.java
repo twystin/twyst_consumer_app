@@ -91,7 +91,7 @@ public interface TwystService {
     public void postCheckin(@Query("token") String token, @Body() CheckinData checkinData, Callback<BaseResponse> callback);
 
     @POST("/api/v4/offer/like")
-    public void postLikeOffer(@Query("token") String token, @Body() LikeOffer likeOffer, Callback<BaseResponse> callback);
+    public void postLikeOffer(@Query("token") String token, @Body() LikeOffer likeOffer, Callback<BaseResponse<Data>> callback);
 
     @POST("/api/v4/offer/unlike")
     public void postUnLikeOffer(@Query("token") String token, @Body() LikeOffer likeOffer, Callback<BaseResponse> callback);

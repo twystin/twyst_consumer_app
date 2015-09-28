@@ -45,6 +45,7 @@ import com.twyst.app.android.R;
 import com.twyst.app.android.alarm.NotificationPublisherReceiver;
 import com.twyst.app.android.model.AvailableNext;
 import com.twyst.app.android.model.BaseResponse;
+import com.twyst.app.android.model.Data;
 import com.twyst.app.android.model.EventMeta;
 import com.twyst.app.android.model.GrabOffer;
 import com.twyst.app.android.model.LikeOffer;
@@ -382,12 +383,16 @@ public class OfferDetailActivity extends BaseActivity {
                     likeOfferMeta.setOffer(offer.get_id());
                     likeOffer.setOfferMeta(likeOfferMeta);
 
-                    HttpService.getInstance().postLikeOffer(getUserToken(), likeOffer, new Callback<BaseResponse>() {
+                    HttpService.getInstance().postLikeOffer(getUserToken(), likeOffer, new Callback<BaseResponse<Data>>() {
                         @Override
-                        public void success(BaseResponse baseResponse, Response response) {
+                        public void success(BaseResponse<Data> baseResponse, Response response) {
                             twystProgressHUD.dismiss();
                             if (baseResponse.isResponse()) {
-
+                                int twystBucks = baseResponse.getData().getTwyst_bucks();
+                                if (twystBucks > getTwystBucks()){
+                                    setTwystBucks(twystBucks);
+                                    Toast.makeText(OfferDetailActivity.this,OfferDetailActivity.this.getResources().getString(R.string.bucks_earned_like_offer),Toast.LENGTH_SHORT).show();
+                                }
                                 offer.setLike(true);
                                 likeText.setText(String.valueOf(offer.getLikeCount() + 1));
                                 offer.setLikeCount(offer.getLikeCount() + 1);
@@ -1584,11 +1589,6 @@ public class OfferDetailActivity extends BaseActivity {
                 dialog.dismiss();
             }
         });
-    }
-
-    public int getTwystBucks() {
-        SharedPreferences prefs = this.getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return prefs.getInt(AppConstants.PREFERENCE_LAST_TWYST_BUCK, 0);
     }
 
     public void slideUp(final View view) {
