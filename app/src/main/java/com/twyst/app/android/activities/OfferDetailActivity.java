@@ -452,6 +452,14 @@ public class OfferDetailActivity extends BaseActivity {
 
         String expiryText = "";
         String lapseText = "";
+
+        //Hiding like Button
+        if ("coupon".equalsIgnoreCase(offer.getType())){
+            likeText.setVisibility(View.INVISIBLE);
+        }else{
+            likeText.setVisibility(View.VISIBLE);
+        }
+
         if ("coupon".equalsIgnoreCase(offer.getType())) {
             if (!TextUtils.isEmpty(offer.getLapseDate())) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
