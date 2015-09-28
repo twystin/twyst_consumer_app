@@ -1434,6 +1434,9 @@ public class OfferDetailActivity extends BaseActivity {
                         dialog.dismiss();
                         if (baseResponse.isResponse()) {
                             Toast.makeText(OfferDetailActivity.this, "Offer grabbed", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(OfferDetailActivity.this, WalletActivity.class);
+                            startActivity(intent);
+                            finish();
                         } else {
                             Toast.makeText(OfferDetailActivity.this, baseResponse.getMessage(), Toast.LENGTH_SHORT).show();
                         }

@@ -243,10 +243,9 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 holder.text2.setTextColor(resources.getColor(R.color.offer_color_yellow));
                 holder.text3.setTextColor(resources.getColor(R.color.offer_color_yellow));
                 holder.eclipseDot.setTextColor(resources.getColor(R.color.offer_color_yellow));
-                holder.footerBckGrd.setBackgroundResource(R.drawable.button_yellow);
 
                 if(offer.isAvailableNow()){
-                    holder.footerBckGrd.setBackgroundResource(R.drawable.button_blue);
+                    holder.footerBckGrd.setBackgroundResource(R.drawable.button_yellow);
                     holder.outlet500.setVisibility(View.VISIBLE);
                     holder.outlet500.setText(String.valueOf(100));
                     holder.footerImageView.setVisibility(View.GONE);

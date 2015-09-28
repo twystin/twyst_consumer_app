@@ -198,7 +198,6 @@
                         android:layout_above="@+id/textView10"
                         android:layout_alignEnd="@+id/textView10"
                         android:layout_alignRight="@+id/textView10"
-                        android:drawableLeft="@drawable/offer_detail_bank_card"
                         android:drawablePadding="5dp"
                         android:textSize="@dimen/offer_detail_text1"
                         android:visibility="gone" />
