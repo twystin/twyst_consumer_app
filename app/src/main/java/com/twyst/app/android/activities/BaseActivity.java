@@ -72,6 +72,10 @@ public abstract class BaseActivity extends ActionBarActivity
     protected SharedPreferences.Editor sharedPreferences;
 
     TextView localityDrawer;
+    TextView userName;
+    ImageView backImage;
+    ImageView userImage;
+
     protected abstract String getTagName();
 
     protected abstract int getLayoutResource();
@@ -162,35 +166,17 @@ public abstract class BaseActivity extends ActionBarActivity
         drawerList = (ListView) findViewById(R.id.drawer_listview);
         View list_header = getLayoutInflater().inflate(R.layout.drawerlist_header, null);
 
-        SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        String name = prefs.getString(AppConstants.PREFERENCE_USER_NAME, "");
-        String pic = prefs.getString(AppConstants.PREFERENCE_USER_PIC, "");
-        String locality = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, "");
-        TextView userName = (TextView) list_header.findViewById(R.id.userName);
-        ImageView backImage = (ImageView) list_header.findViewById(R.id.backImage);
-        ImageView userImage = (ImageView) list_header.findViewById(R.id.userImage);
+        userName = (TextView) list_header.findViewById(R.id.userName);
+        backImage = (ImageView) list_header.findViewById(R.id.backImage);
+        userImage = (ImageView) list_header.findViewById(R.id.userImage);
         TextView editProfile = (TextView) list_header.findViewById(R.id.editProfile);
         localityDrawer = (TextView) list_header.findViewById(R.id.localityDrawer);
+
+        SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        String locality = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, "");
         localityDrawer.setText(locality);
-        userName.setText(name);
 
-        if (!TextUtils.isEmpty(pic)) {
-            backImage.setVisibility(View.VISIBLE);
-            userImage.setVisibility(View.VISIBLE);
-            Picasso picasso = Picasso.with(this);
-            picasso.setIndicatorsEnabled(AppConstants.DEGUG_PICASSO);
-            picasso.setLoggingEnabled(AppConstants.DEGUG_PICASSO);
-            picasso.load(pic)
-                    .noFade()
-                    .centerCrop()
-                    .resize(200, 200)
-                    .transform(new RoundedTransformation(100, 0))
-                    .into(userImage);
-
-        } else {
-            backImage.setVisibility(View.GONE);
-            userImage.setVisibility(View.VISIBLE);
-        }
+        updatePicName();
 
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -934,4 +920,30 @@ public abstract class BaseActivity extends ActionBarActivity
         sharedPreferences.commit();
     }
 
+    public void updatePicName(){
+        SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        String name = prefs.getString(AppConstants.PREFERENCE_USER_NAME, "");
+        String pic = prefs.getString(AppConstants.PREFERENCE_USER_PIC, "");
+        userName.setText(name);
+
+        if (!TextUtils.isEmpty(pic)) {
+            backImage.setVisibility(View.VISIBLE);
+            userImage.setVisibility(View.VISIBLE);
+            Picasso picasso = Picasso.with(this);
+            picasso.setIndicatorsEnabled(AppConstants.DEGUG_PICASSO);
+            picasso.setLoggingEnabled(AppConstants.DEGUG_PICASSO);
+            picasso.load(pic)
+                    .noFade()
+                    .centerCrop()
+                    .resize(200, 200)
+                    .transform(new RoundedTransformation(100, 0))
+                    .into(userImage);
+
+        } else {
+            backImage.setVisibility(View.GONE);
+            userImage.setVisibility(View.VISIBLE);
+        }
+
+
+    }
 }

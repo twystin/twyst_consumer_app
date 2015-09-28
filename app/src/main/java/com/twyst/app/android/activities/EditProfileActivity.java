@@ -264,6 +264,8 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_NAME, currentProfile.getFirstName());
                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_FULL_NAME, currentProfile.getName());
                 sharedPreferences.apply();
+
+                updatePicName();
             }
 
         };
@@ -467,6 +469,8 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_NAME, personName);
                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_FULL_NAME, personFullName);
                 sharedPreferences.apply();
+
+                updatePicName();
 //
 
             }
