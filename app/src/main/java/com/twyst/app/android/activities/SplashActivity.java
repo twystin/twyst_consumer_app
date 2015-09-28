@@ -138,7 +138,7 @@ public class SplashActivity extends Activity {
     private void getKey() {
         PackageInfo info;
         try {
-            info = getPackageManager().getPackageInfo("in.twyst", PackageManager.GET_SIGNATURES);
+            info = getPackageManager().getPackageInfo("com.twyst.app.android", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md;
                 md = MessageDigest.getInstance("SHA");
@@ -154,7 +154,7 @@ public class SplashActivity extends Activity {
     private void generateHashKey() {
 
         try {
-            PackageInfo info = getPackageManager().getPackageInfo("in.twyst", PackageManager.GET_SIGNATURES);
+            PackageInfo info = getPackageManager().getPackageInfo("com.twyst.app.android", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
