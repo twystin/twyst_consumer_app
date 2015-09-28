@@ -66,7 +66,7 @@ public class TutorialFragment extends Fragment {
             case 2:
                 centerLogo.setImageResource(R.drawable.tutorial_center_logo_3);
                 textView1.setText("AND EVEN BETTER WITH FRIENDS!");
-                textView2.setText("Never let an exclusive offer go waste! \nSet up your network on Twyst to share offers with friends. \n\nTIP: That means you can use the exclusive offers your friends unlocked too!");
+                textView2.setText("Never let an exclusive offer go waste! Set up your network on Twyst to share offers with friends. \nTIP: That means you can use the exclusive offers your friends unlocked too!");
                 letsTwyst.setVisibility(View.GONE);
                 break;
             case 3:

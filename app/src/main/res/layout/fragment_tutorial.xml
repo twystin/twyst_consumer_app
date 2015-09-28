@@ -41,7 +41,7 @@
             android:layout_marginTop="@dimen/tutorial_text_margin_top"
             android:gravity="center"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/tutorial_text1_size"
+            android:textSize="18sp"
             android:textStyle="bold"/>
 
         <TextView
@@ -49,10 +49,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="55dp"
-            android:layout_marginLeft="22dp"
-            android:layout_marginRight="22dp"
-            android:layout_marginTop="45dp"
+            android:layout_marginBottom="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="30dp"
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="@dimen/tutorial_text2_size"/>

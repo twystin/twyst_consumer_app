@@ -76,7 +76,7 @@
     <dimen name="tutorial_viewpager_margin_bottom">20dp</dimen>
     <dimen name="tutorial_viewpager_margin_top">14dp</dimen>
     <dimen name="tutorial_centerlogo_margin_top">41dp</dimen>
-    <dimen name="tutorial_padding">20dp</dimen>
+    <dimen name="tutorial_padding">15dp</dimen>
     <dimen name="tutorial_text_margin_top">30dp</dimen>
     <dimen name="tutorial_text1_size">18sp</dimen>
     <dimen name="tutorial_text2_size">14sp</dimen>
