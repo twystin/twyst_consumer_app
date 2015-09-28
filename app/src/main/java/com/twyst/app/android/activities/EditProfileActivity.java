@@ -137,28 +137,7 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
         callbackManager = CallbackManager.Factory.create();
         fromDrawer = getIntent().getBooleanExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, false);
         final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        final String name = prefs.getString(AppConstants.PREFERENCE_USER_FULL_NAME, "");
-        final String pic = prefs.getString(AppConstants.PREFERENCE_USER_PIC, "");
 
-        ImageView backImage = (ImageView) findViewById(R.id.editProfileBackImage);
-        final ImageView image = (ImageView) findViewById(R.id.editProfileUserImage);
-        if (!TextUtils.isEmpty(pic)) {
-            backImage.setVisibility(View.VISIBLE);
-            image.setVisibility(View.VISIBLE);
-            Picasso picasso = Picasso.with(this);
-            picasso.setIndicatorsEnabled(AppConstants.DEGUG_PICASSO);
-            picasso.setLoggingEnabled(AppConstants.DEGUG_PICASSO);
-            picasso.load(pic)
-                    .noFade()
-                    .centerCrop()
-                    .resize(150, 150)
-                    .transform(new RoundedTransformation(100, 0))
-                    .into(image);
-
-        } else {
-            backImage.setVisibility(View.GONE);
-            image.setVisibility(View.VISIBLE);
-        }
         editProfileMail = (EditText) findViewById(R.id.editProfileMail);
         editProfileDob = (EditText) findViewById(R.id.editProfileDob);
         editProfileAnniversary = (EditText) findViewById(R.id.editProfileAnniversary);
@@ -265,7 +244,7 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_FULL_NAME, currentProfile.getName());
                 sharedPreferences.apply();
 
-                updatePicName();
+                updatePicNameLocal();
             }
 
         };
@@ -286,8 +265,8 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
                 if (profileBaseResponse.isResponse()) {
                     hideProgressHUDInLayout();
                     profile = profileBaseResponse.getData();
-                    profileName.setText(name);
 
+                    updatePicNameLocal();
                     findViewById(R.id.layout).setVisibility(View.VISIBLE);
 
                     editProfileMail.setFocusableInTouchMode(false);
@@ -470,7 +449,7 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
                 sharedPreferences.putString(AppConstants.PREFERENCE_USER_FULL_NAME, personFullName);
                 sharedPreferences.apply();
 
-                updatePicName();
+                updatePicNameLocal();
 //
 
             }
@@ -792,4 +771,31 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
         }
     }
 
+    private void updatePicNameLocal(){
+        final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        final String name = prefs.getString(AppConstants.PREFERENCE_USER_FULL_NAME, "");
+        final String pic = prefs.getString(AppConstants.PREFERENCE_USER_PIC, "");
+
+        ImageView backImage = (ImageView) findViewById(R.id.editProfileBackImage);
+        final ImageView image = (ImageView) findViewById(R.id.editProfileUserImage);
+        if (!TextUtils.isEmpty(pic)) {
+            backImage.setVisibility(View.VISIBLE);
+            image.setVisibility(View.VISIBLE);
+            Picasso picasso = Picasso.with(this);
+            picasso.setIndicatorsEnabled(AppConstants.DEGUG_PICASSO);
+            picasso.setLoggingEnabled(AppConstants.DEGUG_PICASSO);
+            picasso.load(pic)
+                    .noFade()
+                    .centerCrop()
+                    .resize(150, 150)
+                    .transform(new RoundedTransformation(100, 0))
+                    .into(image);
+
+        } else {
+            backImage.setVisibility(View.GONE);
+            image.setVisibility(View.VISIBLE);
+        }
+        profileName.setText(name);
+
+    }
 }

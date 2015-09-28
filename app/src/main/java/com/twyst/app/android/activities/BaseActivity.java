@@ -753,6 +753,7 @@ public abstract class BaseActivity extends ActionBarActivity
     protected void onResume() {
         super.onResume();
         checkPlayServices();
+        updatePicName();
     }
 
     public int getScreenHeight() {
