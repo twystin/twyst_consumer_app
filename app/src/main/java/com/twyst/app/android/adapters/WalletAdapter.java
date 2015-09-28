@@ -102,16 +102,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
 
                     if(offers.get(0).getAvailableNext()!=null) {
                         if (!offers.get(0).isAvailableNow() && !TextUtils.isEmpty(offers.get(0).getAvailableNext().getDay()) && !TextUtils.isEmpty(offers.get(0).getAvailableNext().getTime())) {
-                            if (days == 0) {
                                 lapseText = offers.get(0).getAvailableNext().getDay() + ", " + offers.get(0).getAvailableNext().getTime();
-                            } else if (days == 1) {
-                                lapseText = offers.get(0).getAvailableNext().getDay() + ", " + offers.get(0).getAvailableNext().getTime();
-                            } else if (days > 7) {
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("d-MMM");
-                                lapseText = simpleDateFormat.format(lapseDate).toLowerCase() + ", " + offers.get(0).getAvailableNext().getTime(); //next available
-                            } else {
-                                lapseText = offers.get(0).getAvailableNext().getDay() + ", " + offers.get(0).getAvailableNext().getTime();
-                            }
                         } else {
                             lapseText = null;
                         }
