@@ -641,14 +641,22 @@ public class OfferDetailActivity extends BaseActivity {
                             if(selectedLocation.length()!=0) {
                                 redeemConfirmationCoupon(idValue);
                             }else {
-                                List<Offer.OutletList> outletList = offer.getOutletList();
 
-                                values.clear();
-                                outletID.clear();
+                                if (offer.getOutletList().size()>1){
+                                    List<Offer.OutletList> outletList = offer.getOutletList();
 
-                                pickLocDialog(outletList);
+                                    values.clear();
+                                    outletID.clear();
+
+                                    pickLocDialog(outletList);
 //                                Toast.makeText(OfferDetailActivity.this,"Please pick a location before proceeding!",Toast.LENGTH_SHORT).show();
-                            }
+
+                                }else{
+                                    String outletID = offer.getOutletList().get(0).get_id();
+                                    redeemConfirmationCoupon(outletID);
+                                }
+
+                                }
 
 //                            if(locationText.length()!=0) {
 //                                redeemConfirmationCoupon(idValue);
