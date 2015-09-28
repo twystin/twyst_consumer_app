@@ -1150,14 +1150,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
     protected void onResume() {
         super.onResume();
 
-        if (search) {
-            if (firstLoad) {
-                fetchSearchedOutlets();
-            } else {
-                firstLoad = true;
-            }
-
-        } else {
+        if (!search) {
             if (firstLoad) {
                 if (!TextUtils.isEmpty(date) && !TextUtils.isEmpty(time) && !fromchangeLoc) {
                     fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
