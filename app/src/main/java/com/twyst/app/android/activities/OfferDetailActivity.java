@@ -752,26 +752,26 @@ public class OfferDetailActivity extends BaseActivity {
             type_offer.setTextColor(getResources().getColor(R.color.offer_color_yellow));
             coupon_text1.setTextColor(getResources().getColor(R.color.offer_color_yellow));
             coupon_text2.setTextColor(getResources().getColor(R.color.offer_color_yellow));
+            TextView bankcard = (TextView)findViewById(R.id.bankcard);
+
+            if(offer.getLapsedCouponSource()!=null){
+                bankcard.setVisibility(View.VISIBLE);
+                String toDisplay;
+                if (offer.getLapsedCouponSource().getName()!=null && !TextUtils.isEmpty(offer.getLapsedCouponSource().getName())){
+                    toDisplay = offer.getLapsedCouponSource().getName();
+                }else{
+                    toDisplay = offer.getLapsedCouponSource().getPhone();
+                }
+                bankcard.setText("from " + toDisplay);
+                bankcard.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.icon_discover_offer_socialpool_grey), null, null, null);
+            }else {
+                bankcard.setVisibility(View.GONE);
+            }
 
             if (offer.isAvailableNow()) {
-                TextView bankcard = (TextView)findViewById(R.id.bankcard);
                 buckText.setVisibility(View.VISIBLE);
                 buckText.setText("100");
                 btntext.setText(getResources().getString(R.string.grab_offer));
-
-                if(offer.getLapsedCouponSource()!=null){
-                    bankcard.setVisibility(View.VISIBLE);
-                    String toDisplay;
-                    if (offer.getLapsedCouponSource().getName()!=null && !TextUtils.isEmpty(offer.getLapsedCouponSource().getName())){
-                        toDisplay = offer.getLapsedCouponSource().getName();
-                    }else{
-                        toDisplay = offer.getLapsedCouponSource().getPhone();
-                    }
-                    bankcard.setText("from " + toDisplay);
-                    bankcard.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.icon_discover_offer_socialpool_grey), null, null, null);
-                }else {
-                    bankcard.setVisibility(View.GONE);
-                }
 
                 buttonImage.setVisibility(View.GONE);
                 int sdk = android.os.Build.VERSION.SDK_INT;
@@ -977,6 +977,7 @@ public class OfferDetailActivity extends BaseActivity {
             if(!TextUtils.isEmpty(offer.getSource())){
                 bankcard.setVisibility(View.VISIBLE);
                 bankcard.setText(offer.getSource());
+                bankcard.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.icon_discover_offer_bank_creditcard_grey), null, null, null);
             }else {
                 bankcard.setVisibility(View.GONE);
             }
