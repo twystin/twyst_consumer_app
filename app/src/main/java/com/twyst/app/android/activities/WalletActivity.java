@@ -337,7 +337,7 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
                                                                               @Override
                                                                               public int compare(Outlet lhs, Outlet rhs) {
                                                                                   if (!TextUtils.isEmpty(lhs.getDistance()) && !TextUtils.isEmpty(rhs.getDistance())) {
-                                                                                      return Integer.valueOf(lhs.getDistance()).compareTo(Integer.valueOf(rhs.getDistance()));
+                                                                                      return Double.valueOf(lhs.getDistance()).compareTo(Double.valueOf(rhs.getDistance()));
                                                                                   } else {
                                                                                       return 0;
                                                                                   }
@@ -362,7 +362,7 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
                                                                                       Collections.sort(availableNowList, new Comparator<Outlet>() {
                                                                                           @Override
                                                                                           public int compare(Outlet lhs, Outlet rhs) {
-                                                                                              return Integer.valueOf(lhs.getDistance()).compareTo(Integer.valueOf(rhs.getDistance()));
+                                                                                              return Double.valueOf(lhs.getDistance()).compareTo(Double.valueOf(rhs.getDistance()));
                                                                                           }
                                                                                       });
                                                                                   }
