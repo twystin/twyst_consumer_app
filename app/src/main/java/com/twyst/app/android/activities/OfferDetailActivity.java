@@ -643,6 +643,9 @@ public class OfferDetailActivity extends BaseActivity {
                             if(offer.getIssuedBy()!=null){
                                 String id = offer.getIssuedBy();
                                 redeemConfirmationCoupon(id);
+                            }else{// offer selected from DiscoverActivity
+                                String id = outlet.get_id();
+                                redeemConfirmationCoupon(id);
                             }
                         }else {
 
