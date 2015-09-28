@@ -269,10 +269,13 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
                     updatePicNameLocal();
                     findViewById(R.id.layout).setVisibility(View.VISIBLE);
 
-                    editProfileMail.setFocusableInTouchMode(false);
+//                    editProfileMail.setFocusableInTouchMode(false);
                     editProfileDob.setFocusableInTouchMode(false);
                     editProfileAnniversary.setFocusableInTouchMode(false);
-                    editProfileCity.setFocusableInTouchMode(false);
+//                    editProfileCity.setFocusableInTouchMode(false);
+
+                    editProfileAnniversary.setText(prefs.getString(AppConstants.PREFERENCE_ANNIVERSARY, "Anniversary"));
+                    editProfileDob.setText(prefs.getString(AppConstants.PREFERENCE_DOB,"Date of Birth"));
 
                     if (!TextUtils.isEmpty(profile.getPhone())) {
                         editProfileMoNo.setText(profile.getPhone());
@@ -546,9 +549,10 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current date as the default date in the picker
             final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
+            SharedPreferences prefs = getActivity().getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+            int year = prefs.getInt(AppConstants.PREFERENCE_DOB_YEAR, c.get(Calendar.YEAR));
+            int month = prefs.getInt(AppConstants.PREFERENCE_DOB_MONTH, c.get(Calendar.MONTH));
+            int day = prefs.getInt(AppConstants.PREFERENCE_DOB_DAY, c.get(Calendar.DAY_OF_MONTH));
 
             // Create a new instance of DatePickerDialog and return it
             DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Holo_Dialog_MinWidth, this, year, month, day);
@@ -561,6 +565,7 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             Log.d(getClass().getSimpleName(), "year=" + year + ", month=" + month + ", day=" + day);
+            saveSharedPrefDOB(year,month,day);
             TextView editProfileDob = (EditText) getActivity().findViewById(R.id.editProfileDob);
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.YEAR, year);
@@ -570,6 +575,13 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             String dateFormatted = sdf.format(calendar.getTime());
             editProfileDob.setText(dateFormatted);
+        }
+
+        private void saveSharedPrefDOB(int year, int month, int day) {
+            SharedPreferences prefs = getActivity().getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+            prefs.edit().putInt(AppConstants.PREFERENCE_DOB_DAY, day).apply();
+            prefs.edit().putInt(AppConstants.PREFERENCE_DOB_MONTH, month).apply();
+            prefs.edit().putInt(AppConstants.PREFERENCE_DOB_YEAR, year).apply();
         }
     }
 
@@ -581,9 +593,10 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current date as the default date in the picker
             final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
+            SharedPreferences prefs = getActivity().getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+            int year = prefs.getInt(AppConstants.PREFERENCE_ANNIVERSARY_YEAR, c.get(Calendar.YEAR));
+            int month = prefs.getInt(AppConstants.PREFERENCE_ANNIVERSARY_MONTH, c.get(Calendar.MONTH));
+            int day = prefs.getInt(AppConstants.PREFERENCE_ANNIVERSARY_DAY, c.get(Calendar.DAY_OF_MONTH));
 
             // Create a new instance of DatePickerDialog and return it
             DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Holo_Dialog_MinWidth, this, year, month, day);
@@ -596,6 +609,7 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             Log.d(getClass().getSimpleName(), "year=" + year + ", month=" + month + ", day=" + day);
+            saveSharedPrefAnniversary(year, month, day);
             TextView editProfileAnniversary = (EditText) getActivity().findViewById(R.id.editProfileAnniversary);
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.YEAR, year);
@@ -605,6 +619,13 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             String dateFormatted = sdf.format(calendar.getTime());
             editProfileAnniversary.setText(dateFormatted);
+        }
+
+        private void saveSharedPrefAnniversary(int year, int month, int day) {
+            SharedPreferences prefs = getActivity().getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+            prefs.edit().putInt(AppConstants.PREFERENCE_ANNIVERSARY_DAY, day).apply();
+            prefs.edit().putInt(AppConstants.PREFERENCE_ANNIVERSARY_MONTH, month).apply();
+            prefs.edit().putInt(AppConstants.PREFERENCE_ANNIVERSARY_YEAR, year).apply();
         }
     }
 
@@ -710,6 +731,7 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
             public void success(BaseResponse<ProfileUpdate> profileUpdateBaseResponse, Response response) {
                 twystProgressHUD.dismiss();
                 if (profileUpdateBaseResponse.isResponse()) {
+                    saveDOBAnniversaryLocally();
                     Toast.makeText(EditProfileActivity.this, "Profile updated successfully!",Toast.LENGTH_SHORT).show();
                     Log.d(getTagName(), "" + profileUpdateBaseResponse.getMessage());
                 } else {
@@ -724,6 +746,12 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
             }
         });
 
+    }
+
+    private void saveDOBAnniversaryLocally() {
+        SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putString(AppConstants.PREFERENCE_DOB, editProfileDob.getText().toString()).apply();
+        prefs.edit().putString(AppConstants.PREFERENCE_ANNIVERSARY, editProfileAnniversary.getText().toString()).apply();
     }
 
     private void setFacebookConnected(boolean enabled) {

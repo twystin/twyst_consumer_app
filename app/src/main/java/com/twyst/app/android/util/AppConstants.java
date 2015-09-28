@@ -6,8 +6,8 @@ package com.twyst.app.android.util;
 public class AppConstants {
 
 //    public static final String HOST = "http://retwyst.twyst.in";
-//    public static final String HOST = "http://staging.twyst.in";
     public static final String HOST = "http://twyst.in";
+
     public static final String HOST_SECURE = "https://www.twyst.in";
 
     public static final String GCM_PROJECT_ID = "216832068690";
@@ -59,6 +59,17 @@ public class AppConstants {
     public static final String PREFERENCE_IS_FACEBOOK_CONNECTED = "is_facebook_connected";
     public static final String PREFERENCE_IS_GOOGLE_CONNECTED = "is_google_connected";
     public static final String PREFERENCE_IS_PUSH_ENABLED = "is_push_enabled";
+
+    public static final String PREFERENCE_DOB_DAY = "dob_day";
+    public static final String PREFERENCE_DOB_MONTH = "dob_month";
+    public static final String PREFERENCE_DOB_YEAR = "dob_year";
+
+    public static final String PREFERENCE_ANNIVERSARY_DAY = "anniversary_day";
+    public static final String PREFERENCE_ANNIVERSARY_MONTH = "anniversary_month";
+    public static final String PREFERENCE_ANNIVERSARY_YEAR = "anniversary_year";
+
+    public static final String PREFERENCE_ANNIVERSARY = "anniversary";
+    public static final String PREFERENCE_DOB = "dob";
 
     public static final String SMS_FROM = "BW-TWYSTR";
 

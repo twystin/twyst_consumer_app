@@ -182,7 +182,7 @@
 
                             <EditText
                                 android:id="@+id/editProfileMail"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:layout_marginLeft="16dp"
@@ -190,7 +190,6 @@
                                 android:layout_toRightOf="@+id/mailIcon"
                                 android:inputType="textEmailAddress"
                                 android:hint="Email Id"
-                                android:textCursorDrawable="@null"
                                 android:textColorHint="@color/edit_profile_text_color"
                                 android:textColor="@color/edit_profile_text_color"
                                 android:textSize="14sp" />
@@ -326,7 +325,7 @@
 
                             <EditText
                                 android:id="@+id/editProfileCity"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:layout_marginLeft="14dp"
@@ -334,7 +333,6 @@
                                 android:inputType="textEmailAddress"
                                 android:background="@null"
                                 android:hint="City"
-                                android:textCursorDrawable="@null"
                                 android:textColorHint="@color/edit_profile_text_color"
                                 android:textColor="@color/edit_profile_text_color"
                                 android:textSize="14sp" />
