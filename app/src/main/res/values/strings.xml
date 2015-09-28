@@ -107,5 +107,7 @@ each friend who joins.</p>
     <string name="grab_offer">Grab Offer</string>
 
     <string name="redeem_code_get_twyst_bucks">Upload your bill and\nget %1$d Twyst bucks</string>
+    <string name="bucks_earned_follow_outlet">You have earned 20 Twyst Bucks!</string>
+    <string name="bucks_earned_like_offer">You have earned 10 Twyst Bucks!</string>
 
 </resources>

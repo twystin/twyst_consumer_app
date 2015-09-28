@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -228,6 +230,12 @@ public class DiscoverOutletAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                             @Override
                             public void success(BaseResponse<Data> dataBaseResponse, Response response) {
                                 if (dataBaseResponse.isResponse()) {
+                                    int twystBucks = dataBaseResponse.getData().getTwyst_bucks();
+                                    DiscoverActivity discoverActivity = (DiscoverActivity) view.getContext();
+                                    if (twystBucks > discoverActivity.getTwystBucks()){
+                                        discoverActivity.setTwystBucks(twystBucks);
+                                        Toast.makeText(discoverActivity, discoverActivity.getResources().getString(R.string.bucks_earned_follow_outlet), Toast.LENGTH_SHORT).show();
+                                    }
                                     outletViewHolder.followOutletBtn.setImageResource(R.drawable.icon_discover_follow_outlet);
                                     outlet.setFollowing(true);
                                     twystProgressHUD.dismiss();

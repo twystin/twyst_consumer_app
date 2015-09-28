@@ -484,6 +484,11 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
                         @Override
                         public void success(BaseResponse<Data> dataBaseResponse, Response response) {
                             if (dataBaseResponse.isResponse()) {
+                                int twystBucks = dataBaseResponse.getData().getTwyst_bucks();
+                                if (twystBucks > getTwystBucks()){
+                                    setTwystBucks(twystBucks);
+                                    Toast.makeText(OutletDetailsActivity.this,OutletDetailsActivity.this.getResources().getString(R.string.bucks_earned_follow_outlet),Toast.LENGTH_SHORT).show();
+                                }
                                 followOutletBtn.setImageResource(R.drawable.icon_discover_follow_outlet);
                                 outlet.setFollowing(true);
 

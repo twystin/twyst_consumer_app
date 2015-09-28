@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.twyst.app.android.R;
+import com.twyst.app.android.activities.DiscoverActivity;
 import com.twyst.app.android.activities.OfferDetailActivity;
 import com.twyst.app.android.activities.OutletDetailsActivity;
 import com.twyst.app.android.activities.WalletActivity;
@@ -290,6 +291,13 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
                         @Override
                         public void success(BaseResponse<Data> dataBaseResponse, Response response) {
                             if (dataBaseResponse.isResponse()) {
+                                int twystBucks = dataBaseResponse.getData().getTwyst_bucks();
+                                WalletActivity walletActivity = (WalletActivity) view.getContext();
+                                if (twystBucks > walletActivity.getTwystBucks()){
+                                    walletActivity.setTwystBucks(twystBucks);
+                                    ((TextView) walletActivity.findViewById(R.id.buckText)).setText(String.valueOf(twystBucks));
+                                    Toast.makeText(walletActivity, walletActivity.getResources().getString(R.string.bucks_earned_follow_outlet), Toast.LENGTH_SHORT).show();
+                                }
                                 holder.followOutletBtn.setImageResource(R.drawable.icon_discover_follow_outlet);
                                 outlet.setFollowing(true);
                                 twystProgressHUD.dismiss();

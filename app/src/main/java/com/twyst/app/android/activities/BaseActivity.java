@@ -924,4 +924,14 @@ public abstract class BaseActivity extends ActionBarActivity
         return terms;
     }
 
+    public int getTwystBucks() {
+        SharedPreferences prefs = this.getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return prefs.getInt(AppConstants.PREFERENCE_LAST_TWYST_BUCK, 0);
+    }
+
+    public void setTwystBucks(int twystBucks) {
+        sharedPreferences.putInt(AppConstants.PREFERENCE_LAST_TWYST_BUCK, twystBucks);
+        sharedPreferences.commit();
+    }
+
 }
