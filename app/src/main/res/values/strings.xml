@@ -110,4 +110,6 @@ each friend who joins.</p>
     <string name="bucks_earned_follow_outlet">You have earned 20 Twyst Bucks!</string>
     <string name="bucks_earned_like_offer">You have earned 10 Twyst Bucks!</string>
 
+    <string name="offer_redeem_info">To use this offer, please present the coupon code (on the next screen) to your server at the outlet or on the phone. This offer will cost you %1$d Twyst bucks</string>
+
 </resources>

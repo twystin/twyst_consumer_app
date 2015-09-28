@@ -34,9 +34,10 @@
 
 
             <TextView
+                android:id="@+id/tvInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="To use this offer, please present the coupon code (on the next screen) to your server at the outlet or on the phone."
+                android:text="@string/offer_redeem_info"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="7dp"
                 android:gravity="bottom"

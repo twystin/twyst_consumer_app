@@ -1305,6 +1305,11 @@ public class OfferDetailActivity extends BaseActivity {
         LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View dialogView = li.inflate(R.layout.dialog_redeem_confirmation2, null);
 
+        TextView tvInfo = (TextView) dialogView.findViewById(R.id.tvInfo);
+        String offerRedeemInfo = getResources().getString(R.string.offer_redeem_info);
+        String offerRedeemInfoMsg = String.format(offerRedeemInfo,offer.getOfferCost());
+        tvInfo.setText(offerRedeemInfoMsg);
+
         builder.setView(dialogView);
 
         final AlertDialog dialog = builder.create();
