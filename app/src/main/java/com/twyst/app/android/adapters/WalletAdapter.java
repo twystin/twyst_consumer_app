@@ -108,7 +108,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
                                 lapseText = offers.get(0).getAvailableNext().getDay() + ", " + offers.get(0).getAvailableNext().getTime();
                             } else if (days > 7) {
                                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("d-MMM");
-                                lapseText = "next available " + simpleDateFormat.format(lapseDate).toLowerCase() + ", " + offers.get(0).getAvailableNext().getTime();
+                                lapseText = simpleDateFormat.format(lapseDate).toLowerCase() + ", " + offers.get(0).getAvailableNext().getTime(); //next available
                             } else {
                                 lapseText = offers.get(0).getAvailableNext().getDay() + ", " + offers.get(0).getAvailableNext().getTime();
                             }
@@ -168,7 +168,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
             holder.footer_bckgrd.setBackgroundColor(resources.getColor(R.color.offer_color_gray));
             holder.line.setImageDrawable(resources.getDrawable(R.drawable.wallet_vertical_grey_divider));
             holder.coupon_img_icon.setImageDrawable(resources.getDrawable(R.drawable.icon_outlet_detail_coupon_forma));
-            holder.coupon__btn_txt.setText("remind me");
+            holder.coupon__btn_txt.setText(resources.getString(R.string.remind_me));
         }else {
             holder.footer_bckgrd.setBackgroundColor(resources.getColor(R.color.offer_color_red));
             holder.line.setImageDrawable(resources.getDrawable(R.drawable.wallet_vertical_red_divider));
