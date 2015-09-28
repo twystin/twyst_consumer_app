@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:text="Share rewards! Use offers your friends unlock (and vice versa). Get 100 Twysts for each friend you add to Twyst."
+        android:text="Share rewards! Use offers your friends unlock (and vice versa). Get 100 Twyst bucks for each friend you add to Twyst."
         android:textColor="#555" />
 
     <TextView
