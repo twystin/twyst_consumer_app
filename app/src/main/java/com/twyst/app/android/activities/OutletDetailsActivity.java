@@ -246,7 +246,7 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
             @Override
             public void onClick(final View view) {
 
-                if (!TextUtils.isEmpty(feedbackTV.getText()) && attachImage.getDrawable() != null) {
+                if (!TextUtils.isEmpty(feedbackTV.getText())) {// && attachImage.getDrawable() != null
                     final TwystProgressHUD twystProgressHUD = TwystProgressHUD.show(OutletDetailsActivity.this, false, null);
                     Feedback feedback = new Feedback();
                     FeedbackMeta meta = new FeedbackMeta();
@@ -315,9 +315,9 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
                             }
                         }
                     });
-                } else if (!TextUtils.isEmpty(feedbackTV.getText()) && attachImage.getDrawable() == null) {
+                } else if (!TextUtils.isEmpty(feedbackTV.getText())) {// && attachImage.getDrawable() == null
                     feedbackTV.setError("Comments required");
-                    Toast.makeText(OutletDetailsActivity.this, "Please attach a photo or take photo!", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(OutletDetailsActivity.this, "Please attach a photo or take photo!", Toast.LENGTH_SHORT).show();
                 } else {
                     feedbackTV.setError("Please enter some feedback before submitting!");
                     Toast.makeText(OutletDetailsActivity.this, "Please fill all the required fields.", Toast.LENGTH_SHORT).show();
