@@ -108,14 +108,6 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/offerRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/outlet_card_height"
-        android:layout_marginLeft="@dimen/outlet_info_width"
-        android:visibility="gone"
-        android:overScrollMode="never"/>
-
     <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
         android:layout_height="@dimen/outlet_card_height"

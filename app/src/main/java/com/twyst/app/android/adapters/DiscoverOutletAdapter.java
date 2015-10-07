@@ -172,10 +172,6 @@ public class DiscoverOutletAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 hasMoreOffers = false;
             }
 
-            DiscoverOfferAdapter discoverOfferAdapter = new DiscoverOfferAdapter(outlet, hasMoreOffers, address);
-            discoverOfferAdapter.setItems(subList);
-            outletViewHolder.offerRecyclerView.setAdapter(discoverOfferAdapter);
-
             outletViewHolder.viewPager.setAdapter(new DiscoverOfferPagerAdapter(subList, outlet, hasMoreOffers));
 
             Picasso picasso = Picasso.with(view.getContext());
@@ -321,7 +317,6 @@ public class DiscoverOutletAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         ImageView followOutletBtn;
         ImageView callOutletBtn;
 
-        RecyclerView offerRecyclerView;
         ViewPager viewPager;
 
         public OutletViewHolder(View itemView) {
@@ -334,13 +329,6 @@ public class DiscoverOutletAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             outletImage = (ImageView) itemView.findViewById(R.id.outletImage);
             followOutletBtn = (ImageView) itemView.findViewById(R.id.followOutletBtn);
             callOutletBtn = (ImageView) itemView.findViewById(R.id.callOutletBtn);
-
-            offerRecyclerView = (RecyclerView) itemView.findViewById(R.id.offerRecyclerView);
-            offerRecyclerView.setHasFixedSize(true);
-
-            LinearLayoutManager mLayoutManager = new LinearLayoutManager(itemView.getContext());
-            mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-            offerRecyclerView.setLayoutManager(mLayoutManager);
 
             viewPager = (ViewPager) itemView.findViewById(R.id.pager);
 
