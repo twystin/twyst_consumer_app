@@ -17,6 +17,8 @@ import com.twyst.app.android.model.BaseResponse;
 import com.twyst.app.android.model.Profile;
 import com.twyst.app.android.service.HttpService;
 import com.twyst.app.android.util.AppConstants;
+import com.twyst.app.android.util.TwystProgressHUD;
+
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -48,14 +50,15 @@ public class InviteFriendsActivity extends BaseActivity {
 
         final ListView inviteTwystList = (ListView)findViewById(R.id.inviteTwystList);
 
+        final TwystProgressHUD twystProgressHUD = TwystProgressHUD.show(this, false, null);
 
         HttpService.getInstance().getProfile(getUserToken(), new Callback<BaseResponse<Profile>>() {
             @Override
             public void success(BaseResponse<Profile> friendDataBaseResponse, Response response) {
+                twystProgressHUD.dismiss();
                 if (friendDataBaseResponse.isResponse()) {
                     if (friendDataBaseResponse.getData() != null) {
                         friendLists = friendDataBaseResponse.getData().getTwystFriendLists();
-
                         if(friendLists.size()>0) {
 
                             inviteTwystList.setAdapter(new ArrayAdapter<Profile.FriendLists>(InviteFriendsActivity.this, R.layout.listview_item_invite_contact, R.id.contactName, friendLists));
@@ -69,7 +72,7 @@ public class InviteFriendsActivity extends BaseActivity {
 
             @Override
             public void failure(RetrofitError error) {
-
+                twystProgressHUD.dismiss();
                 handleRetrofitError(error);
             }
         });
