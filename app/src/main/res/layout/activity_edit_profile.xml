@@ -349,12 +349,6 @@
                                 android:layout_centerVertical="true"
                                 android:src="@drawable/edit_profile_edit_icon" />
 
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_below="@+id/editProfileCity"
-                                android:layout_marginTop="20dp"
-                                android:background="#d4d4d4" />
                         </RelativeLayout>
                     </LinearLayout>
                 </it.gmariotti.cardslib.library.view.CardViewNative>
