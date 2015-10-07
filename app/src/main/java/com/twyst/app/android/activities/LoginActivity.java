@@ -51,6 +51,7 @@ import com.twyst.app.android.model.BaseResponse;
 import com.twyst.app.android.model.Friend;
 import com.twyst.app.android.model.ProfileUpdate;
 import com.twyst.app.android.model.Referral;
+import com.twyst.app.android.model.ReferralMeta;
 import com.twyst.app.android.service.HttpService;
 import com.twyst.app.android.util.AppConstants;
 import com.twyst.app.android.util.PhoneBookContacts;
@@ -335,8 +336,11 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
     private void postReferral(final String token, final String code){
         final TwystProgressHUD twystProgressHUD = TwystProgressHUD.show(this, false, null);
         Referral referral = new Referral();
-        referral.setReferralCode(code);
-        referral.setSource(source);
+        ReferralMeta referralMeta = new ReferralMeta();
+        referralMeta.setReferralCode(code);
+        referralMeta.setSource(source);
+        referral.setReferralMeta(referralMeta);
+
         HttpService.getInstance().postReferral(token, referral, new Callback<BaseResponse>() {
             @Override
             public void success(BaseResponse baseResponse, Response response) {
