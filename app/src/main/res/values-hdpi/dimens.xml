@@ -64,7 +64,7 @@
     <dimen name="outlet_detail_address">11.5sp</dimen>
     <dimen name="outlet_detail_distance">11sp</dimen>
     <dimen name="outlet_detail_button">10sp</dimen>
-    <dimen name="outlet_detail_header_type1_text">40sp</dimen>
+    <dimen name="outlet_detail_header_type1_text">35sp</dimen>
     <dimen name="outlet_detail_header_type2_text">25sp</dimen>
     <dimen name="outlet_detail_image_height">170dp</dimen>
     <dimen name="outlet_detail_feedback_padding">12dp</dimen>
