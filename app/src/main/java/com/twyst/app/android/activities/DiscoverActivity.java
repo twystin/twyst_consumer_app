@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -53,14 +54,18 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gson.Gson;
 import com.twyst.app.android.R;
 import com.twyst.app.android.adapters.DiscoverOutletAdapter;
 import com.twyst.app.android.model.BaseResponse;
 import com.twyst.app.android.model.DiscoverData;
+import com.twyst.app.android.model.Friend;
 import com.twyst.app.android.model.LocationData;
 import com.twyst.app.android.model.Outlet;
+import com.twyst.app.android.model.ProfileUpdate;
 import com.twyst.app.android.service.HttpService;
 import com.twyst.app.android.util.AppConstants;
+import com.twyst.app.android.util.TwystProgressHUD;
 import com.twyst.app.android.util.Utils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -476,6 +481,39 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                     fabMenu.collapse();
 
                 }
+            }
+        });
+
+
+    }
+
+    private void updateSocialFriendList() {
+
+        final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+        if (prefs.getBoolean(AppConstants.PREFERENCE_IS_FRIEND_LIST_UPDATED,false)){
+            return;
+        }
+
+        String friendString = prefs.getString(AppConstants.PREFERENCE_FRIEND_LIST,"");
+        Gson gson = new Gson();
+        Friend friend = gson.fromJson(friendString,Friend.class);
+
+        HttpService.getInstance().updateSocialFriends(getUserToken(), friend, new Callback<BaseResponse<ProfileUpdate>>() {
+            @Override
+            public void success(BaseResponse<ProfileUpdate> profileUpdateBaseResponse, Response response) {
+                if (profileUpdateBaseResponse.isResponse()) {
+                    Log.d(getTagName(), "" + profileUpdateBaseResponse.getMessage());
+                    prefs.edit().putBoolean(AppConstants.PREFERENCE_IS_FRIEND_LIST_UPDATED, true).apply();
+                    prefs.edit().putString(AppConstants.PREFERENCE_FRIEND_LIST, "").apply();
+                } else {
+                    Log.d(getTagName(), "" + profileUpdateBaseResponse.getMessage());
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+//                handleRetrofitError(error);
             }
         });
     }
@@ -1159,6 +1197,8 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 firstLoad = true;
             }
         }
+
+        updateSocialFriendList();
     }
 
     public void expand(final View v) {

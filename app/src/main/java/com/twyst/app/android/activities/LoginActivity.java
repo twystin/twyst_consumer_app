@@ -33,6 +33,7 @@ import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.plus.model.people.PersonBuffer;
+import com.google.gson.Gson;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 import com.nispok.snackbar.enums.SnackbarType;
@@ -317,7 +318,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
                     if (!TextUtils.isEmpty(code)) {
                         postReferral(token, code);
                     } else {
-                        updateSocialFriendList(token);
+                        saveSocialFriendListLocally(token);
                     }
 
                 } else {
@@ -345,7 +346,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
             @Override
             public void success(BaseResponse baseResponse, Response response) {
                 twystProgressHUD.dismiss();
-                updateSocialFriendList(token);
+                saveSocialFriendListLocally(token);
                 Toast.makeText(LoginActivity.this,"Referrer code "+"( "+code+" )"+" used successfully!",Toast.LENGTH_LONG).show();
             }
 
@@ -357,29 +358,19 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
         });
     }
 
-    private void updateSocialFriendList(String token) {
-        final TwystProgressHUD twystProgressHUD = TwystProgressHUD.show(this, false, null);
+    private void saveSocialFriendListLocally(String token) {
         friend = new Friend();
         friend.setSource(source);
         friend.setList(friendsList);
-        HttpService.getInstance().updateSocialFriends(token, friend, new Callback<BaseResponse<ProfileUpdate>>() {
-            @Override
-            public void success(BaseResponse<ProfileUpdate> profileUpdateBaseResponse, Response response) {
-                twystProgressHUD.dismiss();
-                if (profileUpdateBaseResponse.isResponse()) {
-                    Log.d(getTagName(), "" + profileUpdateBaseResponse.getMessage());
-                    showDiscoverScreen();
-                } else {
-                    Log.d(getTagName(), "" + profileUpdateBaseResponse.getMessage());
-                }
-            }
 
-            @Override
-            public void failure(RetrofitError error) {
-                twystProgressHUD.dismiss();
-                handleRetrofitError(error);
-            }
-        });
+        Gson gson = new Gson();
+        String json = gson.toJson(friend);
+
+        sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
+        sharedPreferences.putString(AppConstants.PREFERENCE_FRIEND_LIST, json);
+        if (sharedPreferences.commit()){
+            showDiscoverScreen();
+        }
 
     }
 
