@@ -112,4 +112,22 @@ each friend who joins.</p>
 
     <string name="offer_redeem_info">To use this offer, please present the coupon code (on the next screen) to your server at the outlet or on the phone. This offer will cost you %1$d Twyst bucks</string>
 
+    <string name="icon_voucher_available">voucher_available</string>
+    <string name="icon_voucher_redeemed">voucher_redeemed</string>
+    <string name="icon_voucher_pending">voucher_pending</string>
+    <string name="icon_active_voucher_nearby">active_voucher_nearby</string>
+    <string name="icon_new_offers">new_offers</string>
+    <string name="icon_offers_nearby">offers_nearby</string>
+    <string name="icon_reactivate_user">reactivate_user</string>
+    <string name="icon_grab_offer">grab_offer</string>
+    <string name="icon_new_features">new_features</string>
+    <string name="icon_coupon_grabbed">coupon_grabbed</string>
+    <string name="icon_birthday">birthday</string>
+    <string name="icon_offer_approved_and_live">offer_approved_and_live</string>
+    <string name="icon_outlet_specific_offer">outlet_specific_offer</string>
+    <string name="icon_winback">winback</string>
+    <string name="icon_bill_rejected">bill_rejected</string>
+    <string name="icon_bill_approved">bill_approved</string>
+    <string name="icon_wallet">wallet</string>
+
 </resources>
