@@ -7,11 +7,16 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -31,7 +36,7 @@ import com.twyst.app.android.util.PhoneBookContacts;
  */
 public class SplashActivity extends Activity {
 
-    private static int SPLASH_TIME_OUT = 1700;
+    private static int SPLASH_TIME_OUT = 2200;
     private GoogleCloudMessaging googleCloudMessaging;
     private Context context;
 
@@ -56,7 +61,7 @@ public class SplashActivity extends Activity {
         }
 
         context = getApplicationContext();
-
+        showAnimation();
         new FetchContact().execute();
         if (checkPlayServices()) {
             googleCloudMessaging = GoogleCloudMessaging.getInstance(this);
@@ -92,6 +97,133 @@ public class SplashActivity extends Activity {
                 Log.i(getClass().getSimpleName(), "Splash killed.");
             }
         }, SPLASH_TIME_OUT);
+    }
+
+    private void showAnimation() {
+        final ImageView ivT = (ImageView) findViewById(R.id.ivT);
+        final ImageView ivW = (ImageView) findViewById(R.id.ivW);
+        final ImageView ivY = (ImageView) findViewById(R.id.ivY);
+        final ImageView ivS = (ImageView) findViewById(R.id.ivS);
+        final ImageView ivT2 = (ImageView) findViewById(R.id.ivT2);
+        final ImageView ivIN = (ImageView) findViewById(R.id.ivIN);
+
+        final Animation splashSlideDownT = AnimationUtils.loadAnimation(this, R.anim.splash_slide_down);
+        final Animation splashSlideDownW = AnimationUtils.loadAnimation(this, R.anim.splash_slide_down);
+        final Animation splashSlideDownY = AnimationUtils.loadAnimation(this, R.anim.splash_slide_down);
+        final Animation splashSlideDownS = AnimationUtils.loadAnimation(this, R.anim.splash_slide_down);
+        final Animation splashSlideDownT2 = AnimationUtils.loadAnimation(this, R.anim.splash_slide_down);
+        final Animation splashSlideDownIN = AnimationUtils.loadAnimation(this, R.anim.splash_slide_down);
+
+        final AnimationDrawable frameAnimation = (AnimationDrawable) ivY.getDrawable();
+
+        splashSlideDownIN.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                ivY.post(new Runnable() {
+                    public void run() {
+                        if (frameAnimation != null) {
+                            ivY.setBackground(null);
+                            frameAnimation.start();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        splashSlideDownT2.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                ivIN.startAnimation(splashSlideDownIN);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        splashSlideDownS.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                ivT2.startAnimation(splashSlideDownT2);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        splashSlideDownY.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                ivS.startAnimation(splashSlideDownS);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        splashSlideDownW.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                ivY.startAnimation(splashSlideDownY);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        splashSlideDownT.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                ivW.startAnimation(splashSlideDownW);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        ivT.startAnimation(splashSlideDownT);
+
+
     }
 
     protected boolean checkPlayServices() {
