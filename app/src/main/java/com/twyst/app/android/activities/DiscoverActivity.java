@@ -499,6 +499,8 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         Gson gson = new Gson();
         Friend friend = gson.fromJson(friendString,Friend.class);
 
+        if (friend==null) return;
+
         HttpService.getInstance().updateSocialFriends(getUserToken(), friend, new Callback<BaseResponse<ProfileUpdate>>() {
             @Override
             public void success(BaseResponse<ProfileUpdate> profileUpdateBaseResponse, Response response) {
