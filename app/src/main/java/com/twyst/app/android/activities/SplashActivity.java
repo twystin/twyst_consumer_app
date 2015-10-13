@@ -20,13 +20,21 @@ import android.widget.ImageView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import com.google.android.gms.tagmanager.Container;
+import com.google.android.gms.tagmanager.ContainerHolder;
+import com.google.android.gms.tagmanager.TagManager;
 import com.twyst.app.android.R;
+import com.twyst.app.android.model.ContainerHolderSingleton;
 import com.twyst.app.android.service.HttpService;
 import com.twyst.app.android.util.AppConstants;
 import com.twyst.app.android.util.PhoneBookContacts;
@@ -36,10 +44,16 @@ import com.twyst.app.android.util.PhoneBookContacts;
  */
 public class SplashActivity extends Activity {
 
+    private static final String CONTAINER_ID = "GTM-PNRJQ9";
+
     private static int SPLASH_TIME_OUT = 2200;
     private GoogleCloudMessaging googleCloudMessaging;
     private Context context;
+    private ContainerHolder mContainerHolder = null;
 
+    private void setContainerHolder(ContainerHolder containerHolder) {
+        this.mContainerHolder = containerHolder;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +75,14 @@ public class SplashActivity extends Activity {
         }
 
         context = getApplicationContext();
+
         showAnimation();
-        new FetchContact().execute();
+
+    new FetchContact().execute();
         if (checkPlayServices()) {
             googleCloudMessaging = GoogleCloudMessaging.getInstance(this);
             registerInBackground();
+            new DownloadContainerTask(this).execute(CONTAINER_ID);
         } else {
             Log.i(getClass().getSimpleName(), "No valid Google Play Services APK found.");
         }
@@ -317,6 +334,66 @@ public class SplashActivity extends Activity {
 
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+        }
+    }
+
+
+        // This AsyncTask class will set the Container Holder object once this task is completed.
+        private class DownloadContainerTask extends AsyncTask<String, Void, Boolean> {
+            private static final long TIMEOUT_FOR_CONTAINER_OPEN_MILLISECONDS = 2000;
+            private static final int DEFAULT_CONTAINER_RESOURCE_ID = R.raw.gtm1;
+
+            private Activity mActivity;
+            private ContainerHolder mContainerHolder;
+
+            public DownloadContainerTask(Activity activity) {
+                this.mActivity = activity;
+            }
+
+            @Override
+            protected Boolean doInBackground(String... params) {
+                String containerId = params[0];
+
+                TagManager tagManager = TagManager.getInstance(mActivity);
+                PendingResult<ContainerHolder> pending = tagManager.loadContainerPreferNonDefault(
+                        containerId, DEFAULT_CONTAINER_RESOURCE_ID);
+
+                mContainerHolder = pending.await(TIMEOUT_FOR_CONTAINER_OPEN_MILLISECONDS,
+                        TimeUnit.MILLISECONDS);
+                if (!mContainerHolder.getStatus().isSuccess()) {
+                    Log.e("HelloWorld", "failure loading container");
+//                    displayErrorToUser(R.string.load_error);
+                    return false;
+                }
+                return true;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean result) {
+                // Set up the containerHolder object.
+                setContainerHolder(mContainerHolder);
+                // Modify the background-color and text-color of text based on the value
+                // from configuration.
+                updateConstantsfromContainer();
+            }
+        }
+
+
+    private void updateConstantsfromContainer() {
+        if (mContainerHolder != null) {
+            Double USER_ONE_LOCATION_CHECK_TIME = (mContainerHolder.getContainer().getDouble(AppConstants.PREFERENCE_USER_ONE_LOCATION_CHECK_TIME));
+            Double DISTANCE_LIMIT = (mContainerHolder.getContainer().getDouble(AppConstants.PREFERENCE_DISTANCE_LIMIT));
+            Double LOCATION_REQUEST_REFRESH_INTERVAL = (mContainerHolder.getContainer().getDouble(AppConstants.PREFERENCE_LOCATION_REQUEST_REFRESH_INTERVAL));
+            Double LOCATION_REQUEST_SMALLEST_DISPLACEMENT = (mContainerHolder.getContainer().getDouble(AppConstants.PREFERENCE_LOCATION_REQUEST_SMALLEST_DISPLACEMENT));
+            Double LOCATION_OFFLINE_LIST_MAX_SIZE = (mContainerHolder.getContainer().getDouble(AppConstants.PREFERENCE_LOCATION_OFFLINE_LIST_MAX_SIZE));
+
+            final SharedPreferences.Editor prefsEdit = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
+            prefsEdit.putInt((AppConstants.PREFERENCE_USER_ONE_LOCATION_CHECK_TIME),USER_ONE_LOCATION_CHECK_TIME.intValue());
+            prefsEdit.putInt((AppConstants.PREFERENCE_DISTANCE_LIMIT),DISTANCE_LIMIT.intValue());
+            prefsEdit.putInt((AppConstants.PREFERENCE_LOCATION_REQUEST_REFRESH_INTERVAL),LOCATION_REQUEST_REFRESH_INTERVAL.intValue());
+            prefsEdit.putInt((AppConstants.PREFERENCE_LOCATION_REQUEST_SMALLEST_DISPLACEMENT),LOCATION_REQUEST_SMALLEST_DISPLACEMENT.intValue());
+            prefsEdit.putInt((AppConstants.PREFERENCE_LOCATION_OFFLINE_LIST_MAX_SIZE),LOCATION_OFFLINE_LIST_MAX_SIZE.intValue());
+            prefsEdit.apply();
         }
     }
 

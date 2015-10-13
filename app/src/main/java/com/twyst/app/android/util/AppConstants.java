@@ -5,8 +5,8 @@ package com.twyst.app.android.util;
  */
 public class AppConstants {
 
-//    public static final String HOST = "http://retwyst.twyst.in";
-    public static final String HOST = "http://twyst.in";
+    public static final String HOST = "http://retwyst.twyst.in";
+//    public static final String HOST = "http://twyst.in";
 
     public static final String HOST_SECURE = "https://www.twyst.in";
 
@@ -57,6 +57,13 @@ public class AppConstants {
     public static final String PREFERENCE_CHANGE_LOCATION_LONGITUDE = "change_location_longitude";
     public static final String PREFERENCE_IS_FRIEND_LIST_UPDATED = "is_friend_list_updated";
     public static final String PREFERENCE_FRIEND_LIST = "friend_list";
+    public static final String PREFERENCE_LAST_SAVED_LOCATIONS_LIST = "last_saved_location_list";
+
+    public static final String PREFERENCE_USER_ONE_LOCATION_CHECK_TIME = "user_one_location_check_time";
+    public static final String PREFERENCE_DISTANCE_LIMIT = "distance_limit";
+    public static final String PREFERENCE_LOCATION_REQUEST_REFRESH_INTERVAL = "location_request_refresh_interval";
+    public static final String PREFERENCE_LOCATION_REQUEST_SMALLEST_DISPLACEMENT = "location_request_smallest_displacement";
+    public static final String PREFERENCE_LOCATION_OFFLINE_LIST_MAX_SIZE = "location_offline_list_max_size";
 
     public static final String PREFERENCE_IS_FACEBOOK_CONNECTED = "is_facebook_connected";
     public static final String PREFERENCE_IS_GOOGLE_CONNECTED = "is_google_connected";

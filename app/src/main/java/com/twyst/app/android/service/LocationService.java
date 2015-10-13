@@ -9,8 +9,10 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -20,10 +22,14 @@ import com.google.android.gms.location.LocationServices;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import com.google.gson.Gson;
 import com.twyst.app.android.model.BaseResponse;
+import com.twyst.app.android.model.LocationOffline;
+import com.twyst.app.android.model.LocationOfflineList;
 import com.twyst.app.android.model.UserLocation;
 import com.twyst.app.android.util.AppConstants;
 import retrofit.Callback;
@@ -38,9 +44,15 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    protected Location mCurrentLocation;
     protected static final String TAG = "location-updates";
-    private UserLocation locationData;
+
+    private final static int USER_ONE_LOCATION_CHECK_TIME = 30000;
+    private final static int DISTANCE_LIMIT = 2000;
+    private final static int LOCATION_REQUEST_REFRESH_INTERVAL = 1000;
+    private final static int LOCATION_REQUEST_SMALLEST_DISPLACEMENT = 50;
+    private final static int LOCATION_OFFLINE_LIST_MAX_SIZE = 10;
+
+    private static Handler handler  = new Handler();
 
     @Override
     public void onCreate() {
@@ -59,10 +71,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                 .build();
 
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
+        final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        mLocationRequest.setInterval(prefs.getInt(AppConstants.PREFERENCE_LOCATION_REQUEST_REFRESH_INTERVAL,LOCATION_REQUEST_REFRESH_INTERVAL));
         mLocationRequest.setFastestInterval(1000);
-        mLocationRequest.setSmallestDisplacement(500);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        mLocationRequest.setSmallestDisplacement(prefs.getInt(AppConstants.PREFERENCE_LOCATION_REQUEST_SMALLEST_DISPLACEMENT,LOCATION_REQUEST_SMALLEST_DISPLACEMENT));
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
@@ -77,8 +90,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        super.onStartCommand(intent, flags, startId);
-        System.out.println("LocationService.. onStartCommand()");
+//        super.onStartCommand(intent, flags, startId);
+//        System.out.println("LocationService.. onStartCommand()");
         return START_STICKY;
     }
 
@@ -104,25 +117,81 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         System.out.println("Connection failed: ConnectionResult.getErrorCode() = " + connectionResult.getErrorCode());
     }
 
+    private Runnable timedTask = new Runnable(){
+
+        @Override
+        public void run() {
+
+            Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+            String locationOfflineListString = prefs.getString(AppConstants.PREFERENCE_LAST_SAVED_LOCATIONS_LIST, "");
+            Gson gson = new Gson();
+            LocationOfflineList locationOfflineList = gson.fromJson(locationOfflineListString, LocationOfflineList.class);
+            LinkedList<LocationOffline> fifo = locationOfflineList.getFifo();
+
+            for (LocationOffline locationOffline : fifo) {
+                Location newLocation = new Location("");
+                newLocation.setLatitude(locationOffline.getLatitude());
+                newLocation.setLongitude(locationOffline.getLongitude());
+                double distance = currentLocation.distanceTo(newLocation);
+                if (distance <= prefs.getInt(AppConstants.PREFERENCE_DISTANCE_LIMIT,DISTANCE_LIMIT)) {
+                    Toast.makeText(LocationService.this, "User at one location. Send to server", Toast.LENGTH_LONG).show();
+
+                    UserLocation locationData;
+                    locationData = new UserLocation();
+                    locationData.setLat(String.valueOf(currentLocation.getLatitude()));
+                    locationData.setLng(String.valueOf(currentLocation.getLongitude()));
+
+                    HttpService.getInstance().postLocation(getUserToken(), locationData, new Callback<BaseResponse>() {
+                        @Override
+                        public void success(BaseResponse baseResponse, Response response) {
+                            Toast.makeText(LocationService.this,"Location posted successfully to server",Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                        }
+                    });
+
+                    getAddress(currentLocation);
+
+
+
+                    if(prefs.edit().putString(AppConstants.PREFERENCE_LAST_SAVED_LOCATIONS_LIST, "").commit())
+                    break;
+                }
+            }
+
+        }};
+
     //Location Listener
     @Override
     public void onLocationChanged(Location location) {
         System.out.println("LocationService.onLocationChanged i = " + location);
-        //Toast.makeText(this, "LocationService.onConnectionSuspended", Toast.LENGTH_SHORT).show();
+        Toast.makeText(LocationService.this, "Location changed", Toast.LENGTH_LONG).show();
 
-        mCurrentLocation = location;
-        locationData = new UserLocation();
-        locationData.setLat(String.valueOf(mCurrentLocation.getLatitude()));
-        locationData.setLng(String.valueOf(mCurrentLocation.getLongitude()));
-        HttpService.getInstance().postLocation(getUserToken(), locationData, new Callback<BaseResponse>() {
-            @Override
-            public void success(BaseResponse baseResponse, Response response) {}
+        final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
-            @Override
-            public void failure(RetrofitError error) {}
-        });
+        String locationOfflineListString = prefs.getString(AppConstants.PREFERENCE_LAST_SAVED_LOCATIONS_LIST,"");
+        Gson gson = new Gson();
+        LocationOfflineList locationOfflineList = gson.fromJson(locationOfflineListString, LocationOfflineList.class);
 
-        getAddress(mCurrentLocation);
+        if (locationOfflineList==null)
+            locationOfflineList = new LocationOfflineList();
+
+        LocationOffline locationOffline = new LocationOffline();
+        locationOffline.setLatitude(location.getLatitude());
+        locationOffline.setLongitude(location.getLongitude());
+        locationOffline.setTimeStamp(location.getTime());
+        locationOfflineList.addToLast(locationOffline, prefs.getInt(AppConstants.PREFERENCE_LOCATION_OFFLINE_LIST_MAX_SIZE,LOCATION_OFFLINE_LIST_MAX_SIZE));
+
+        Gson gson2 = new Gson();
+        String json = gson2.toJson(locationOfflineList);
+
+        prefs.edit().putString(AppConstants.PREFERENCE_LAST_SAVED_LOCATIONS_LIST,json).apply();
+
+        handler.removeCallbacks(timedTask);
+        handler.postDelayed(timedTask, prefs.getInt(AppConstants.PREFERENCE_USER_ONE_LOCATION_CHECK_TIME,USER_ONE_LOCATION_CHECK_TIME));
 
     }
 
