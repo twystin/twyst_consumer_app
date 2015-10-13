@@ -121,45 +121,49 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
         @Override
         public void run() {
-
-            Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-            String locationOfflineListString = prefs.getString(AppConstants.PREFERENCE_LAST_SAVED_LOCATIONS_LIST, "");
-            Gson gson = new Gson();
-            LocationOfflineList locationOfflineList = gson.fromJson(locationOfflineListString, LocationOfflineList.class);
-            LinkedList<LocationOffline> fifo = locationOfflineList.getFifo();
+            Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if (currentLocation!=null){
+                String locationOfflineListString = prefs.getString(AppConstants.PREFERENCE_LAST_SAVED_LOCATIONS_LIST, "");
+                Gson gson = new Gson();
+                LocationOfflineList locationOfflineList = gson.fromJson(locationOfflineListString, LocationOfflineList.class);
+                LinkedList<LocationOffline> fifo = locationOfflineList.getFifo();
 
-            for (LocationOffline locationOffline : fifo) {
-                Location newLocation = new Location("");
-                newLocation.setLatitude(locationOffline.getLatitude());
-                newLocation.setLongitude(locationOffline.getLongitude());
-                double distance = currentLocation.distanceTo(newLocation);
-                if (distance <= prefs.getInt(AppConstants.PREFERENCE_DISTANCE_LIMIT,DISTANCE_LIMIT)) {
-                    Toast.makeText(LocationService.this, "User at one location. Send to server", Toast.LENGTH_LONG).show();
+                for (LocationOffline locationOffline : fifo) {
+                    Location newLocation = new Location("");
+                    newLocation.setLatitude(locationOffline.getLatitude());
+                    newLocation.setLongitude(locationOffline.getLongitude());
+                    double distance = currentLocation.distanceTo(newLocation);
+                    if (distance <= prefs.getInt(AppConstants.PREFERENCE_DISTANCE_LIMIT,DISTANCE_LIMIT)) {
+                        Toast.makeText(LocationService.this, "User at one location. Send to server", Toast.LENGTH_LONG).show();
 
-                    UserLocation locationData;
-                    locationData = new UserLocation();
-                    locationData.setLat(String.valueOf(currentLocation.getLatitude()));
-                    locationData.setLng(String.valueOf(currentLocation.getLongitude()));
+                        UserLocation locationData;
+                        locationData = new UserLocation();
+                        locationData.setLat(String.valueOf(currentLocation.getLatitude()));
+                        locationData.setLng(String.valueOf(currentLocation.getLongitude()));
 
-                    HttpService.getInstance().postLocation(getUserToken(), locationData, new Callback<BaseResponse>() {
-                        @Override
-                        public void success(BaseResponse baseResponse, Response response) {
-                            Toast.makeText(LocationService.this,"Location posted successfully to server",Toast.LENGTH_LONG).show();
-                        }
+                        HttpService.getInstance().postLocation(getUserToken(), locationData, new Callback<BaseResponse>() {
+                            @Override
+                            public void success(BaseResponse baseResponse, Response response) {
+                                Toast.makeText(LocationService.this,"Location posted successfully to server",Toast.LENGTH_LONG).show();
+                            }
 
-                        @Override
-                        public void failure(RetrofitError error) {
-                        }
-                    });
+                            @Override
+                            public void failure(RetrofitError error) {
+                            }
+                        });
 
-                    getAddress(currentLocation);
+                        getAddress(currentLocation);
 
 
 
-                    if(prefs.edit().putString(AppConstants.PREFERENCE_LAST_SAVED_LOCATIONS_LIST, "").commit())
-                    break;
+                        if(prefs.edit().putString(AppConstants.PREFERENCE_LAST_SAVED_LOCATIONS_LIST, "").commit())
+                            break;
+                    }
                 }
+
+            }else{
+                prefs.edit().putString(AppConstants.PREFERENCE_LAST_SAVED_LOCATIONS_LIST, "").apply();
             }
 
         }};
