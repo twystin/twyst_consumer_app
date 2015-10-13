@@ -415,7 +415,7 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
 
                 text1.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.offer_flatoff_size));
 
-            } else if ("reducedprice".equalsIgnoreCase(offer.getMeta().getRewardType())) {
+            } else if ("reduced".equalsIgnoreCase(offer.getMeta().getRewardType())) {
 
                 text1.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.offer_reduced_size));
 

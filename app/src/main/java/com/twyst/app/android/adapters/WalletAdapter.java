@@ -184,7 +184,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
                 if (meta.getRewardType() != null) {
 
                     if (meta.getRewardType().equals("buy_one_get_one") || meta.getRewardType().equals("onlyhappyhours") || meta.getRewardType().equals("flatoff")
-                            || meta.getRewardType().equals("reducedprice") || meta.getRewardType().equals("happyhours") || meta.getRewardType().equals("custom")) {
+                            || meta.getRewardType().equals("reduced") || meta.getRewardType().equals("happyhours") || meta.getRewardType().equals("custom")) {
                         holder.type_offer.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimensionPixelSize(R.dimen.outlet_detail_header_type2_text));
 
                     } else {
