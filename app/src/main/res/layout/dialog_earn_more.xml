@@ -3,38 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/gradient_shape"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fc6e51"
+        android:background="#323232"
         android:gravity="center_vertical"
         android:padding="16dp"
         android:text="Earn Twyst Bucks"
         android:textColor="@android:color/white"
         android:textSize="16sp" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="false">
-
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/gradient_shape"
-            android:orientation="vertical"
+            android:layout_height="350dp"
             android:scrollbarAlwaysDrawVerticalTrack="true">
 
-            <TextView
-                android:id="@+id/tvEarnMore"
+               <WebView
+                android:id="@+id/webView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textColor="#555"
-                android:textSize="14sp" />
+                android:layout_height="350dp"
+                android:padding="10dp">
+
+            </WebView>
 
             <com.balysv.materialripple.MaterialRippleLayout
                 android:id="@+id/okButton"
@@ -54,6 +46,5 @@
                     android:textSize="@dimen/outlet_details_coupon_txt" />
             </com.balysv.materialripple.MaterialRippleLayout>
         </RelativeLayout>
-    </ScrollView>
 
 </LinearLayout>

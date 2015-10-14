@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,10 +27,13 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -48,6 +52,8 @@ import com.twyst.app.android.adapters.DrawerListAdapter;
 import com.twyst.app.android.model.DrawerItem;
 import com.twyst.app.android.util.AppConstants;
 import com.twyst.app.android.util.RoundedTransformation;
+import com.twyst.app.android.util.TwystProgressHUD;
+
 import retrofit.RetrofitError;
 
 /**
@@ -854,8 +860,38 @@ public abstract class BaseActivity extends ActionBarActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View dialogView = li.inflate(R.layout.dialog_earn_more, null);
-        TextView tvEarnMore = (TextView) dialogView.findViewById(R.id.tvEarnMore);
-        tvEarnMore.setText(Html.fromHtml(getString(R.string.earn_more_body)));
+//        TextView tvEarnMore = (TextView) dialogView.findViewById(R.id.tvEarnMore);
+//        tvEarnMore.setText(Html.fromHtml(getString(R.string.earn_more_body)));
+
+        WebView webView = (WebView) dialogView.findViewById(R.id.webView);
+        webView.getSettings().setJavaScriptEnabled(true); // enable javascript
+        final TwystProgressHUD twystProgressHUD = TwystProgressHUD.show(this, false, null);
+
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon)
+            {
+                // TODO show you progress image
+                super.onPageStarted(view, url, favicon);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url)
+            {
+                twystProgressHUD.dismiss();
+                // TODO hide your progress image
+                super.onPageFinished(view, url);
+            }
+
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                twystProgressHUD.dismiss();
+//                Toast.makeText(BaseActivity.this, description, Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
+        webView .loadUrl(AppConstants.HOST + "/api/v4/earn/more");
 
         builder.setView(dialogView);
 

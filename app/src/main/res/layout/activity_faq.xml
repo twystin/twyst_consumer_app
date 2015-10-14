@@ -16,6 +16,8 @@
             layout="@layout/toolbar" />
 
         <ScrollView
+            android:id="@+id/scrollView"
+            android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/toolbar">
@@ -60,6 +62,14 @@
             </LinearLayout>
 
         </ScrollView>
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_below="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </WebView>
     </RelativeLayout>
 
     <include
