@@ -53,6 +53,7 @@ import com.twyst.app.android.model.Friend;
 import com.twyst.app.android.model.ProfileUpdate;
 import com.twyst.app.android.model.Referral;
 import com.twyst.app.android.model.ReferralMeta;
+import com.twyst.app.android.model.UpdateProfile;
 import com.twyst.app.android.service.HttpService;
 import com.twyst.app.android.util.AppConstants;
 import com.twyst.app.android.util.PhoneBookContacts;
@@ -306,14 +307,28 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
             googleplusUri = linkUri;
         }
 
+        UpdateProfile updateProfile = new UpdateProfile();
+        updateProfile.setEmail(email);
+        updateProfile.setImage(userImage);
+        updateProfile.setFname(firstName);
+        updateProfile.setMname(middleName);
+        updateProfile.setLname(lastName);
+        updateProfile.setCity(city);
+        updateProfile.setId(id);
+        updateProfile.setSource(source);
+        updateProfile.setFacebookUri(facebookUri);
+        updateProfile.setGoogleplusUri(googleplusUri);
+        updateProfile.setDeviceId(deviceId);
+        updateProfile.setVersion(Utils.getbuildVersionStringBuilder().toString());
+        updateProfile.setDevice(android.os.Build.DEVICE);
+        updateProfile.setModel(android.os.Build.MODEL);
+        updateProfile.setProduct(android.os.Build.PRODUCT);
 
-        HttpService.getInstance().updateProfile(token, email, userImage, firstName, middleName, lastName, city,id,source,facebookUri,googleplusUri, deviceId, Utils.getbuildVersionStringBuilder().toString(), android.os.Build.DEVICE, android.os.Build.MODEL, android.os.Build.PRODUCT, new Callback<BaseResponse<ProfileUpdate>>() {
+        HttpService.getInstance().updateProfile(token, updateProfile, new Callback<BaseResponse<ProfileUpdate>>() {
             @Override
             public void success(BaseResponse<ProfileUpdate> loginDataBaseResponse, Response response) {
                 twystProgressHUD.dismiss();
                 if (loginDataBaseResponse.isResponse()) {
-
-
                     final String code = prefs.getString(AppConstants.PREFERENCE_USER_REFERRAL, "");
                     if (!TextUtils.isEmpty(code)) {
                         postReferral(token, code);

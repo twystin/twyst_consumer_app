@@ -1,7 +1,6 @@
 package com.twyst.app.android.service;
 
 import java.util.ArrayList;
-
 import com.twyst.app.android.model.AuthToken;
 import com.twyst.app.android.model.BaseResponse;
 import com.twyst.app.android.model.CheckinData;
@@ -12,6 +11,7 @@ import com.twyst.app.android.model.NotificationData;
 import com.twyst.app.android.model.Profile;
 import com.twyst.app.android.model.Referral;
 import com.twyst.app.android.model.ReportProblem;
+import com.twyst.app.android.model.UpdateProfile;
 import com.twyst.app.android.model.UseOffer;
 import com.twyst.app.android.model.DiscoverData;
 import com.twyst.app.android.model.Feedback;
@@ -51,9 +51,8 @@ public interface TwystService {
     @POST("/api/v4/authcode")
     public void userAuthToken(@Field("code") String code, @Field("phone") String phone, Callback<BaseResponse<AuthToken>> callback);
 
-    @FormUrlEncoded
     @PUT("/api/v4/profile")
-    public void updateProfile( @Query("token") String token, @Field("email") String email,@Field("image") String image,@Field("first_name") String fname,@Field("middle_name") String mname,@Field("last_name") String lname,@Field("city") String city, @Field("id")String id, @Field("source")String source, @Field("facebookUri")String facebookUri, @Field("googleplusUri")String googleplusUri, @Field("gcmId") String deviceId,@Field("os_version") String version ,@Field("device") String device,@Field("model") String model,@Field("product") String product, Callback<BaseResponse<ProfileUpdate>> callback);
+    public void updateProfile( @Query("token") String token,@Body UpdateProfile updateProfile, Callback<BaseResponse<ProfileUpdate>> callback);
 
     @GET("/api/v4/recos")
     public void getRecommendedOutlets(@Query("token") String token, @Query("start") int start, @Query("end") int end, @Query("lat") String lat, @Query("long") String lng, @Query("date") String date,@Query(value = "time",encodeValue=false) String time , Callback<BaseResponse<DiscoverData>> callback);

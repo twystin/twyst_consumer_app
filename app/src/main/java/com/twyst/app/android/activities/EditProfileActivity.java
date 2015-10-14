@@ -57,9 +57,12 @@ import java.util.regex.Pattern;
 
 import com.twyst.app.android.R;
 import com.twyst.app.android.model.BaseResponse;
+import com.twyst.app.android.model.EventDate;
 import com.twyst.app.android.model.Friend;
+import com.twyst.app.android.model.LifeEvents;
 import com.twyst.app.android.model.Profile;
 import com.twyst.app.android.model.ProfileUpdate;
+import com.twyst.app.android.model.UpdateProfile;
 import com.twyst.app.android.service.HttpService;
 import com.twyst.app.android.util.AppConstants;
 import com.twyst.app.android.util.RoundedTransformation;
@@ -670,7 +673,25 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
         String deviceId = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).getString(AppConstants.PREFERENCE_REGISTRATION_ID, "");
         final TwystProgressHUD twystProgressHUD = TwystProgressHUD.show(this, false, null);
 
-        HttpService.getInstance().updateProfile(getUserToken(), editProfileMail.getText().toString(), userImage, firstName, middleName, lastName, editProfileCity.getText().toString(), id, source, facebookUri, googleplusUri, deviceId, Utils.getbuildVersionStringBuilder().toString(), android.os.Build.DEVICE, android.os.Build.MODEL, android.os.Build.PRODUCT, new Callback<BaseResponse<ProfileUpdate>>() {
+        UpdateProfile updateProfile = new UpdateProfile();
+        updateProfile.setEmail(editProfileMail.getText().toString());
+        updateProfile.setImage(userImage);
+        updateProfile.setFname(firstName);
+        updateProfile.setMname(middleName);
+        updateProfile.setLname(lastName);
+        updateProfile.setCity(editProfileCity.getText().toString());
+        updateProfile.setId(id);
+        updateProfile.setSource(source);
+        updateProfile.setFacebookUri(facebookUri);
+        updateProfile.setGoogleplusUri(googleplusUri);
+        updateProfile.setDeviceId(deviceId);
+        updateProfile.setVersion(Utils.getbuildVersionStringBuilder().toString());
+        updateProfile.setDevice(android.os.Build.DEVICE);
+        updateProfile.setModel(android.os.Build.MODEL);
+        updateProfile.setProduct(android.os.Build.PRODUCT);
+        updateProfile.setLifeEvents(getLifeEvents());
+
+        HttpService.getInstance().updateProfile(getUserToken(),updateProfile, new Callback<BaseResponse<ProfileUpdate>>() {
             @Override
             public void success(final BaseResponse<ProfileUpdate> profileUpdateBaseResponse, Response response) {
                 twystProgressHUD.dismiss();
@@ -686,6 +707,36 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
                 handleRetrofitError(error);
             }
         });
+    }
+
+    private LifeEvents getLifeEvents() {
+
+        LifeEvents lifeEvents = new LifeEvents();
+
+        final Calendar c = Calendar.getInstance();
+        SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+        int bYear = prefs.getInt(AppConstants.PREFERENCE_DOB_YEAR, c.get(Calendar.YEAR));
+        int bMonth = prefs.getInt(AppConstants.PREFERENCE_DOB_MONTH, c.get(Calendar.MONTH));
+        int bDay = prefs.getInt(AppConstants.PREFERENCE_DOB_DAY, c.get(Calendar.DAY_OF_MONTH));
+
+        EventDate birthdayDate = new EventDate();
+        birthdayDate.setY(bYear);
+        birthdayDate.setM(bMonth);
+        birthdayDate.setD(bDay);
+        lifeEvents.setBirthdayDate(birthdayDate);
+
+        int aYear = prefs.getInt(AppConstants.PREFERENCE_ANNIVERSARY_YEAR, c.get(Calendar.YEAR));
+        int aMonth = prefs.getInt(AppConstants.PREFERENCE_ANNIVERSARY_MONTH, c.get(Calendar.MONTH));
+        int aDay = prefs.getInt(AppConstants.PREFERENCE_ANNIVERSARY_DAY, c.get(Calendar.DAY_OF_MONTH));
+
+        EventDate anniversaryDate = new EventDate();
+        anniversaryDate.setY(aYear);
+        anniversaryDate.setM(aMonth);
+        anniversaryDate.setD(aDay);
+        lifeEvents.setAnniversaryDate(anniversaryDate);
+
+        return lifeEvents;
     }
 
     private void updateUserEmail() {

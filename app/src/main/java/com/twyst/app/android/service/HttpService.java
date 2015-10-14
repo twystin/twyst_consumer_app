@@ -9,6 +9,7 @@ import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import com.twyst.app.android.model.AuthToken;
 import com.twyst.app.android.model.BaseResponse;
@@ -31,6 +32,7 @@ import com.twyst.app.android.model.ShareOffer;
 import com.twyst.app.android.model.ShareOutlet;
 import com.twyst.app.android.model.SubmitOffer;
 import com.twyst.app.android.model.Suggestion;
+import com.twyst.app.android.model.UpdateProfile;
 import com.twyst.app.android.model.UploadBill;
 import com.twyst.app.android.model.UseOffer;
 import com.twyst.app.android.model.UserLocation;
@@ -99,8 +101,8 @@ public class HttpService {
         twystService.userAuthToken(code, phone, callback);
     }
 
-    public void updateProfile(String token, String email, String image, String fname, String mname, String lname, String city,String id, String source,String facebookUri,String googleplusUri, String deviceId, String version, String device, String model, String product,Callback<BaseResponse<ProfileUpdate>> callback) {
-        twystService.updateProfile(token, email, image, fname, mname, lname, city, id, source, facebookUri, googleplusUri, deviceId, version, device, model, product, callback);
+    public void updateProfile(String token, UpdateProfile updateProfile, Callback<BaseResponse<ProfileUpdate>> callback) {
+        twystService.updateProfile(token, updateProfile, callback);
     }
 
     public void getRecommendedOutlets(String userToken, int start,String lat, String lng, String date, String time, Callback<BaseResponse<DiscoverData>> callback) {
