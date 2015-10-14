@@ -2,6 +2,7 @@ package com.twyst.app.android.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -27,6 +28,7 @@ import com.twyst.app.android.R;
 import com.twyst.app.android.activities.OfferDetailActivity;
 import com.twyst.app.android.activities.OutletDetailsActivity;
 import com.twyst.app.android.activities.SubmitOfferActivity;
+import com.twyst.app.android.activities.UploadBillActivity;
 import com.twyst.app.android.model.Offer;
 import com.twyst.app.android.model.Outlet;
 import com.twyst.app.android.util.AppConstants;
@@ -38,16 +40,18 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
     private List<Offer> items = new ArrayList<>();
     private Outlet outlet;
     private boolean hasMoreOffers;
+    private boolean isCheckinExclusiveOffersAvailable;
 
-    public DiscoverOfferPagerAdapter(List<Offer> items, Outlet outlet, boolean hasMoreOffers) {
+    public DiscoverOfferPagerAdapter(List<Offer> items, Outlet outlet,boolean isCheckinExclusiveOffersAvailable, boolean hasMoreOffers) {
         this.items = items;
         this.outlet = outlet;
         this.hasMoreOffers = hasMoreOffers;
+        this.isCheckinExclusiveOffersAvailable = isCheckinExclusiveOffersAvailable;
     }
 
     @Override
     public int getCount() {
-        return items.size() + 1;
+        return items.size() + 2;
     }
 
     @Override
@@ -439,14 +443,43 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
             ((ViewPager) container).addView(itemView);
             return itemView;
 
-        } else {
+        } else if(position == items.size()){
+            final View itemView = inflater.inflate(R.layout.layout_footer_offer, container, false);
+
+            TextView footerText = (TextView) itemView.findViewById(R.id.footerText);
+            RelativeLayout emptyLayout = (RelativeLayout) itemView.findViewById(R.id.emptyLayout);
+
+            final SharedPreferences prefs = itemView.getContext().getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+            String checkinText="";
+            if (isCheckinExclusiveOffersAvailable){
+                checkinText = itemView.getContext().getResources().getString(R.string.checkin_offer_card_text_exclusive);
+            }else{
+                checkinText = itemView.getContext().getResources().getString(R.string.checkin_offer_card_text);
+            }
+            String checkinTextFormatted = String.format(checkinText,prefs.getInt(AppConstants.PREFERENCE_TWYST_BUCKS_CHECKIN_OUTLET_PAYING,AppConstants.TWYST_BUCKS_CHECKIN_OUTLET_PAYING));
+
+            footerText.setText(checkinTextFormatted);
+            emptyLayout.setBackgroundResource(R.drawable.checkin_offer_card_front);
+            emptyLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(v.getContext(), UploadBillActivity.class);
+                        intent.putExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_NAME, outlet.getName());
+                        v.getContext().startActivity(intent);
+                    }
+                });
+
+            ((ViewPager) container).addView(itemView);
+            return itemView;
+        }else{
             final View itemView = inflater.inflate(R.layout.layout_footer_offer, container, false);
 
             TextView footerText = (TextView) itemView.findViewById(R.id.footerText);
             RelativeLayout emptyLayout = (RelativeLayout) itemView.findViewById(R.id.emptyLayout);
 
             if (hasMoreOffers) {
-                footerText.setText("view more");
+                footerText.setText("");
+                emptyLayout.setBackgroundResource(R.drawable.view_more_card_front);
                 emptyLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -457,8 +490,11 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                 });
 
             } else {
-//                footerText.setText("submit offer");
-                footerText.setText("");
+                final SharedPreferences prefs = itemView.getContext().getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+                String submitOfferText = itemView.getContext().getResources().getString(R.string.submit_offer_card_text);
+                String submitOfferTextFormatted = String.format(submitOfferText,prefs.getInt(AppConstants.PREFERENCE_TWYST_BUCKS_SUBMIT_OFFER,AppConstants.TWYST_BUCKS_SUBMIT_OFFER));
+
+                footerText.setText(submitOfferTextFormatted);
                 emptyLayout.setBackgroundResource(R.drawable.submit_offer_card_front);
                 emptyLayout.setOnClickListener(new View.OnClickListener() {
                     @Override

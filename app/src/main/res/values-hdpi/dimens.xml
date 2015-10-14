@@ -23,6 +23,8 @@
     <dimen name="discover_plan_ahead_padding">8dp</dimen>
     <dimen name="discover_plan_ahead_text_size">11sp</dimen>
 
+    <dimen name="discover_offer_detail">8sp</dimen>
+
     <dimen name="outlet_details_shop_card_height">200dp</dimen>
     <dimen name="outlet_details_shop_bar_height">55dp</dimen>
     <dimen name="outlet_details_card_bg_height">160dp</dimen>

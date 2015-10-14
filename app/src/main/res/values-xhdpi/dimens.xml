@@ -24,6 +24,7 @@
     <dimen name="discover_plan_ahead_padding">10dp</dimen>
     <dimen name="discover_plan_ahead_text_size">12sp</dimen>
 
+    <dimen name="discover_offer_detail">13sp</dimen>
 
     <dimen name="outlet_details_shop_card_height">200dp</dimen>
     <dimen name="outlet_details_shop_bar_height">55dp</dimen>

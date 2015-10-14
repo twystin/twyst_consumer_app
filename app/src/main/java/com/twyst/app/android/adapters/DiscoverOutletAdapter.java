@@ -172,7 +172,7 @@ public class DiscoverOutletAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 hasMoreOffers = false;
             }
 
-            outletViewHolder.viewPager.setAdapter(new DiscoverOfferPagerAdapter(subList, outlet, hasMoreOffers));
+            outletViewHolder.viewPager.setAdapter(new DiscoverOfferPagerAdapter(subList, outlet, isCheckinExclusiveOffersAvailable(outlet.getOffers()), hasMoreOffers));
 
             Picasso picasso = Picasso.with(view.getContext());
             picasso.setIndicatorsEnabled(AppConstants.DEGUG_PICASSO);
@@ -289,6 +289,13 @@ public class DiscoverOutletAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
 
 
+    }
+
+    private boolean isCheckinExclusiveOffersAvailable(List<Offer> offers) {
+        for (Offer offer: offers){
+            if ("checkin".equalsIgnoreCase(offer.getType()))return true;
+        }
+        return false;
     }
 
     @Override
