@@ -30,8 +30,17 @@ public class UpdateProfile implements Serializable {
     private String device;
     private String model;
     private String product;
+
     @SerializedName("life_events")
-    private LifeEvents lifeEvents;
+    private LifeEvents[] lifeEvents;
+
+    public LifeEvents[] getLifeEvents() {
+        return lifeEvents;
+    }
+
+    public void setLifeEvents(LifeEvents[] lifeEvents) {
+        this.lifeEvents = lifeEvents;
+    }
 
     public String getEmail() {
         return email;
@@ -153,11 +162,4 @@ public class UpdateProfile implements Serializable {
         this.product = product;
     }
 
-    public LifeEvents getLifeEvents() {
-        return lifeEvents;
-    }
-
-    public void setLifeEvents(LifeEvents lifeEvents) {
-        this.lifeEvents = lifeEvents;
-    }
 }

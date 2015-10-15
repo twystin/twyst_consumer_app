@@ -709,9 +709,9 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
         });
     }
 
-    private LifeEvents getLifeEvents() {
+    private LifeEvents[] getLifeEvents() {
 
-        LifeEvents lifeEvents = new LifeEvents();
+        LifeEvents[] lifeEvents = new LifeEvents[LifeEvents.TYPES_COUNT];
 
         final Calendar c = Calendar.getInstance();
         SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
@@ -720,21 +720,25 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
         int bMonth = prefs.getInt(AppConstants.PREFERENCE_DOB_MONTH, c.get(Calendar.MONTH));
         int bDay = prefs.getInt(AppConstants.PREFERENCE_DOB_DAY, c.get(Calendar.DAY_OF_MONTH));
 
+        lifeEvents[0]= new LifeEvents();
         EventDate birthdayDate = new EventDate();
         birthdayDate.setY(bYear);
-        birthdayDate.setM(bMonth);
+        birthdayDate.setM(bMonth+1);
         birthdayDate.setD(bDay);
-        lifeEvents.setBirthdayDate(birthdayDate);
+        lifeEvents[0].setEventDate(birthdayDate);
+        lifeEvents[0].setEventType(LifeEvents.BIRTHDAY);
 
         int aYear = prefs.getInt(AppConstants.PREFERENCE_ANNIVERSARY_YEAR, c.get(Calendar.YEAR));
         int aMonth = prefs.getInt(AppConstants.PREFERENCE_ANNIVERSARY_MONTH, c.get(Calendar.MONTH));
         int aDay = prefs.getInt(AppConstants.PREFERENCE_ANNIVERSARY_DAY, c.get(Calendar.DAY_OF_MONTH));
 
+        lifeEvents[1]= new LifeEvents();
         EventDate anniversaryDate = new EventDate();
         anniversaryDate.setY(aYear);
-        anniversaryDate.setM(aMonth);
+        anniversaryDate.setM(aMonth+1);
         anniversaryDate.setD(aDay);
-        lifeEvents.setAnniversaryDate(anniversaryDate);
+        lifeEvents[1].setEventDate(anniversaryDate);
+        lifeEvents[1].setEventType(LifeEvents.ANNIVERSARY);
 
         return lifeEvents;
     }

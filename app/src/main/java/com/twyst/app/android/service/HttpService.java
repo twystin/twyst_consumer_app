@@ -42,6 +42,7 @@ import com.twyst.app.android.model.WriteToUs;
 import com.twyst.app.android.util.AppConstants;
 import retrofit.Callback;
 import retrofit.RestAdapter;
+import retrofit.android.AndroidLog;
 import retrofit.client.OkClient;
 import retrofit.client.Response;
 /**
@@ -72,6 +73,7 @@ public class HttpService {
         Cache cache = new Cache(context.getCacheDir(), 1024);
         okHttpClient.setCache(cache);
         RestAdapter jsonRestAdapter = new RestAdapter.Builder()
+//                .setLogLevel(RestAdapter.LogLevel.FULL).setLog(new AndroidLog("Retrofit"))
                 .setLogLevel((AppConstants.IS_DEVELOPMENT) ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE)
                 .setEndpoint(AppConstants.HOST)
                 .setClient(okClient)

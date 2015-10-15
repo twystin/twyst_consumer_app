@@ -8,26 +8,40 @@ import java.io.Serializable;
  * Created by Vipul Sharma on 9/28/2015.
  */
 public class LifeEvents implements Serializable {
+    public static final String BIRTHDAY = "birthday";
+    public static final String ANNIVERSARY = "anniversary";
+    public static final int TYPES_COUNT = 2;
 
-    @SerializedName("birthday")
-    private EventDate birthdayDate;
+    @SerializedName("event_date")
+    private EventDate eventDate;
 
-    @SerializedName("anniversary")
-    private EventDate anniversaryDate;
+    @SerializedName("event_type")
+    private String eventType;
 
-    public EventDate getBirthdayDate() {
-        return birthdayDate;
+    @SerializedName("event_meta")
+    private String eventMeta;
+
+    public EventDate getEventDate() {
+        return eventDate;
     }
 
-    public void setBirthdayDate(EventDate birthdayDate) {
-        this.birthdayDate = birthdayDate;
+    public void setEventDate(EventDate eventDate) {
+        this.eventDate = eventDate;
     }
 
-    public EventDate getAnniversaryDate() {
-        return anniversaryDate;
+    public String getEventType() {
+        return eventType;
     }
 
-    public void setAnniversaryDate(EventDate anniversaryDate) {
-        this.anniversaryDate = anniversaryDate;
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+
+    public String getEventMeta() {
+        return eventMeta;
+    }
+
+    public void setEventMeta(String eventMeta) {
+        this.eventMeta = eventMeta;
     }
 }

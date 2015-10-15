@@ -1,13 +1,18 @@
 package com.twyst.app.android.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
  * Created by Vipul Sharma on 10/14/2015.
  */
 public class EventDate implements Serializable {
+    @SerializedName("d")
     private int d;
+    @SerializedName("m")
     private int m;
+    @SerializedName("y")
     private int y;
 
     public int getY() {
