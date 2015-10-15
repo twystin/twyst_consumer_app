@@ -8,6 +8,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.drawable.AnimationDrawable;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,24 +28,37 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tagmanager.Container;
 import com.google.android.gms.tagmanager.ContainerHolder;
 import com.google.android.gms.tagmanager.TagManager;
+import com.google.gson.Gson;
 import com.twyst.app.android.R;
+import com.twyst.app.android.model.BaseResponse;
 import com.twyst.app.android.model.ContainerHolderSingleton;
+import com.twyst.app.android.model.LocationOffline;
+import com.twyst.app.android.model.LocationOfflineList;
+import com.twyst.app.android.model.UserLocation;
 import com.twyst.app.android.service.HttpService;
 import com.twyst.app.android.util.AppConstants;
 import com.twyst.app.android.util.PhoneBookContacts;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by satish on 23/12/14.
  */
 public class SplashActivity extends Activity {
+    private static final long TIMEOUT_FOR_CONTAINER_OPEN_MILLISECONDS = 2000;
 
     private static final String CONTAINER_ID = "GTM-PNRJQ9";
+    private static Handler handler  = new Handler();
 
     private static int SPLASH_TIME_OUT = 2200;
     private GoogleCloudMessaging googleCloudMessaging;
@@ -54,6 +68,16 @@ public class SplashActivity extends Activity {
     private void setContainerHolder(ContainerHolder containerHolder) {
         this.mContainerHolder = containerHolder;
     }
+    private Runnable timedTask = new Runnable(){
+
+        @Override
+        public void run() {
+            setContainerHolder(ContainerHolderSingleton.getContainerHolder());
+            if (mContainerHolder != null) {
+                mContainerHolder.refresh();
+            }
+            updateConstantsfromContainer();
+        }};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +101,13 @@ public class SplashActivity extends Activity {
         context = getApplicationContext();
 
         showAnimation();
+        new FetchContact().execute();
 
-    new FetchContact().execute();
         if (checkPlayServices()) {
             googleCloudMessaging = GoogleCloudMessaging.getInstance(this);
             registerInBackground();
-            new DownloadContainerTask(this).execute(CONTAINER_ID);
+            downloadContainer();
+            handler.postDelayed(timedTask, TIMEOUT_FOR_CONTAINER_OPEN_MILLISECONDS + 1000);
         } else {
             Log.i(getClass().getSimpleName(), "No valid Google Play Services APK found.");
         }
@@ -115,6 +140,41 @@ public class SplashActivity extends Activity {
             }
         }, SPLASH_TIME_OUT);
     }
+
+    private void downloadContainer() {
+        TagManager tagManager = TagManager.getInstance(this);
+
+        // Modify the log level of the logger to print out not only
+        // warning and error messages, but also verbose, debug, info messages.
+//        tagManager.setVerboseLoggingEnabled(true);
+
+        PendingResult<ContainerHolder> pending =
+                tagManager.loadContainerPreferNonDefault(CONTAINER_ID,
+                        R.raw.gtm);
+
+        // The onResult method will be called as soon as one of the following happens:
+        //     1. a saved container is loaded
+        //     2. if there is no saved container, a network container is loaded
+        //     3. the 2-second timeout occurs
+        pending.setResultCallback(new ResultCallback<ContainerHolder>() {
+            @Override
+            public void onResult(ContainerHolder containerHolder) {
+                ContainerHolderSingleton.setContainerHolder(containerHolder);
+                Container container = containerHolder.getContainer();
+                if (!containerHolder.getStatus().isSuccess()) {
+                    Log.e("SplashActivity", "failure loading container");
+//                    displayErrorToUser(R.string.load_error);
+                    return;
+                }
+                ContainerHolderSingleton.setContainerHolder(containerHolder);
+                ContainerLoadedCallback.registerCallbacksForContainer(container);
+                containerHolder.setContainerAvailableListener(new ContainerLoadedCallback());
+//                startMainActivity();
+            }
+        }, TIMEOUT_FOR_CONTAINER_OPEN_MILLISECONDS, TimeUnit.MILLISECONDS);
+    }
+
+
 
     private void showAnimation() {
         final ImageView ivT = (ImageView) findViewById(R.id.ivT);
@@ -337,54 +397,13 @@ public class SplashActivity extends Activity {
         }
     }
 
-
-        // This AsyncTask class will set the Container Holder object once this task is completed.
-        private class DownloadContainerTask extends AsyncTask<String, Void, Boolean> {
-            private static final long TIMEOUT_FOR_CONTAINER_OPEN_MILLISECONDS = 2000;
-            private static final int DEFAULT_CONTAINER_RESOURCE_ID = R.raw.gtm1;
-
-            private Activity mActivity;
-            private ContainerHolder mContainerHolder;
-
-            public DownloadContainerTask(Activity activity) {
-                this.mActivity = activity;
-            }
-
-            @Override
-            protected Boolean doInBackground(String... params) {
-                String containerId = params[0];
-
-                TagManager tagManager = TagManager.getInstance(mActivity);
-                PendingResult<ContainerHolder> pending = tagManager.loadContainerPreferNonDefault(
-                        containerId, DEFAULT_CONTAINER_RESOURCE_ID);
-
-                mContainerHolder = pending.await(TIMEOUT_FOR_CONTAINER_OPEN_MILLISECONDS,
-                        TimeUnit.MILLISECONDS);
-                if (!mContainerHolder.getStatus().isSuccess()) {
-                    Log.e("HelloWorld", "failure loading container");
-//                    displayErrorToUser(R.string.load_error);
-                    return false;
-                }
-                return true;
-            }
-
-            @Override
-            protected void onPostExecute(Boolean result) {
-                // Set up the containerHolder object.
-                setContainerHolder(mContainerHolder);
-                // Modify the background-color and text-color of text based on the value
-                // from configuration.
-                updateConstantsfromContainer();
-            }
-        }
-
-
     private void updateConstantsfromContainer() {
         if (mContainerHolder != null) {
             Double USER_ONE_LOCATION_CHECK_TIME = (mContainerHolder.getContainer().getDouble(AppConstants.PREFERENCE_USER_ONE_LOCATION_CHECK_TIME));
             Double DISTANCE_LIMIT = (mContainerHolder.getContainer().getDouble(AppConstants.PREFERENCE_DISTANCE_LIMIT));
             Double LOCATION_REQUEST_REFRESH_INTERVAL = (mContainerHolder.getContainer().getDouble(AppConstants.PREFERENCE_LOCATION_REQUEST_REFRESH_INTERVAL));
             Double LOCATION_REQUEST_SMALLEST_DISPLACEMENT = (mContainerHolder.getContainer().getDouble(AppConstants.PREFERENCE_LOCATION_REQUEST_SMALLEST_DISPLACEMENT));
+            Double LOCATION_REQUEST_PRIORITY = (mContainerHolder.getContainer().getDouble(AppConstants.PREFERENCE_LOCATION_REQUEST_PRIORITY));
             Double LOCATION_OFFLINE_LIST_MAX_SIZE = (mContainerHolder.getContainer().getDouble(AppConstants.PREFERENCE_LOCATION_OFFLINE_LIST_MAX_SIZE));
 
             final SharedPreferences.Editor prefsEdit = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
@@ -392,9 +411,51 @@ public class SplashActivity extends Activity {
             prefsEdit.putInt((AppConstants.PREFERENCE_DISTANCE_LIMIT),DISTANCE_LIMIT.intValue());
             prefsEdit.putInt((AppConstants.PREFERENCE_LOCATION_REQUEST_REFRESH_INTERVAL),LOCATION_REQUEST_REFRESH_INTERVAL.intValue());
             prefsEdit.putInt((AppConstants.PREFERENCE_LOCATION_REQUEST_SMALLEST_DISPLACEMENT),LOCATION_REQUEST_SMALLEST_DISPLACEMENT.intValue());
+            prefsEdit.putInt((AppConstants.PREFERENCE_LOCATION_REQUEST_PRIORITY),LOCATION_REQUEST_PRIORITY.intValue());
             prefsEdit.putInt((AppConstants.PREFERENCE_LOCATION_OFFLINE_LIST_MAX_SIZE),LOCATION_OFFLINE_LIST_MAX_SIZE.intValue());
             prefsEdit.apply();
         }
     }
 
+
+private static class ContainerLoadedCallback implements ContainerHolder.ContainerAvailableListener {
+    @Override
+    public void onContainerAvailable(ContainerHolder containerHolder, String containerVersion) {
+        // We load each container when it becomes available.
+        Container container = containerHolder.getContainer();
+        registerCallbacksForContainer(container);
+    }
+
+    public static void registerCallbacksForContainer(Container container) {
+        // Register two custom function call macros to the container.
+        container.registerFunctionCallMacroCallback("increment", new CustomMacroCallback());
+        container.registerFunctionCallMacroCallback("mod", new CustomMacroCallback());
+        // Register a custom function call tag to the container.
+        container.registerFunctionCallTagCallback("custom_tag", new CustomTagCallback());
+    }
 }
+
+private static class CustomMacroCallback implements Container.FunctionCallMacroCallback {
+    private int numCalls;
+
+    @Override
+    public Object getValue(String name, Map<String, Object> parameters) {
+        if ("increment".equals(name)) {
+            return ++numCalls;
+        } else if ("mod".equals(name)) {
+            return (Long) parameters.get("key1") % Integer.valueOf((String) parameters.get("key2"));
+        } else {
+            throw new IllegalArgumentException("Custom macro name: " + name + " is not supported.");
+        }
+    }
+}
+
+private static class CustomTagCallback implements Container.FunctionCallTagCallback {
+    @Override
+    public void execute(String tagName, Map<String, Object> parameters) {
+        // The code for firing this custom tag.
+        Log.i("SplashActivity", "Custom function call tag :" + tagName + " is fired.");
+    }
+}
+}
+
