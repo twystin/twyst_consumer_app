@@ -330,6 +330,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 }
             });
 
+        }else{
+            background.setColor(resources.getColor(R.color.notification_light_red));
+            holder.notifyCircle.setBackground(background);
+            holder.notificationBtn.setImageDrawable(resources.getDrawable(R.drawable.notification_unknown));
         }
 
 
