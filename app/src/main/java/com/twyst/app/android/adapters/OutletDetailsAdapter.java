@@ -39,6 +39,7 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
     private static final int VIEW_INVISIBLE = 2;
     private String outletname;
     private String address;
+    private String outlet_id;
     private List<Offer> items = new ArrayList<>();
 
 
@@ -46,10 +47,11 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
         return items;
     }
 
-    public void setItems(List<Offer> items, String name, String address) {
+    public void setItems(List<Offer> items, String name, String address, String outlet_id) {
         this.items = items;
         this.outletname=name;
         this.address=address;
+        this.outlet_id= outlet_id;
     }
 
     @Override
@@ -430,8 +432,9 @@ public class OutletDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 public void onClick(final View v) {
 
                     Intent intent = new Intent(v.getContext(), SubmitOfferActivity.class);
-                    intent.putExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_NAME, outletname);
-                    intent.putExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_ADDRESS, address);
+                    intent.putExtra(AppConstants.INTENT_PARAM_SUBMIT_OFFER_OUTLET_NAME, outletname);
+                    intent.putExtra(AppConstants.INTENT_PARAM_SUBMIT_OFFER_OUTLET_ADDRESS, address);
+                    intent.putExtra(AppConstants.INTENT_PARAM_SUBMIT_OFFER_OUTLET_ID, outlet_id);
                     v.getContext().startActivity(intent);
 
                 }

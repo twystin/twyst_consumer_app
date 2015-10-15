@@ -464,7 +464,8 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(v.getContext(), UploadBillActivity.class);
-                        intent.putExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_NAME, outlet.getName());
+                        intent.putExtra(AppConstants.INTENT_PARAM_UPLOAD_BILL_OUTLET_ID, outlet.get_id());
+                        intent.putExtra(AppConstants.INTENT_PARAM_UPLOAD_BILL_OUTLET_NAME, outlet.getName());
                         v.getContext().startActivity(intent);
                     }
                 });
@@ -500,8 +501,9 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(v.getContext(), SubmitOfferActivity.class);
-                        intent.putExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_NAME, outlet.getName());
-                        intent.putExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_ADDRESS,outlet.getAddress());
+                        intent.putExtra(AppConstants.INTENT_PARAM_SUBMIT_OFFER_OUTLET_NAME, outlet.getName());
+                        intent.putExtra(AppConstants.INTENT_PARAM_SUBMIT_OFFER_OUTLET_ADDRESS,outlet.getAddress());
+                        intent.putExtra(AppConstants.INTENT_PARAM_SUBMIT_OFFER_OUTLET_ID,outlet.get_id());
                         v.getContext().startActivity(intent);
                     }
                 });

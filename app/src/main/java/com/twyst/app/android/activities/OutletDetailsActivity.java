@@ -592,7 +592,8 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
                     public void run() {
 
                         Intent intent = new Intent(OutletDetailsActivity.this, UploadBillActivity.class);
-                        intent.putExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_NAME, outlet.getName());
+                        intent.putExtra(AppConstants.INTENT_PARAM_UPLOAD_BILL_OUTLET_ID, outlet.get_id());
+                        intent.putExtra(AppConstants.INTENT_PARAM_UPLOAD_BILL_OUTLET_NAME, outlet.getName());
                         startActivity(intent);
                     }
                 }, 100);
@@ -604,8 +605,9 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
             public void onClick(View v) {
                 if (obstructor.getVisibility() == View.VISIBLE) {
                     Intent intent = new Intent(OutletDetailsActivity.this, SubmitOfferActivity.class);
-                    intent.putExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_NAME, outlet.getName());
-                    intent.putExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_ADDRESS, outlet.getAddress());
+                    intent.putExtra(AppConstants.INTENT_PARAM_SUBMIT_OFFER_OUTLET_NAME, outlet.getName());
+                    intent.putExtra(AppConstants.INTENT_PARAM_SUBMIT_OFFER_OUTLET_ADDRESS, outlet.getAddress());
+                    intent.putExtra(AppConstants.INTENT_PARAM_SUBMIT_OFFER_OUTLET_ID, outlet.get_id());
                     startActivity(intent);
                     fabMenu.collapse();
 
@@ -662,7 +664,7 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
                 fabMenu.setVisibility(View.VISIBLE);
                 outletDetailsRecyclerView.setVisibility(View.VISIBLE);
                 layout.setVisibility(View.VISIBLE);
-                outletAdapter.setItems(outlet.getOffers(),outlet.getName(),outlet.getAddress());
+                outletAdapter.setItems(outlet.getOffers(),outlet.getName(),outlet.getAddress(),outlet.get_id());
                 outletAdapter.notifyDataSetChanged();
             }
 

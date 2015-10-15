@@ -237,7 +237,8 @@ public class RedeemVoucherActivity extends BaseActivity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(RedeemVoucherActivity.this, UploadBillActivity.class);
-                intent.putExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_NAME, outlet.getName());
+                intent.putExtra(AppConstants.INTENT_PARAM_UPLOAD_BILL_OUTLET_ID, outlet.get_id());
+                intent.putExtra(AppConstants.INTENT_PARAM_UPLOAD_BILL_OUTLET_NAME, outlet.getName());
                 startActivity(intent);
             }
         });

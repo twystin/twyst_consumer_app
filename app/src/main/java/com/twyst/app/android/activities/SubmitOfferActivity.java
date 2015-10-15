@@ -71,8 +71,9 @@ public class SubmitOfferActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         hideProgressHUDInLayout();
         fromDrawer = getIntent().getBooleanExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, false);
-        String outletName = getIntent().getStringExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_NAME);
-        String outletAddress = getIntent().getStringExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_ADDRESS);
+        String outletName = getIntent().getStringExtra(AppConstants.INTENT_PARAM_SUBMIT_OFFER_OUTLET_NAME);
+        String outletAddress = getIntent().getStringExtra(AppConstants.INTENT_PARAM_SUBMIT_OFFER_OUTLET_ADDRESS);
+        final String outletID = getIntent().getStringExtra(AppConstants.INTENT_PARAM_SUBMIT_OFFER_OUTLET_ID);
         final EditText outletNameET = (EditText) findViewById(R.id.outletNameET);
         final EditText offerET = (EditText) findViewById(R.id.offerET);
         final EditText locationET = (EditText) findViewById(R.id.locationEt);
@@ -102,10 +103,10 @@ public class SubmitOfferActivity extends BaseActivity {
                     final TwystProgressHUD twystProgressHUD = TwystProgressHUD.show(SubmitOfferActivity.this, false, null);
 
                     SubmitOffer submitOffer = new SubmitOffer();
-                    submitOffer.setOutletId(null);
+                    submitOffer.setOutletId(outletID);
                     SubmitOfferMeta submitOfferMeta = new SubmitOfferMeta();
-                    submitOfferMeta.setOffer(outletNameET.getText().toString());
-                    submitOfferMeta.setOutlet(offerET.getText().toString());
+                    submitOfferMeta.setOffer(offerET.getText().toString());
+                    submitOfferMeta.setOutlet(outletNameET.getText().toString());
                     submitOfferMeta.setLocation(locationET.getText().toString());
 
                     String imagePat = uploadingImage;

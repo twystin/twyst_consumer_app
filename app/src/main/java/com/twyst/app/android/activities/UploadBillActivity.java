@@ -76,7 +76,8 @@ public class UploadBillActivity extends BaseActivity {
         fromDrawer = getIntent().getBooleanExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, false);
         hideProgressHUDInLayout();
 
-        String outletName = getIntent().getStringExtra(AppConstants.INTENT_PARAM_SUMIT_OFFER_OUTLET_NAME);
+        final String outletID = getIntent().getStringExtra(AppConstants.INTENT_PARAM_UPLOAD_BILL_OUTLET_ID);
+        String outletName = getIntent().getStringExtra(AppConstants.INTENT_PARAM_UPLOAD_BILL_OUTLET_NAME);
         final EditText outletNameET = (EditText) findViewById(R.id.outletNameET);
         final EditText outletBillDate = (EditText) findViewById(R.id.outletBillET);
         editImageButton = (TextView) findViewById(R.id.editImageButton);
@@ -102,7 +103,7 @@ public class UploadBillActivity extends BaseActivity {
 
                     UploadBill uploadBill = new UploadBill();
 
-                    uploadBill.setOutletId(null);
+                    uploadBill.setOutletId(outletID);
                     UploadBillMeta uploadBillMeta = new UploadBillMeta();
                     uploadBillMeta.setBillDate(outletBillDate.getText().toString());
                     uploadBillMeta.setOutletName(outletNameET.getText().toString());

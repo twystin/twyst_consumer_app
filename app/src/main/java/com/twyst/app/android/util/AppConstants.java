@@ -103,10 +103,13 @@ public class AppConstants {
     public static final String INTENT_PARAM_CHECKIN_OUTLET_ID = "checkin_outlet_id";
     public static final String INTENT_PARAM_CHECKIN_COUNT = "checkin_count";
 
-    public static final String INTENT_PARAM_SUMIT_OFFER_OUTLET_NAME = "outlet_names";
     public static final String INTENT_PARAM_FROM_DRAWER = "from_drawer";
     public static final String INTENT_PARAM_FROM_PUSH_NOTIFICATION_CLICKED = "from_push_notification";
-    public static final String INTENT_PARAM_SUMIT_OFFER_OUTLET_ADDRESS ="address" ;
+    public static final String INTENT_PARAM_SUBMIT_OFFER_OUTLET_NAME = "submit_offer_outlet_name";
+    public static final String INTENT_PARAM_SUBMIT_OFFER_OUTLET_ADDRESS ="submit_offer_outlet_address" ;
+    public static final String INTENT_PARAM_SUBMIT_OFFER_OUTLET_ID ="submit_offer_outlet_id" ;
+    public static final String INTENT_PARAM_UPLOAD_BILL_OUTLET_ID ="upload_bill_outlet_id" ;
+    public static final String INTENT_PARAM_UPLOAD_BILL_OUTLET_NAME ="upload_bill_outlet_name" ;
     public static final String PREFERENCE_LOCALITY_SHOWN_DRAWER = "locality";
     public static final String PREFERENCE_PREVIOUS_LOCALITY_SHOWN_DRAWER = "previous_locality";
     public static final String PREFERENCE_CURRENT_LAT = "current_lat";
