@@ -24,7 +24,6 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/invite_friend_padding"
             android:textSize="@dimen/invite_friend_text"
-            android:text="Share rewards! Use offers your friends unlock (and vice versa). Get 250 Twyst bucks for each friend you add to Twyst."
             android:textColor="#555" />
 
         <RelativeLayout

@@ -130,6 +130,8 @@ each friend who joins.</p>
     <string name="icon_bill_approved">bill_approved</string>
     <string name="icon_wallet">wallet</string>
 
+    <string name="invite_friends_text">Share rewards! Use offers your friends unlock (and vice versa). Get %1$d Twyst bucks for each friend you add to Twyst.</string>
+
     <string name="submit_offer_card_text">See an offer not listed on Twyst?\nBe the first to tell us &amp; earn %1$d Twyst Bucks!</string>
     <string name="checkin_offer_card_text_exclusive">Upload bill to check-in and unlock exclusive offers! You also get %1$d Twyst Bucks!</string>
     <string name="checkin_offer_card_text">Upload bill and get %1$d Twyst Bucks!</string>

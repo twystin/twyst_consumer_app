@@ -8,6 +8,7 @@ import android.support.v4.view.GravityCompat;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -45,6 +46,13 @@ public class InviteFriendsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setupAsChild= true;
         super.onCreate(savedInstanceState);
+
+        final SharedPreferences prefs = this.getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        int bucksTDisplay = prefs.getInt(AppConstants.PREFERENCE_TWYST_BUCKS_INVITE_FRIENDS, AppConstants.TWYST_BUCKS_INVITE_FRIENDS);
+        String inviteText = this.getResources().getString(R.string.invite_friends_text);
+        String inviteTextFormatted = String.format(inviteText, bucksTDisplay);
+        TextView textView1 = (TextView) findViewById(R.id.textView1);
+        textView1.setText(inviteTextFormatted);
 
         fromDrawer = getIntent().getBooleanExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, false);
 
