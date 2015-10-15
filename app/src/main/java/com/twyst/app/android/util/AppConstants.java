@@ -20,16 +20,37 @@ public class AppConstants {
     public static final int MAX_WAIT_FOR_SMS_IN_SECONDS = (IS_DEVELOPMENT) ? 30 : 30;
 
     //Earn-burn default values
-    public static final int TWYST_BUCKS_REFERRAL = 250;
-    public static final int TWYST_BUCKS_CHECKIN_OUTLET_PAYING = 50;
+    public static final int TWYST_BUCKS_INVITE_FRIENDS = 250;
+    public static final int TWYST_BUCKS_FOLLOW = 20;
+    public static final int TWYST_BUCKS_LIKE_OFFER = 20;
     public static final int TWYST_BUCKS_CHECKIN_OUTLET_NON_PAYING = 50;
+    public static final int TWYST_BUCKS_CHECKIN_OUTLET_PAYING = 50;
     public static final int TWYST_BUCKS_SUBMIT_OFFER = 50;
+    public static final int TWYST_BUCKS_SHARE_OFFER = 20;
+    public static final int TWYST_BUCKS_SHARE_OUTLET = 20;
+    public static final int TWYST_BUCKS_SUGGESTION = 20;
+    public static final int TWYST_BUCKS_SHARE_CHECKIN = 25;
+    public static final int TWYST_BUCKS_SHARE_REDEMPTION = 25;
+    public static final int TWYST_BUCKS_GRAB = 100;
+    public static final int TWYST_BUCKS_EXTEND = 150;
+    public static final int TWYST_BUCKS_REDEEM = 100;
+    public static final int TWYST_BUCKS_BUY_CHECKIN = 150;
 
-    public static final String PREFERENCE_TWYST_BUCKS_REFERRAL = "twyst_bucks_referral";
-    public static final String PREFERENCE_TWYST_BUCKS_SUBMIT_OFFER = "twyst_bucks_submit_offer";
-    public static final String PREFERENCE_TWYST_BUCKS_CHECKIN_OUTLET_PAYING = "twyst_bucks_checkin_outlet_paying";
+    public static final String PREFERENCE_TWYST_BUCKS_INVITE_FRIENDS = "twyst_bucks_invite_friends";
+    public static final String PREFERENCE_TWYST_BUCKS_FOLLOW = "twyst_bucks_follow";
+    public static final String PREFERENCE_TWYST_BUCKS_LIKE_OFFER = "twyst_bucks_like_offer";
     public static final String PREFERENCE_TWYST_BUCKS_CHECKIN_OUTLET_NON_PAYING = "twyst_bucks_checkin_outlet_non_paying";
-
+    public static final String PREFERENCE_TWYST_BUCKS_CHECKIN_OUTLET_PAYING = "twyst_bucks_checkin_outlet_paying";
+    public static final String PREFERENCE_TWYST_BUCKS_SUBMIT_OFFER = "twyst_bucks_submit_offer";
+    public static final String PREFERENCE_TWYST_BUCKS_SHARE_OFFER = "twyst_bucks_share_offer";
+    public static final String PREFERENCE_TWYST_BUCKS_SHARE_OUTLET = "twyst_bucks_share_outlet";
+    public static final String PREFERENCE_TWYST_BUCKS_SUGGESTION = "twyst_bucks_suggestion";
+    public static final String PREFERENCE_TWYST_BUCKS_SHARE_CHECKIN = "twyst_bucks_share_checkin";
+    public static final String PREFERENCE_TWYST_BUCKS_SHARE_REDEMPTION = "twyst_bucks_share_redemption";
+    public static final String PREFERENCE_TWYST_BUCKS_GRAB = "twyst_bucks_grab";
+    public static final String PREFERENCE_TWYST_BUCKS_EXTEND = "twyst_bucks_extend";
+    public static final String PREFERENCE_TWYST_BUCKS_REDEEM = "twyst_bucks_redeem";
+    public static final String PREFERENCE_TWYST_BUCKS_BUY_CHECKIN = "twyst_bucks_buy_checkin";
 
     public static final String INTENT_PARAM_OTP_CODE = "otp_code";
     public static final String INTENT_PARAM_OTP_PHONE = "otp_phone_number";
