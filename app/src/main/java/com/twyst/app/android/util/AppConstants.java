@@ -75,6 +75,7 @@ public class AppConstants {
     public static final String PREFERENCE_DISTANCE_LIMIT = "distance_limit";
     public static final String PREFERENCE_LOCATION_REQUEST_REFRESH_INTERVAL = "location_request_refresh_interval";
     public static final String PREFERENCE_LOCATION_REQUEST_SMALLEST_DISPLACEMENT = "location_request_smallest_displacement";
+    public static final String PREFERENCE_LOCATION_REQUEST_PRIORITY = "location_request_priority";
     public static final String PREFERENCE_LOCATION_OFFLINE_LIST_MAX_SIZE = "location_offline_list_max_size";
 
     public static final String PREFERENCE_IS_FACEBOOK_CONNECTED = "is_facebook_connected";

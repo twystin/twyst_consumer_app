@@ -46,10 +46,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private LocationRequest mLocationRequest;
     protected static final String TAG = "location-updates";
 
-    private final static int USER_ONE_LOCATION_CHECK_TIME = 30000;
+    private final static int USER_ONE_LOCATION_CHECK_TIME = 360000;
     private final static int DISTANCE_LIMIT = 2000;
-    private final static int LOCATION_REQUEST_REFRESH_INTERVAL = 1000;
-    private final static int LOCATION_REQUEST_SMALLEST_DISPLACEMENT = 50;
+    private final static int LOCATION_REQUEST_REFRESH_INTERVAL = 10000;
+    private final static int LOCATION_REQUEST_PRIORITY = 102; //PRIORITY_BALANCED_POWER_ACCURACY=102, PRIORITY_HIGH_ACCURACY = 100, PRIORITY_LOW_POWER = 104
+    private final static int LOCATION_REQUEST_SMALLEST_DISPLACEMENT = 500;
     private final static int LOCATION_OFFLINE_LIST_MAX_SIZE = 10;
 
     private static Handler handler  = new Handler();
@@ -75,7 +76,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         mLocationRequest.setInterval(prefs.getInt(AppConstants.PREFERENCE_LOCATION_REQUEST_REFRESH_INTERVAL,LOCATION_REQUEST_REFRESH_INTERVAL));
         mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setSmallestDisplacement(prefs.getInt(AppConstants.PREFERENCE_LOCATION_REQUEST_SMALLEST_DISPLACEMENT,LOCATION_REQUEST_SMALLEST_DISPLACEMENT));
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setPriority(prefs.getInt(AppConstants.PREFERENCE_LOCATION_REQUEST_PRIORITY,LOCATION_REQUEST_PRIORITY));
 
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
@@ -90,7 +91,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-//        super.onStartCommand(intent, flags, startId);
+        super.onStartCommand(intent, flags, startId);
 //        System.out.println("LocationService.. onStartCommand()");
         return START_STICKY;
     }
@@ -135,7 +136,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                     newLocation.setLongitude(locationOffline.getLongitude());
                     double distance = currentLocation.distanceTo(newLocation);
                     if (distance <= prefs.getInt(AppConstants.PREFERENCE_DISTANCE_LIMIT,DISTANCE_LIMIT)) {
-                        Toast.makeText(LocationService.this, "User at one location. Send to server", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(LocationService.this, "User at one location. Send to server", Toast.LENGTH_LONG).show();
 
                         UserLocation locationData;
                         locationData = new UserLocation();
@@ -145,7 +146,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                         HttpService.getInstance().postLocation(getUserToken(), locationData, new Callback<BaseResponse>() {
                             @Override
                             public void success(BaseResponse baseResponse, Response response) {
-                                Toast.makeText(LocationService.this,"Location posted successfully to server",Toast.LENGTH_LONG).show();
+//                                Toast.makeText(LocationService.this,"Location posted successfully to server",Toast.LENGTH_LONG).show();
                             }
 
                             @Override
@@ -172,7 +173,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     @Override
     public void onLocationChanged(Location location) {
         System.out.println("LocationService.onLocationChanged i = " + location);
-        Toast.makeText(LocationService.this, "Location changed", Toast.LENGTH_LONG).show();
+//        Toast.makeText(LocationService.this, "Location changed", Toast.LENGTH_LONG).show();
 
         final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
