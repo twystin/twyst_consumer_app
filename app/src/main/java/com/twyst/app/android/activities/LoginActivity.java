@@ -234,11 +234,12 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
                     lastName = "";
                     dob = "";
                     id = "";
+                    final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
                     friendsList = PhoneBookContacts.getInstance().getPhoneContactList();
                     sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
                     sharedPreferences.putString(AppConstants.PREFERENCE_USER_PIC, "");
-                    sharedPreferences.putString(AppConstants.PREFERENCE_USER_NAME, socialEmail);
-                    sharedPreferences.putString(AppConstants.PREFERENCE_USER_FULL_NAME, socialEmail);
+                    sharedPreferences.putString(AppConstants.PREFERENCE_USER_NAME, prefs.getString(AppConstants.PREFERENCE_USER_PHONE,""));
+                    sharedPreferences.putString(AppConstants.PREFERENCE_USER_FULL_NAME, prefs.getString(AppConstants.PREFERENCE_USER_PHONE,""));
                     sharedPreferences.apply();
                     updateUserEmail();
 
