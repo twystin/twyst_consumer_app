@@ -10,7 +10,6 @@ import java.util.List;
  */
 public class Outlet extends Data implements Serializable {
 
-
     private String name;
 
     private String city;
@@ -53,6 +52,17 @@ public class Outlet extends Data implements Serializable {
     private boolean following;
 
     private String background;
+
+    @SerializedName("is_paying")
+    private boolean isPaying;
+
+    public boolean isPaying() {
+        return isPaying;
+    }
+
+    public void setIsPaying(boolean isPaying) {
+        this.isPaying = isPaying;
+    }
 
     public String getName() {
         return name;

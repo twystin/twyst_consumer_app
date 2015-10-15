@@ -448,15 +448,21 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
 
             TextView footerText = (TextView) itemView.findViewById(R.id.footerText);
             RelativeLayout emptyLayout = (RelativeLayout) itemView.findViewById(R.id.emptyLayout);
-
             final SharedPreferences prefs = itemView.getContext().getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+            int bucksTDisplay;
+            if (outlet.isPaying()){
+                bucksTDisplay = prefs.getInt(AppConstants.PREFERENCE_TWYST_BUCKS_CHECKIN_OUTLET_PAYING,AppConstants.TWYST_BUCKS_CHECKIN_OUTLET_PAYING);
+            }else{
+                bucksTDisplay = prefs.getInt(AppConstants.PREFERENCE_TWYST_BUCKS_CHECKIN_OUTLET_NON_PAYING,AppConstants.TWYST_BUCKS_CHECKIN_OUTLET_NON_PAYING);
+            }
             String checkinText="";
             if (isCheckinExclusiveOffersAvailable){
                 checkinText = itemView.getContext().getResources().getString(R.string.checkin_offer_card_text_exclusive);
             }else{
                 checkinText = itemView.getContext().getResources().getString(R.string.checkin_offer_card_text);
             }
-            String checkinTextFormatted = String.format(checkinText,prefs.getInt(AppConstants.PREFERENCE_TWYST_BUCKS_CHECKIN_OUTLET_PAYING,AppConstants.TWYST_BUCKS_CHECKIN_OUTLET_PAYING));
+            String checkinTextFormatted = String.format(checkinText,bucksTDisplay);
 
             footerText.setText(checkinTextFormatted);
             emptyLayout.setBackgroundResource(R.drawable.checkin_offer_card_front);

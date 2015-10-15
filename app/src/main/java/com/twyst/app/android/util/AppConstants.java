@@ -28,7 +28,7 @@ public class AppConstants {
     public static final String PREFERENCE_TWYST_BUCKS_REFERRAL = "twyst_bucks_referral";
     public static final String PREFERENCE_TWYST_BUCKS_SUBMIT_OFFER = "twyst_bucks_submit_offer";
     public static final String PREFERENCE_TWYST_BUCKS_CHECKIN_OUTLET_PAYING = "twyst_bucks_checkin_outlet_paying";
-    public static final String PREFERENCE_TWYST_BUCKSCHECKIN__OUTLET_NON_PAYING = "twyst_bucks_checkin_outlet_non_paying";
+    public static final String PREFERENCE_TWYST_BUCKS_CHECKIN_OUTLET_NON_PAYING = "twyst_bucks_checkin_outlet_non_paying";
 
 
     public static final String INTENT_PARAM_OTP_CODE = "otp_code";
