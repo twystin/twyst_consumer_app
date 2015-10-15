@@ -1,9 +1,11 @@
 package com.twyst.app.android;
 
+import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDex;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
@@ -23,9 +25,21 @@ public class TwystApplication extends Application {
 
         HttpService.getInstance().setup(getApplicationContext(), getGATracker());
 
-        Intent locationService = new Intent();
-        locationService.setClass(getApplicationContext(), LocationService.class);
-        startService(locationService);
+        if (!isMyServiceRunning(LocationService.class)){
+            Intent locationService = new Intent();
+            locationService.setClass(getApplicationContext(), LocationService.class);
+            startService(locationService);
+        }
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public synchronized Tracker getGATracker() {
