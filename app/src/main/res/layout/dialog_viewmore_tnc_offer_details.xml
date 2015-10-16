@@ -20,7 +20,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#fc6e51"
+            android:background="#323232"
             android:gravity="center_vertical"
             android:padding="16dp"
             android:text="Terms &amp; Conditions"
