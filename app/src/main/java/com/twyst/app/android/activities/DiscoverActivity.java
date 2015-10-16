@@ -1062,34 +1062,47 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         Log.i(getTagName(), "retrieveLocation called isConnected: " + mGoogleApiClient.isConnected());
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-        if (mLastLocation != null) {
-            double latitude = mLastLocation.getLatitude();
-            double longitude = mLastLocation.getLongitude();
+            if (mLastLocation != null) {
+                double latitude = mLastLocation.getLatitude();
+                double longitude = mLastLocation.getLongitude();
 
-            placeNameSelectedAndUsed = findNearestOutletName(latitude, longitude);
-            latitudeStrSelectedAndUsed = String.valueOf(latitude);
-            longitudeStrSelectedAndUsed = String.valueOf(longitude);
+                placeNameSelectedAndUsed = findNearestOutletName(latitude, longitude);
+                latitudeStrSelectedAndUsed = String.valueOf(latitude);
+                longitudeStrSelectedAndUsed = String.valueOf(longitude);
 
-            sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, latitudeStrSelectedAndUsed);
-            sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, longitudeStrSelectedAndUsed);
-            sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, placeNameSelectedAndUsed);
-            sharedPreferences.commit();
+                sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, latitudeStrSelectedAndUsed);
+                sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, longitudeStrSelectedAndUsed);
+                sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, placeNameSelectedAndUsed);
+                sharedPreferences.commit();
 
-            selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
-            localityDrawer.setText(placeNameSelectedAndUsed);
+                selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
+                localityDrawer.setText(placeNameSelectedAndUsed);
 
-            planAheadLocation.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#636363\">(current)</font></b>"));
+                planAheadLocation.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#636363\">(current)</font></b>"));
 
-            findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
-            if (firstLoad) {
-                fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
+                findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
+                if (firstLoad) {
+                    fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
+                }
+
+            } else {
+                boolean toTry = true;
+                if (toTry) {
+//            findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
+                    toTry = false;
+                    // Execute some code after 2 seconds have passed
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            retrieveLocation();
+                        }
+                    }, 2000);
+                } else {
+                    askLocationFromUser();
+                }
             }
-
-        } else {
-            askLocationFromUser();
         }
 
-    }
 
     private LocationData findNearestOutletLocation(double latitude, double longitude) {
         ArrayList<LocationData> locations2 = new ArrayList<>(locations);
@@ -1156,12 +1169,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
             switch (resultCode) {
                 case Activity.RESULT_OK:
                     Log.i(getTagName(), "User agreed to make required location settings changes.");
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            retrieveLocation();
-                        }
-                    }, 2500);
+                    retrieveLocation();
                     break;
                 case Activity.RESULT_CANCELED:
                     Log.i(getTagName(), "User chose not to make required location settings changes.");
