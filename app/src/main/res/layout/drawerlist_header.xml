@@ -70,6 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
+                    android:visibility="invisible"
                     android:src="@drawable/icon_discover_location" />
 
                 <TextView
@@ -78,6 +79,7 @@
                     android:layout_height="wrap_content"
                     android:textAllCaps="true"
                     android:ellipsize="end"
+                    android:visibility="invisible"
                     android:maxLines="1"
                     android:maxEms="12"
                     android:scrollHorizontally="true"
