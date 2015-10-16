@@ -10,6 +10,7 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.GravityCompat;
@@ -106,7 +107,6 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
     TextView planAheadTime;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
-    private boolean firstLoad;
     int autoCompleteFlag;
     private String searchedItem;
     protected boolean search;
@@ -220,11 +220,16 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 if (search) {
                     fetchSearchedOutlets();
                 } else {
-                    if (TextUtils.isEmpty(date) && TextUtils.isEmpty(time)) {
-                        fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, null, null, true);
-                    } else {
-                        fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
+                    if (selectedLocationTxt.getText().toString().contains("(Last Known)")) {
+                        retrieveLocation(true);
+                    }else{
+                        if (TextUtils.isEmpty(date) && TextUtils.isEmpty(time)) {
+                            fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, null, null, true);
+                        } else {
+                            fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
+                        }
                     }
+
                 }
             }
         });
@@ -850,13 +855,21 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                     if (launched.equalsIgnoreCase("Yes")) {
                         dialog.dismiss();
                     } else {
-                        DiscoverActivity.this.finish();
+//                        DiscoverActivity.this.finish();
 
                     }
                 }
                 return true;
             }
         });
+
+        SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        String launched = prefs.getString(AppConstants.PREFERENCE_CHECK_FIRST_LAUNCH, "");
+        if (launched.equalsIgnoreCase("Yes")) {
+            dialogView.findViewById(R.id.cancelBtn).setVisibility(View.VISIBLE);
+        } else {
+            dialogView.findViewById(R.id.cancelBtn).setVisibility(View.INVISIBLE);
+        }
 
         dialogView.findViewById(R.id.cancelBtn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -866,7 +879,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 if (launched.equalsIgnoreCase("Yes")) {
                     dialog.dismiss();
                 } else {
-                    DiscoverActivity.this.finish();
+//                    DiscoverActivity.this.finish();
                 }
             }
         });
@@ -902,7 +915,30 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         });
     }
 
-    private void fetchOutlets(int start, String latitude, String longitude, String date, String time, final boolean clear) {
+    private void fetchOutlets(final int start, String latitude, String longitude, final String date,final String time, final boolean clear) {
+        if ((latitude==null) || (longitude==null)){
+            final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+            latitude = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE,null);
+            longitude = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, null);
+            if ((latitude==null) || (longitude==null)){
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        retrieveLocation(true);
+                    }
+                }, 1000);
+
+            }else{
+                String lastSavedLocation = prefs.getString((AppConstants.PREFERENCE_LAST_LOCATION_NAME),"");
+                selectedLocationTxt.setText(Html.fromHtml(lastSavedLocation + " <b><font color=\"#ffffff\">(Last Known)</font></b>"));
+                localityDrawer.setText(lastSavedLocation);
+
+                planAheadLocation.setText(Html.fromHtml(lastSavedLocation + " <b><font color=\"#636363\">(Last Known)</font></b>"));
+                fetchOutlets(start, latitude, longitude, date, time, clear);
+            }
+            return;
+        }
+
         Log.d(getTagName(), "Going to fetch outlets with, start: " + start + ", lat " + latitude + ", long: " + longitude + ", date: " + date + ", time: " + time);
         fetchingOutlets = true;
         mSwipeRefreshLayout.setEnabled(true);
@@ -1077,7 +1113,8 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         Log.i(getTagName(), "Connection failed: ConnectionResult.getErrorCode() = " + connectionResult.getErrorCode());
     }
 
-    private void retrieveLocation() {
+    private void retrieveLocation(boolean tryAgain) {
+        if (mGoogleApiClient == null) return;
         Log.i(getTagName(), "retrieveLocation called isConnected: " + mGoogleApiClient.isConnected());
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
@@ -1100,24 +1137,22 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 planAheadLocation.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#636363\">(current)</font></b>"));
 
                 findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
-                if (firstLoad) {
-                    fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
-                }
+                fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
 
             } else {
-                boolean toTry = true;
-                if (toTry) {
+                if (tryAgain) {
 //            findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
-                    toTry = false;
                     // Execute some code after 2 seconds have passed
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         public void run() {
-                            retrieveLocation();
+                            retrieveLocation(false);
+                            onItemsLoadComplete();
                         }
                     }, 2000);
                 } else {
                     askLocationFromUser();
+                    onItemsLoadComplete();
                 }
             }
         }
@@ -1188,7 +1223,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
             switch (resultCode) {
                 case Activity.RESULT_OK:
                     Log.i(getTagName(), "User agreed to make required location settings changes.");
-                    retrieveLocation();
+                    retrieveLocation(true);
                     break;
                 case Activity.RESULT_CANCELED:
                     Log.i(getTagName(), "User chose not to make required location settings changes.");
@@ -1208,7 +1243,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
             case LocationSettingsStatusCodes.SUCCESS:
                 Log.i(getTagName(), "All location settings are satisfied.");
                 if (!search) {
-                    retrieveLocation();
+                    retrieveLocation(true);
                     break;
                 }
 
@@ -1237,16 +1272,11 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         super.onResume();
 
         if (!search) {
-            if (firstLoad) {
-                if (!TextUtils.isEmpty(date) && !TextUtils.isEmpty(time) && !fromchangeLoc) {
-                    fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
-                }
-            } else {
-                firstLoad = true;
+            if (!TextUtils.isEmpty(date) && !TextUtils.isEmpty(time) && !fromchangeLoc) {
+                fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
             }
+            updateSocialFriendList();
         }
-
-        updateSocialFriendList();
     }
 
     public void expand(final View v) {
@@ -1430,4 +1460,5 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         });
 
     }
+
 }
