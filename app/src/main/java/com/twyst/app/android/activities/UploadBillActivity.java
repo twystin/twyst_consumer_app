@@ -63,7 +63,7 @@ public class UploadBillActivity extends BaseActivity {
     private static final int SELECT_FILE = 11;
     private ImageView attachImage;
     public String imagePath, fileName, encodedString;
-    public static String uploadingImage;
+    private String uploadingImage;
     private TextView editImageButton;
     public static int IMAGE_RESULTS = 100;
     private LinearLayout takePhotoLayoutBack;

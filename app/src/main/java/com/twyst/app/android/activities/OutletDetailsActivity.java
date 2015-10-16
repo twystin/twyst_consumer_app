@@ -76,7 +76,7 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
     private static final int SELECT_FILE = 15;
     private ImageView attachImage;
     public String imagePath,fileName,encodedString;
-    public static String uploadingImage;
+    private String uploadingImage;
 
     public static int IMAGE_RESULTS = 103;
     private FloatingActionButton submitFab;
