@@ -117,6 +117,10 @@ public class HttpService {
         twystService.getOutletDetails(outletId, userToken, lat, lng, callback);
     }
 
+    public void getOutletsList(Callback<BaseResponse> callback) {
+        twystService.getOutletsList(callback);
+    }
+
     public void updateSocialFriends(String token, Friend friend, Callback<BaseResponse<ProfileUpdate>> callback){
         twystService.updateSocialFriends(token, friend, callback);
     }

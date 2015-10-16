@@ -42,6 +42,7 @@ import com.twyst.app.android.model.BaseResponse;
 import com.twyst.app.android.model.ContainerHolderSingleton;
 import com.twyst.app.android.model.LocationOffline;
 import com.twyst.app.android.model.LocationOfflineList;
+import com.twyst.app.android.model.OutletDetailData;
 import com.twyst.app.android.model.UserLocation;
 import com.twyst.app.android.service.HttpService;
 import com.twyst.app.android.util.AppConstants;
@@ -101,6 +102,7 @@ public class SplashActivity extends Activity {
         context = getApplicationContext();
 
         showAnimation();
+        saveOutletsList();
         new FetchContact().execute();
 
         if (checkPlayServices()) {
@@ -139,6 +141,25 @@ public class SplashActivity extends Activity {
                 Log.i(getClass().getSimpleName(), "Splash killed.");
             }
         }, SPLASH_TIME_OUT);
+    }
+
+    private void saveOutletsList() {
+        final SharedPreferences preferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        HttpService.getInstance().getOutletsList(new Callback<BaseResponse>() {
+            @Override
+            public void success(BaseResponse baseResponse, Response response) {
+
+                Object object = baseResponse.getData();
+                Gson gson = new Gson();
+                String outletList = gson.toJson(object);
+
+                preferences.edit().putString(AppConstants.PREFERENCE_OUTLETS_LIST, outletList).apply();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+            }
+        });
     }
 
     private void downloadContainer() {

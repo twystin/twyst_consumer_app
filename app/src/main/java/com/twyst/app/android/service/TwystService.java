@@ -60,6 +60,9 @@ public interface TwystService {
     @GET("/api/v4/outlets/{outlet_id}")
     public void getOutletDetails(@Path("outlet_id") String outletId, @Query("token")String token, @Query("lat") String lat, @Query("long") String lng,Callback<BaseResponse<OutletDetailData>> callback);
 
+    @GET("/api/v4/locations/outlets")
+    public void getOutletsList(Callback<BaseResponse> callback);
+
     @PUT("/api/v4/friends")
     public void updateSocialFriends(@Query("token") String token ,@Body Friend friend, Callback<BaseResponse<ProfileUpdate>> callback);
 

@@ -47,7 +47,7 @@
                 android:textColor="#7c7c7c"
                 android:textSize="@dimen/dialog_content_text" />
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/outletNameET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -61,6 +61,7 @@
                 android:textSize="@dimen/dialog_content_text" />
 
             <TextView
+                android:id="@+id/tvLocationLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/submit_offer_margin_bottom"
@@ -71,6 +72,19 @@
                 android:textColor="#7c7c7c"
                 android:textSize="@dimen/dialog_content_text" />
 
+            <Spinner
+                android:id="@+id/spinnerLocationList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:visibility="gone"
+                android:padding="4dp"
+                android:paddingBottom="5dp"
+                android:singleLine="false"
+                android:textCursorDrawable="@null"
+                android:textColor="#2E2E2E"
+                android:textColorHint="#2E2E2E"
+                android:textSize="@dimen/dialog_content_text" />
 
             <EditText
                 android:id="@+id/locationEt"

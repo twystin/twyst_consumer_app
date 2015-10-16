@@ -37,6 +37,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.gson.Gson;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 import com.nispok.snackbar.enums.SnackbarType;
@@ -44,15 +45,21 @@ import com.nispok.snackbar.listeners.ActionClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 import com.twyst.app.android.R;
 import com.twyst.app.android.adapters.DrawerListAdapter;
 import com.twyst.app.android.model.DrawerItem;
+import com.twyst.app.android.model.OutletList;
 import com.twyst.app.android.util.AppConstants;
 import com.twyst.app.android.util.RoundedTransformation;
 import com.twyst.app.android.util.TwystProgressHUD;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.mortbay.util.ajax.JSON;
 
 import retrofit.RetrofitError;
 
@@ -983,4 +990,79 @@ public abstract class BaseActivity extends ActionBarActivity
 
 
     }
+
+    public ArrayList<OutletList> getOutletListsArray() {
+        final SharedPreferences preferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        String outletListString = preferences.getString(AppConstants.PREFERENCE_OUTLETS_LIST, "");
+
+        ArrayList<OutletList> list = new ArrayList<OutletList>();
+        try{
+            JSONObject jsonObject = new JSONObject(outletListString);
+            Iterator<String> iter = jsonObject.keys();
+            while (iter.hasNext()) {
+                String key = iter.next();
+                try {
+                    JSONObject jsonObject1 = jsonObject.getJSONObject(key);
+                    String name = jsonObject1.getString("name");
+                    String address = jsonObject1.getString("address");
+
+                    OutletList outletList = new OutletList();
+                    outletList.set_id(key);
+                    outletList.setName(name);
+                    outletList.setAddress(address);
+
+                    list.add(outletList);
+                } catch (JSONException e) {
+                    // Something went wrong!
+                }
+            }
+        }catch (JSONException e){
+        }
+
+        return list;
+    }
+
+    public ArrayList getOutletListNames(ArrayList<OutletList> outletListArrayList) {
+        ArrayList outletListNames = new ArrayList();
+        for (OutletList outletList : outletListArrayList) {
+            String name = outletList.getName();
+            // repeated additions:
+            if (!outletListNames.contains(name)){
+                outletListNames.add(name);
+            }
+        }
+        return outletListNames;
+    }
+
+    public ArrayList<OutletList> getFilteredOutletListsAddressArray(ArrayList<OutletList> outletListArrayList, String selectedName) {
+        ArrayList<OutletList> list = new ArrayList<OutletList>();
+        for (OutletList outletList : outletListArrayList) {
+            String name = outletList.getName();
+            if (name.equals(selectedName)){
+                list.add(outletList);
+            }
+        }
+        return list;
+    }
+
+    public ArrayList getOutletListAddress(ArrayList<OutletList> outletListArrayList, String selectedName) {
+        ArrayList outletListLocations = new ArrayList();
+        for (OutletList outletList : outletListArrayList) {
+            outletListLocations.add(outletList.getAddress());
+        }
+        return outletListLocations;
+    }
+
+    public String getOutletID(ArrayList<OutletList> outletListArrayList, String selectedAddress) {
+        String outletID="";
+        for (OutletList outletList : outletListArrayList) {
+            String address = outletList.getAddress();
+            if (address.equals(selectedAddress)){
+                outletID = outletList.get_id();
+            }
+
+        }
+        return outletID;
+    }
+
 }

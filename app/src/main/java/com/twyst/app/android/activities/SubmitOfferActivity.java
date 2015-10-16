@@ -13,27 +13,36 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.view.GravityCompat;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.ArrayList;
 
 import com.twyst.app.android.R;
 import com.twyst.app.android.model.BaseResponse;
+import com.twyst.app.android.model.OutletList;
 import com.twyst.app.android.model.SubmitOffer;
 import com.twyst.app.android.model.SubmitOfferMeta;
 import com.twyst.app.android.service.HttpService;
 import com.twyst.app.android.util.AppConstants;
 import com.twyst.app.android.util.TwystProgressHUD;
+
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -54,6 +63,9 @@ public class SubmitOfferActivity extends BaseActivity {
     private LinearLayout attachImageLayout;
     private Button submitBtn;
     private TextView editImageButton;
+    private String mSelectedAddress = "";
+    private String mSelectedName = "";
+    private String mOutletID = "";
 
     @Override
     protected String getTagName() {
@@ -71,24 +83,92 @@ public class SubmitOfferActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         hideProgressHUDInLayout();
         fromDrawer = getIntent().getBooleanExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, false);
-        String outletName = getIntent().getStringExtra(AppConstants.INTENT_PARAM_SUBMIT_OFFER_OUTLET_NAME);
-        String outletAddress = getIntent().getStringExtra(AppConstants.INTENT_PARAM_SUBMIT_OFFER_OUTLET_ADDRESS);
-        final String outletID = getIntent().getStringExtra(AppConstants.INTENT_PARAM_SUBMIT_OFFER_OUTLET_ID);
-        final EditText outletNameET = (EditText) findViewById(R.id.outletNameET);
+        final String outletName = getIntent().getStringExtra(AppConstants.INTENT_PARAM_SUBMIT_OFFER_OUTLET_NAME);
+        final String outletAddress = getIntent().getStringExtra(AppConstants.INTENT_PARAM_SUBMIT_OFFER_OUTLET_ADDRESS);
+        mOutletID = getIntent().getStringExtra(AppConstants.INTENT_PARAM_SUBMIT_OFFER_OUTLET_ID);
+        final AutoCompleteTextView outletNameET = (AutoCompleteTextView) findViewById(R.id.outletNameET);
         final EditText offerET = (EditText) findViewById(R.id.offerET);
         final EditText locationET = (EditText) findViewById(R.id.locationEt);
+        final TextView tvLocationLabel = (TextView) findViewById(R.id.tvLocationLabel);
+        final Spinner spinnerLocationList = (Spinner) findViewById(R.id.spinnerLocationList);
         takePhotoLayout = (LinearLayout) findViewById(R.id.takePhotoLayout);
         attachImageLayout = (LinearLayout) findViewById(R.id.attachImageLayout);
         submitBtn = (Button) findViewById(R.id.submitButton);
         editImageButton = (TextView) findViewById(R.id.editImageButton);
         if (!TextUtils.isEmpty(outletName) || !TextUtils.isEmpty(outletAddress)) {
+            spinnerLocationList.setVisibility(View.GONE);
+            locationET.setVisibility(View.VISIBLE);
             outletNameET.setText(outletName);
+            mSelectedAddress = outletAddress;
+            mSelectedName = outletName;
             locationET.setText(outletAddress);
             outletNameET.setEnabled(false);
             outletNameET.setKeyListener(null);
             locationET.setEnabled(false);
             locationET.setKeyListener(null);
             offerET.requestFocus();
+
+        }else{
+            locationET.setVisibility(View.GONE);
+            spinnerLocationList.setVisibility(View.INVISIBLE);
+            tvLocationLabel.setVisibility(View.INVISIBLE);
+
+            final ArrayList<OutletList> list = getOutletListsArray();
+
+            outletNameET.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    spinnerLocationList.setVisibility(View.INVISIBLE);
+                    tvLocationLabel.setVisibility(View.INVISIBLE);
+                    mSelectedName="";
+                    mSelectedAddress ="";
+                    mOutletID = "";
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
+
+            outletNameET.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    String selectedName = adapterView.getItemAtPosition(i).toString();
+                    ArrayList<OutletList> outletListFilteredAddressArray = getFilteredOutletListsAddressArray(list, selectedName);
+                    ArrayList outletListLocations = getOutletListAddress(outletListFilteredAddressArray, selectedName);
+                    spinnerLocationList.setVisibility(View.VISIBLE);
+                    tvLocationLabel.setVisibility(View.VISIBLE);
+                    ArrayAdapter locationsAdapter = new ArrayAdapter(SubmitOfferActivity.this, R.layout.location_dropdown_item,outletListLocations);
+                    spinnerLocationList.setAdapter(locationsAdapter);
+                    spinnerLocationList.requestFocus();
+                    mSelectedName = selectedName;
+                    mSelectedAddress = spinnerLocationList.getSelectedItem().toString();
+                    mOutletID = getOutletID(outletListFilteredAddressArray,mSelectedAddress);
+                }
+            });
+            ArrayAdapter namesAdapter = new ArrayAdapter(this, R.layout.location_dropdown_item, getOutletListNames(list));
+            outletNameET.setAdapter(namesAdapter);
+
+            spinnerLocationList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    String selectedAddress = adapterView.getItemAtPosition(i).toString();
+                    ArrayList<OutletList> outletListFilteredAddressArray = getFilteredOutletListsAddressArray(list, mSelectedName);
+                    mSelectedAddress = selectedAddress;
+                    mOutletID = getOutletID(outletListFilteredAddressArray,mSelectedAddress);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
 
         }
 
@@ -99,15 +179,15 @@ public class SubmitOfferActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                if (!TextUtils.isEmpty(offerET.getText()) && !TextUtils.isEmpty(outletNameET.getText()) && !TextUtils.isEmpty(locationET.getText())) {
+                if (!TextUtils.isEmpty(offerET.getText()) && !TextUtils.isEmpty(mSelectedName) && !TextUtils.isEmpty(mSelectedAddress)) {
                     final TwystProgressHUD twystProgressHUD = TwystProgressHUD.show(SubmitOfferActivity.this, false, null);
 
                     SubmitOffer submitOffer = new SubmitOffer();
-                    submitOffer.setOutletId(outletID);
+                    submitOffer.setOutletId(mOutletID);
                     SubmitOfferMeta submitOfferMeta = new SubmitOfferMeta();
                     submitOfferMeta.setOffer(offerET.getText().toString());
-                    submitOfferMeta.setOutlet(outletNameET.getText().toString());
-                    submitOfferMeta.setLocation(locationET.getText().toString());
+                    submitOfferMeta.setOutlet(mSelectedName);
+                    submitOfferMeta.setLocation(mSelectedAddress);
 
                     String imagePat = uploadingImage;
 
@@ -149,16 +229,15 @@ public class SubmitOfferActivity extends BaseActivity {
                             }
                         }
                     });
-                } else if (TextUtils.isEmpty(offerET.getText()) && !TextUtils.isEmpty(outletNameET.getText()) && !TextUtils.isEmpty(locationET.getText())) {
+                }else if (TextUtils.isEmpty(mSelectedName)) {
+                    outletNameET.setError("Please select outlet name from the list!");
+                } else if (TextUtils.isEmpty(offerET.getText())) {
                     offerET.setError("Please enter the offer!");
-                } else if (!TextUtils.isEmpty(offerET.getText()) && TextUtils.isEmpty(outletNameET.getText()) && !TextUtils.isEmpty(locationET.getText())) {
-                    outletNameET.setError("Please enter outlet name!");
-                } else if (!TextUtils.isEmpty(offerET.getText()) && !TextUtils.isEmpty(outletNameET.getText()) && TextUtils.isEmpty(locationET.getText())) {
-                    locationET.setError("Please enter outlet location!");
+                } else if (!TextUtils.isEmpty(mSelectedName) && TextUtils.isEmpty(mSelectedAddress)) {
+
                 } else {
-                    offerET.setError("Please enter the offer!");
-                    outletNameET.setError("Please enter outlet name!");
-                    locationET.setError("Please enter outlet location!");
+                    offerET.setError("Please select the offer!");
+                    outletNameET.setError("Please select outlet name from the list!");
                 }
 
             }

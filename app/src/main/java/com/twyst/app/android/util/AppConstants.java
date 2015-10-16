@@ -136,4 +136,6 @@ public class AppConstants {
     public static final String PREFERENCE_CURRENT_LAT = "current_lat";
     public static final String PREFERENCE_CURRENT_LNG = "current_lng";
     public static final String PREFERENCE_CHECK_FIRST_LAUNCH = "check_first_launch";
+
+    public static final String PREFERENCE_OUTLETS_LIST = "outlet_list";
 }
