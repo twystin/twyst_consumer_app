@@ -363,7 +363,7 @@ public class LoginActivity extends Activity implements GoogleApiClient.Connectio
             public void success(BaseResponse baseResponse, Response response) {
                 twystProgressHUD.dismiss();
                 saveSocialFriendListLocally(token);
-                Toast.makeText(LoginActivity.this,"Referrer code "+"( "+code+" )"+" used successfully!",Toast.LENGTH_LONG).show();
+//                Toast.makeText(LoginActivity.this,"Referrer code "+"( "+code+" )"+" used successfully!",Toast.LENGTH_LONG).show();
             }
 
             @Override
