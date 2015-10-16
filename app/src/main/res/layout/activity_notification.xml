@@ -64,8 +64,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 fab:fab_icon="@drawable/discover_submit_fab_icon"
-                app:fab_colorNormal="#058c7e"
-                fab:fab_colorPressed="#288E83"
+                app:fab_colorNormal="#673d74"
+                fab:fab_colorPressed="#936c9f"
                 fab:fab_title="Submit an offer"/>
 
 
