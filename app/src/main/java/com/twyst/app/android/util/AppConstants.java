@@ -129,6 +129,7 @@ public class AppConstants {
     public static final String INTENT_PARAM_SUBMIT_OFFER_OUTLET_NAME = "submit_offer_outlet_name";
     public static final String INTENT_PARAM_SUBMIT_OFFER_OUTLET_ADDRESS ="submit_offer_outlet_address" ;
     public static final String INTENT_PARAM_SUBMIT_OFFER_OUTLET_ID ="submit_offer_outlet_id" ;
+    public static final String INTENT_PARAM_UPLOAD_BILL_OUTLET_ADDRESS ="upload_bill_outlet_address" ;
     public static final String INTENT_PARAM_UPLOAD_BILL_OUTLET_ID ="upload_bill_outlet_id" ;
     public static final String INTENT_PARAM_UPLOAD_BILL_OUTLET_NAME ="upload_bill_outlet_name" ;
     public static final String PREFERENCE_LOCALITY_SHOWN_DRAWER = "locality";

@@ -88,7 +88,7 @@
                 android:textColor="#7c7c7c"
                 android:textSize="@dimen/dialog_content_text" />
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/outletNameET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,6 +97,46 @@
                 android:padding="4dp"
                 android:textCursorDrawable="@null"
                 android:singleLine="false"
+                android:textColor="#2E2E2E"
+                android:textColorHint="#2E2E2E"
+                android:textSize="@dimen/dialog_content_text" />
+
+            <TextView
+                android:id="@+id/tvLocationLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/submit_offer_margin_bottom"
+                android:layout_marginTop="@dimen/submit_offer_margin"
+                android:gravity="bottom"
+                android:singleLine="true"
+                android:text="Location"
+                android:textColor="#7c7c7c"
+                android:textSize="@dimen/dialog_content_text" />
+
+            <Spinner
+                android:id="@+id/spinnerLocationList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:visibility="gone"
+                android:padding="4dp"
+                android:paddingBottom="5dp"
+                android:singleLine="false"
+                android:textCursorDrawable="@null"
+                android:textColor="#2E2E2E"
+                android:textColorHint="#2E2E2E"
+                android:textSize="@dimen/dialog_content_text" />
+
+            <EditText
+                android:id="@+id/locationEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_shape"
+                android:gravity="top"
+                android:padding="4dp"
+                android:paddingBottom="5dp"
+                android:singleLine="false"
+                android:textCursorDrawable="@null"
                 android:textColor="#2E2E2E"
                 android:textColorHint="#2E2E2E"
                 android:textSize="@dimen/dialog_content_text" />
@@ -191,7 +231,7 @@
                 <RelativeLayout
                     android:id="@+id/layoutImage"
                     android:layout_below="@+id/takePhoto"
-                    android:layout_centerInParent="true"
+                    android:layout_alignParentLeft="true"
                     android:layout_width="160dp"
                     android:layout_height="110dp">
                     <TextView
@@ -219,15 +259,18 @@
 
                 <com.balysv.materialripple.MaterialRippleLayout
                     android:id="@+id/uploadBtn"
-                    android:layout_width="170dp"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/layoutImage"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:paddingBottom="10dp"
+                    android:layout_marginRight="20dp"
                     android:layout_centerHorizontal="true"
                     app:mrl_rippleOverlay="true">
 
                     <Button
                         android:id="@+id/uploadPhotoButton"
-                        android:layout_width="170dp"
+                        android:layout_width="100dp"
                         android:layout_height="30dp"
                         android:background="@drawable/button_grey"
                         android:text="Upload"

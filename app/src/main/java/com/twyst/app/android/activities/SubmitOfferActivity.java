@@ -2,6 +2,7 @@ package com.twyst.app.android.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -19,6 +20,7 @@ import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -109,9 +111,10 @@ public class SubmitOfferActivity extends BaseActivity {
             offerET.requestFocus();
 
         }else{
-            locationET.setVisibility(View.GONE);
-            spinnerLocationList.setVisibility(View.INVISIBLE);
-            tvLocationLabel.setVisibility(View.INVISIBLE);
+            locationET.setVisibility(View.VISIBLE);
+            locationET.setEnabled(false);
+            spinnerLocationList.setVisibility(View.GONE);
+            tvLocationLabel.setVisibility(View.VISIBLE);
 
             final ArrayList<OutletList> list = getOutletListsArray();
 
@@ -123,8 +126,8 @@ public class SubmitOfferActivity extends BaseActivity {
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    spinnerLocationList.setVisibility(View.INVISIBLE);
-                    tvLocationLabel.setVisibility(View.INVISIBLE);
+                    spinnerLocationList.setVisibility(View.GONE);
+                    locationET.setVisibility(View.VISIBLE);
                     mSelectedName="";
                     mSelectedAddress ="";
                     mOutletID = "";
@@ -143,7 +146,12 @@ public class SubmitOfferActivity extends BaseActivity {
                     ArrayList<OutletList> outletListFilteredAddressArray = getFilteredOutletListsAddressArray(list, selectedName);
                     ArrayList outletListLocations = getOutletListAddress(outletListFilteredAddressArray, selectedName);
                     spinnerLocationList.setVisibility(View.VISIBLE);
-                    tvLocationLabel.setVisibility(View.VISIBLE);
+                    locationET.setVisibility(View.GONE);
+                    View view1 = SubmitOfferActivity.this.getCurrentFocus();
+                    if (view1 != null) {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
+                    }
                     ArrayAdapter locationsAdapter = new ArrayAdapter(SubmitOfferActivity.this, R.layout.location_dropdown_item,outletListLocations);
                     spinnerLocationList.setAdapter(locationsAdapter);
                     spinnerLocationList.requestFocus();

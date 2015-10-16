@@ -471,6 +471,7 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                     public void onClick(View v) {
                         Intent intent = new Intent(v.getContext(), UploadBillActivity.class);
                         intent.putExtra(AppConstants.INTENT_PARAM_UPLOAD_BILL_OUTLET_ID, outlet.get_id());
+                        intent.putExtra(AppConstants.INTENT_PARAM_UPLOAD_BILL_OUTLET_ADDRESS, outlet.getAddress());
                         intent.putExtra(AppConstants.INTENT_PARAM_UPLOAD_BILL_OUTLET_NAME, outlet.getName());
                         v.getContext().startActivity(intent);
                     }

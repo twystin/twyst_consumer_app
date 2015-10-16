@@ -3,6 +3,7 @@ package com.twyst.app.android.activities;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -13,27 +14,36 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.view.GravityCompat;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import com.twyst.app.android.R;
 import com.twyst.app.android.model.BaseResponse;
+import com.twyst.app.android.model.OutletList;
 import com.twyst.app.android.model.UploadBill;
 import com.twyst.app.android.model.UploadBillMeta;
 import com.twyst.app.android.service.HttpService;
@@ -58,6 +68,9 @@ public class UploadBillActivity extends BaseActivity {
     public static int IMAGE_RESULTS = 100;
     private LinearLayout takePhotoLayoutBack;
     private Button uploadPhotoButton;
+    private String mSelectedAddress = "";
+    private String mSelectedName = "";
+    private String mOutletID = "";
 
     @Override
     protected String getTagName() {
@@ -76,15 +89,100 @@ public class UploadBillActivity extends BaseActivity {
         fromDrawer = getIntent().getBooleanExtra(AppConstants.INTENT_PARAM_FROM_DRAWER, false);
         hideProgressHUDInLayout();
 
-        final String outletID = getIntent().getStringExtra(AppConstants.INTENT_PARAM_UPLOAD_BILL_OUTLET_ID);
+        mOutletID = getIntent().getStringExtra(AppConstants.INTENT_PARAM_UPLOAD_BILL_OUTLET_ID);
         String outletName = getIntent().getStringExtra(AppConstants.INTENT_PARAM_UPLOAD_BILL_OUTLET_NAME);
-        final EditText outletNameET = (EditText) findViewById(R.id.outletNameET);
+        String outletAddress = getIntent().getStringExtra(AppConstants.INTENT_PARAM_UPLOAD_BILL_OUTLET_ADDRESS);
+        final AutoCompleteTextView outletNameET = (AutoCompleteTextView) findViewById(R.id.outletNameET);
+        final EditText locationET = (EditText) findViewById(R.id.locationEt);
+        final TextView tvLocationLabel = (TextView) findViewById(R.id.tvLocationLabel);
         final EditText outletBillDate = (EditText) findViewById(R.id.outletBillET);
+        final Spinner spinnerLocationList = (Spinner) findViewById(R.id.spinnerLocationList);
         editImageButton = (TextView) findViewById(R.id.editImageButton);
         takePhotoLayoutBack = (LinearLayout) findViewById(R.id.takePhotoLayout);
         if (!TextUtils.isEmpty(outletName)) {
             outletNameET.setKeyListener(null);
             outletNameET.setEnabled(false);
+        }
+
+        if (!TextUtils.isEmpty(outletName) || !TextUtils.isEmpty(outletAddress)) {
+            spinnerLocationList.setVisibility(View.GONE);
+            locationET.setVisibility(View.VISIBLE);
+            outletNameET.setText(outletName);
+            mSelectedAddress = outletAddress;
+            mSelectedName = outletName;
+            locationET.setText(outletAddress);
+            outletNameET.setEnabled(false);
+            outletNameET.setKeyListener(null);
+            locationET.setEnabled(false);
+            locationET.setKeyListener(null);
+
+        }else{
+            locationET.setVisibility(View.VISIBLE);
+            locationET.setEnabled(false);
+            spinnerLocationList.setVisibility(View.GONE);
+            tvLocationLabel.setVisibility(View.VISIBLE);
+
+            final ArrayList<OutletList> list = getOutletListsArray();
+
+            outletNameET.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    spinnerLocationList.setVisibility(View.GONE);
+                    locationET.setVisibility(View.VISIBLE);
+                    mSelectedName="";
+                    mSelectedAddress ="";
+                    mOutletID = "";
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
+
+            outletNameET.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    String selectedName = adapterView.getItemAtPosition(i).toString();
+                    ArrayList<OutletList> outletListFilteredAddressArray = getFilteredOutletListsAddressArray(list, selectedName);
+                    ArrayList outletListLocations = getOutletListAddress(outletListFilteredAddressArray, selectedName);
+                    spinnerLocationList.setVisibility(View.VISIBLE);
+                    locationET.setVisibility(View.GONE);
+                    View view1 = UploadBillActivity.this.getCurrentFocus();
+                    if (view1 != null) {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
+                    }
+                    ArrayAdapter locationsAdapter = new ArrayAdapter(UploadBillActivity.this, R.layout.location_dropdown_item,outletListLocations);
+                    spinnerLocationList.setAdapter(locationsAdapter);
+                    spinnerLocationList.requestFocus();
+                    mSelectedName = selectedName;
+                    mSelectedAddress = spinnerLocationList.getSelectedItem().toString();
+                    mOutletID = getOutletID(outletListFilteredAddressArray,mSelectedAddress);
+                }
+            });
+            ArrayAdapter namesAdapter = new ArrayAdapter(this, R.layout.location_dropdown_item, getOutletListNames(list));
+            outletNameET.setAdapter(namesAdapter);
+
+            spinnerLocationList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    String selectedAddress = adapterView.getItemAtPosition(i).toString();
+                    ArrayList<OutletList> outletListFilteredAddressArray = getFilteredOutletListsAddressArray(list, mSelectedName);
+                    mSelectedAddress = selectedAddress;
+                    mOutletID = getOutletID(outletListFilteredAddressArray,mSelectedAddress);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
         }
 
 
@@ -103,10 +201,11 @@ public class UploadBillActivity extends BaseActivity {
 
                     UploadBill uploadBill = new UploadBill();
 
-                    uploadBill.setOutletId(outletID);
+                    uploadBill.setOutletId(mOutletID);
                     UploadBillMeta uploadBillMeta = new UploadBillMeta();
                     uploadBillMeta.setBillDate(outletBillDate.getText().toString());
-                    uploadBillMeta.setOutletName(outletNameET.getText().toString());
+                    uploadBillMeta.setOutletName(mSelectedName);
+                    uploadBillMeta.setLocation(mSelectedAddress);
 
                     String imagePat = uploadingImage;
 

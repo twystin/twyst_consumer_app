@@ -16,8 +16,19 @@ public class UploadBillMeta implements Serializable{
     @SerializedName("bill_date")
     private String billDate;
 
+    @SerializedName("location")
+    private String location;
+
     @SerializedName("photo")
     private String photo;
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public String getOutletName() {
         return outletName;

@@ -1059,6 +1059,7 @@ public abstract class BaseActivity extends ActionBarActivity
             String address = outletList.getAddress();
             if (address.equals(selectedAddress)){
                 outletID = outletList.get_id();
+                return outletID;
             }
 
         }

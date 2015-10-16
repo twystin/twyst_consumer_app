@@ -593,6 +593,7 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
 
                         Intent intent = new Intent(OutletDetailsActivity.this, UploadBillActivity.class);
                         intent.putExtra(AppConstants.INTENT_PARAM_UPLOAD_BILL_OUTLET_ID, outlet.get_id());
+                        intent.putExtra(AppConstants.INTENT_PARAM_UPLOAD_BILL_OUTLET_ADDRESS, outlet.getAddress());
                         intent.putExtra(AppConstants.INTENT_PARAM_UPLOAD_BILL_OUTLET_NAME, outlet.getName());
                         startActivity(intent);
                     }
