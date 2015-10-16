@@ -844,13 +844,32 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                                  KeyEvent event) {
                 // TODO Auto-generated method stub
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    DiscoverActivity.this.finish();
+
+                    SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+                    String launched = prefs.getString(AppConstants.PREFERENCE_CHECK_FIRST_LAUNCH, "");
+                    if (launched.equalsIgnoreCase("Yes")) {
+                        dialog.dismiss();
+                    } else {
+                        DiscoverActivity.this.finish();
+
+                    }
                 }
                 return true;
             }
         });
 
-
+        dialogView.findViewById(R.id.cancelBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+                String launched = prefs.getString(AppConstants.PREFERENCE_CHECK_FIRST_LAUNCH, "");
+                if (launched.equalsIgnoreCase("Yes")) {
+                    dialog.dismiss();
+                } else {
+                    DiscoverActivity.this.finish();
+                }
+            }
+        });
 
         dialogView.findViewById(R.id.customLocationSubmitBtn).setOnClickListener(new View.OnClickListener() {
             @Override

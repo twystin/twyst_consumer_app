@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fc6e51"
+        android:background="#323232"
         android:padding="15dp"
         android:text="Oops, we can't find your location!\nPlease enter your location below (or choose the one closest to you), to see the best dining offers around you."
         android:textColor="@android:color/white"
@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#fafafa"
-            android:hint="enter your location"
+            android:hint="Enter your location"
             android:singleLine="true"
             android:textSize="@dimen/dialog_content_text"
             android:textColorHint="#ccc"
@@ -38,22 +38,47 @@
 
     </LinearLayout>
 
-    <com.balysv.materialripple.MaterialRippleLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="15dp"
-        app:mrl_rippleOverlay="true">
+        android:layout_margin="15dp">
 
-        <Button
+        <com.balysv.materialripple.MaterialRippleLayout
+            android:layout_width="wrap_content"
             android:id="@+id/customLocationSubmitBtn"
-            android:layout_width="80dp"
-            android:layout_height="37dp"
-            android:background="@drawable/button_red"
-            android:text="SUBMIT"
-            android:textSize="@dimen/dialog_button_text"
-            android:textColor="@android:color/white" />
-    </com.balysv.materialripple.MaterialRippleLayout>
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            app:mrl_rippleOverlay="true">
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="37dp"
+                android:background="@drawable/button_red"
+                android:text="SUBMIT"
+                android:textSize="@dimen/dialog_button_text"
+                android:textColor="@android:color/white" />
+        </com.balysv.materialripple.MaterialRippleLayout>
+
+        <com.balysv.materialripple.MaterialRippleLayout
+            android:id="@+id/cancelBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="14dp"
+            android:layout_toLeftOf="@+id/customLocationSubmitBtn"
+            app:mrl_rippleOverlay="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:background="#fafafa"
+                android:gravity="center_vertical|center_horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="CANCEL"
+                android:textColor="#959595"
+                android:textSize="@dimen/dialog_button_text" />
+        </com.balysv.materialripple.MaterialRippleLayout>
+
+    </RelativeLayout>
 
 </LinearLayout>
