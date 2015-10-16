@@ -196,7 +196,7 @@ public class UploadBillActivity extends BaseActivity {
             public void onClick(View v) {
 
 
-                if (!TextUtils.isEmpty(outletNameET.getText()) && !TextUtils.isEmpty(outletBillDate.getText()) && attachImage.getDrawable() != null) {
+                if (!TextUtils.isEmpty(mSelectedName) && !TextUtils.isEmpty(mSelectedAddress) && !TextUtils.isEmpty(outletBillDate.getText()) && attachImage.getDrawable() != null) {
                     final TwystProgressHUD twystProgressHUD = TwystProgressHUD.show(UploadBillActivity.this, false, null);
 
                     UploadBill uploadBill = new UploadBill();
@@ -256,11 +256,11 @@ public class UploadBillActivity extends BaseActivity {
                         }
                     });
 
-                } else if (TextUtils.isEmpty(outletNameET.getText()) && !TextUtils.isEmpty(outletBillDate.getText()) && attachImage.getDrawable() != null) {
-                    outletNameET.setError("Please enter outlet name!");
-                } else if (!TextUtils.isEmpty(outletNameET.getText()) && TextUtils.isEmpty(outletBillDate.getText()) && attachImage.getDrawable() != null) {
+                }else if (TextUtils.isEmpty(mSelectedName)) {
+                    outletNameET.setError("Please select outlet name from the list!");
+                } else if (TextUtils.isEmpty(outletBillDate.getText())) {
                     outletBillDate.setError("Please select a date!");
-                } else if (!TextUtils.isEmpty(outletNameET.getText()) && !TextUtils.isEmpty(outletBillDate.getText()) && attachImage.getDrawable() == null) {
+                } else if (attachImage.getDrawable() == null) {
                     Toast.makeText(UploadBillActivity.this, "Please attach a photo or take photo!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(UploadBillActivity.this, "Please enter all details with photo!", Toast.LENGTH_SHORT).show();
