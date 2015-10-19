@@ -997,7 +997,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
             public void failure(RetrofitError error) {
                 fetchingOutlets = false;
 
-                error.getCause().printStackTrace();
+//                error.getCause().printStackTrace();
                 Log.i(getTagName(), "Error: error while trying to fetch outlets  :-" + error.getStackTrace().toString());
                 hideProgressHUDInLayout();
                 onItemsLoadComplete();
