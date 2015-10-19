@@ -5,8 +5,8 @@ package com.twyst.app.android.util;
  */
 public class AppConstants {
 
-//    public static final String HOST = "http://retwyst.twyst.in";
-    public static final String HOST = "http://twyst.in";
+    public static final String HOST = "http://retwyst.twyst.in";
+//    public static final String HOST = "http://twyst.in";
 
     public static final String HOST_SECURE = "https://www.twyst.in";
 
