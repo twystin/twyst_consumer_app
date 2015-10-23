@@ -51,7 +51,7 @@
                 android:text="Voucher Available"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/invite_friend_button_text"
-                android:textStyle="normal" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/notifyDetail"
