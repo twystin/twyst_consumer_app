@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDex;
+import android.support.v7.widget.AppCompatTextView;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -14,6 +15,8 @@ import com.twyst.app.android.service.HttpService;
 import com.twyst.app.android.service.LocationService;
 import com.twyst.app.android.util.AppConstants;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+
 /**
  * Created by satish on 31/05/15.
  */
@@ -22,6 +25,13 @@ public class TwystApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                        .setDefaultFontPath("fonts/Roboto-Medium.ttf")
+                        .addCustomStyle(AppCompatTextView.class, android.R.attr.textViewStyle)
+                        .setFontAttrId(R.attr.fontPath)
+                        .build()
+        );
 
         HttpService.getInstance().setup(getApplicationContext(), getGATracker());
 

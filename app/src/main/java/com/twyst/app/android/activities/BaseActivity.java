@@ -62,6 +62,7 @@ import org.json.JSONObject;
 import org.mortbay.util.ajax.JSON;
 
 import retrofit.RetrofitError;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by satish on 04/12/14.
@@ -98,6 +99,12 @@ public abstract class BaseActivity extends ActionBarActivity
             circularProgressBar.progressiveStop();
             circularProgressBar.setVisibility(View.GONE);
         }
+    }
+
+    //Applying font to the BaseActivity
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override
