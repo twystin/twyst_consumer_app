@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:padding="10dp"
     android:fontFamily="sans-serif"
-    android:textSize="14sp"
+    android:textSize="14dp"
     android:ellipsize="end"
     android:singleLine="true"
     />

@@ -8,7 +8,7 @@
     android:layout_height="30dp"
     android:singleLine="true"
     android:padding="5dp"
-    android:textSize="12sp"
+    android:textSize="12dp"
     android:background="#fafafa"
     android:textColor="#7d7d7d"
     android:layout_centerVertical="true"

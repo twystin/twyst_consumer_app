@@ -124,7 +124,7 @@
                         android:paddingTop="10dp"
                         android:text="Scan QR"
                         android:textColor="@android:color/white"
-                        android:textSize="24sp"
+                        android:textSize="24dp"
                         android:textStyle="bold" />
 
                 </com.balysv.materialripple.MaterialRippleLayout>
@@ -136,7 +136,7 @@
                     android:layout_margin="30dp"
                     android:text="OR"
                     android:textColor="@android:color/white"
-                    android:textSize="24sp"
+                    android:textSize="24dp"
                     android:layout_gravity="center_horizontal" />
 
                 <com.balysv.materialripple.MaterialRippleLayout
@@ -157,7 +157,7 @@
                         android:paddingTop="10dp"
                         android:text="Upload Bill"
                         android:textColor="@android:color/white"
-                        android:textSize="24sp"
+                        android:textSize="24dp"
                         android:textStyle="bold" />
 
                 </com.balysv.materialripple.MaterialRippleLayout>

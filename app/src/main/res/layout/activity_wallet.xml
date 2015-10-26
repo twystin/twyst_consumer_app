@@ -46,7 +46,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="TWYST BUCKS"
                     android:textColor="#323232"
-                    android:textSize="16sp" />
+                    android:textSize="16dp" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -66,7 +66,7 @@
                         android:background="@drawable/wallet_buck_black_icon"
                         android:gravity="center"
                         android:textColor="#323232"
-                        android:textSize="14sp"
+                        android:textSize="14dp"
                         android:visibility="visible" />
 
                     <TextView
@@ -76,7 +76,7 @@
                         android:layout_gravity="center"
                         android:text="Available"
                         android:textColor="#323232"
-                        android:textSize="14sp" />
+                        android:textSize="14dp" />
                 </LinearLayout>
 
                 <com.balysv.materialripple.MaterialRippleLayout
@@ -98,7 +98,7 @@
                         android:text="Earn More"
                         android:textAllCaps="false"
                         android:textColor="@android:color/white"
-                        android:textSize="14sp" />
+                        android:textSize="14dp" />
                 </com.balysv.materialripple.MaterialRippleLayout>
 
 
@@ -133,7 +133,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="MY COUPONS"
                     android:textColor="#323232"
-                    android:textSize="16sp" />
+                    android:textSize="16dp" />
 
                 <LinearLayout
                     android:layout_width="170dp"
@@ -160,7 +160,7 @@
                             android:singleLine="true"
                             android:text="Sort By:"
                             android:textColor="#8b8b8b"
-                            android:textSize="12sp"
+                            android:textSize="12dp"
                             android:textStyle="bold" />
 
 
@@ -177,7 +177,7 @@
                             android:paddingRight="3dp"
                             android:singleLine="true"
                             android:textColor="#8b8b8b"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
 
 
                     </RelativeLayout>
@@ -302,7 +302,7 @@
                         android:paddingTop="10dp"
                         android:text="Scan QR"
                         android:textColor="@android:color/white"
-                        android:textSize="24sp"
+                        android:textSize="24dp"
                         android:textStyle="bold" />
 
                 </com.balysv.materialripple.MaterialRippleLayout>
@@ -315,7 +315,7 @@
                     android:layout_margin="30dp"
                     android:text="OR"
                     android:textColor="@android:color/white"
-                    android:textSize="24sp" />
+                    android:textSize="24dp" />
 
                 <com.balysv.materialripple.MaterialRippleLayout
                     android:id="@+id/uploadBillBtn"
@@ -335,7 +335,7 @@
                         android:paddingTop="10dp"
                         android:text="Upload Bill"
                         android:textColor="@android:color/white"
-                        android:textSize="24sp"
+                        android:textSize="24dp"
                         android:textStyle="bold" />
 
                 </com.balysv.materialripple.MaterialRippleLayout>

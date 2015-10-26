@@ -16,5 +16,5 @@
         android:padding="15dp"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:lineSpacingExtra="-2sp" />
+        android:lineSpacingExtra="-2dp" />
 </RelativeLayout>

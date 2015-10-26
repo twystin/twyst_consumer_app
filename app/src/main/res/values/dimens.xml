@@ -18,12 +18,12 @@
     <dimen name="outlet_details_shop_card_height">200dp</dimen>
     <dimen name="outlet_details_shop_bar_height">55dp</dimen>
     <dimen name="outlet_details_card_bg_height">160dp</dimen>
-    <dimen name="outlet_details_card_vld_txt">9sp</dimen>
-    <dimen name="outlet_details_card_offer_txt">50sp</dimen>
-    <dimen name="outlet_details_card_user_txt">8sp</dimen>
-    <dimen name="outlet_details_coupon_txt">12sp</dimen>
+    <dimen name="outlet_details_card_vld_txt">9dp</dimen>
+    <dimen name="outlet_details_card_offer_txt">50dp</dimen>
+    <dimen name="outlet_details_card_user_txt">8dp</dimen>
+    <dimen name="outlet_details_coupon_txt">12dp</dimen>
     <dimen name="outlet_details_coupon_btn_height">45dp</dimen>
-    <dimen name="outlet_details_coupon_btn_txt">12sp</dimen>
+    <dimen name="outlet_details_coupon_btn_txt">12dp</dimen>
     <dimen name="outlet_details_coupon_margin_left">15dp</dimen>
     <dimen name="outlet_details_coupon_margin_right">15dp</dimen>
     <dimen name="outlet_details_coupon_margin_top">10dp</dimen>

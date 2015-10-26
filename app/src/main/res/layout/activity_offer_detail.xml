@@ -46,7 +46,7 @@
                 <RelativeLayout
                     android:id="@+id/relativeLayoutTop"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/offer_detail_iamge_height">
+                    android:layout_height="@dimen/offer_detail_image_height">
 
                     <ImageView
                         android:id="@+id/outletImage"
@@ -399,7 +399,7 @@
                                 android:paddingRight="3dp"
                                 android:textAllCaps="false"
                                 android:textColor="@android:color/white"
-                                android:textSize="13sp"
+                                android:textSize="13dp"
                                 android:textStyle="normal"
                                 android:visibility="gone" />
 
@@ -491,7 +491,7 @@
                 android:paddingTop="10dp"
                 android:text="Report a problem"
                 android:textColor="@android:color/white"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
 
             <RelativeLayout
                 android:id="@+id/report1"
@@ -596,7 +596,7 @@
                 android:textColor="#2E2E2E"
                 android:textColorHint="#c2c2c2"
                 android:textCursorDrawable="@null"
-                android:textSize="14sp" />
+                android:textSize="14dp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -624,7 +624,7 @@
                         android:paddingRight="10dp"
                         android:text="CANCEL"
                         android:textColor="#959595"
-                        android:textSize="12sp" />
+                        android:textSize="12dp" />
                 </com.balysv.materialripple.MaterialRippleLayout>
 
                 <com.balysv.materialripple.MaterialRippleLayout
@@ -643,7 +643,7 @@
                         android:paddingRight="20dp"
                         android:text="SEND"
                         android:textColor="@android:color/white"
-                        android:textSize="14sp"
+                        android:textSize="14dp"
                         android:textStyle="bold" />
 
                 </com.balysv.materialripple.MaterialRippleLayout>

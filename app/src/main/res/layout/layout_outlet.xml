@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:text="Sector 15, Gurgaon"
                     android:textColor="@android:color/white"
-                    android:textSize="10sp"/>
+                    android:textSize="@dimen/outlet_offer_address_textsize"/>
 
                 <TextView
                     android:id="@+id/distance"
@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:text="15.3 km"
                     android:textColor="@android:color/white"
-                    android:textSize="10sp"/>
+                    android:textSize="@dimen/outlet_offer_address_textsize"/>
 
             </LinearLayout>
 

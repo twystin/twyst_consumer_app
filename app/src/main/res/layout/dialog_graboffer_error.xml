@@ -24,7 +24,7 @@
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
             android:textColor="@android:color/white"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,7 +42,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="7dp"
                 android:gravity="bottom"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 android:textColor="#7d7d7d"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="7dp"
                 android:gravity="bottom"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 android:textColor="#7d7d7d"/>
 
 
@@ -80,7 +80,7 @@
                         android:paddingRight="10dp"
                         android:text="NOT NOW"
                         android:textColor="#959595"
-                        android:textSize="12sp" />
+                        android:textSize="12dp" />
                 </com.balysv.materialripple.MaterialRippleLayout>
 
                 <com.balysv.materialripple.MaterialRippleLayout
@@ -97,7 +97,7 @@
                         android:background="@drawable/button_green"
                         android:text="SEE HOW"
                         android:textColor="@android:color/white"
-                        android:textSize="12sp" />
+                        android:textSize="12dp" />
                 </com.balysv.materialripple.MaterialRippleLayout>
 
 

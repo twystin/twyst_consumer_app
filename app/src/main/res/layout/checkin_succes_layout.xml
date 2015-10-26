@@ -32,7 +32,7 @@
                     android:layout_marginTop="25dp"
                     android:gravity="center_vertical"
                     android:textColor="@color/half_black"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
 
 
@@ -46,7 +46,7 @@
                 android:gravity="center_vertical"
                 android:layout_marginTop="20dp"
                 android:textColor="@color/half_black"
-                android:textSize="12sp" />
+                android:textSize="12dp" />
 
 
 <!--
@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:textColor="@color/half_black"
-                    android:textSize="12sp" />-->
+                    android:textSize="12dp" />-->
 
 
 
@@ -69,7 +69,7 @@
                 android:textAllCaps="true"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
-                android:textSize="14sp" />
+                android:textSize="14dp" />
 
 
             <LinearLayout
@@ -100,7 +100,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:text="Share This"
-                        android:textSize="12sp" />
+                        android:textSize="12dp" />
 
                 </LinearLayout>
 
@@ -124,7 +124,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:text="Send Feedback"
-                        android:textSize="12sp" />
+                        android:textSize="12dp" />
 
                 </LinearLayout>
 

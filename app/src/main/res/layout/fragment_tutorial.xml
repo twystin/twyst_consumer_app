@@ -41,7 +41,7 @@
             android:layout_marginTop="@dimen/tutorial_text_margin_top"
             android:gravity="center"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
+            android:textSize="18dp"
             android:textStyle="bold"/>
 
         <TextView

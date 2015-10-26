@@ -32,7 +32,7 @@
             android:singleLine="true"
             android:text="Jonathan Rhys Meyers"
             android:textColor="#555"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
 
         <TextView
             android:id="@+id/contactEmail"
@@ -44,7 +44,7 @@
             android:singleLine="true"
             android:text="jonathan.rhys@gmail.com"
             android:textColor="#555"
-            android:textSize="12sp" />
+            android:textSize="12dp" />
 
     </LinearLayout>
 

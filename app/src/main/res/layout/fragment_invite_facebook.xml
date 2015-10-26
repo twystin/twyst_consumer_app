@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:textColor="#323232"
             android:textStyle="bold"
-            android:textSize="20sp"
+            android:textSize="20dp"
             android:text="Share Twyst!" />
 
         <ImageView
@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#323232"
-            android:textSize="16sp"
+            android:textSize="16dp"
             android:text="Invite your friends to share\nrewards with you on Twyst."
 
             android:gravity="center_horizontal"

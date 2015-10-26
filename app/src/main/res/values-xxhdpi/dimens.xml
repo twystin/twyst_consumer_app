@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <dimen name="activity_horizontal_margin">42dp</dimen>
     <dimen name="navigation_drawer_width">290dp</dimen>
     <dimen name="navigation_drawer_item_margin">16dp</dimen>
@@ -9,18 +10,18 @@
     <dimen name="outlet_info_bottom_height">35dp</dimen>
     <dimen name="outlet_offer_width">186dp</dimen>
     <dimen name="outlet_offer_height">160dp</dimen>
-    <dimen name="outlet_offer_header_textsize">12.5dp</dimen>
-    <dimen name="outlet_offer_address_textsize">8dp</dimen>
+    <dimen name="outlet_offer_header_textsize">14.5dp</dimen>
+    <dimen name="outlet_offer_address_textsize">10dp</dimen>
     <dimen name="offer_padding_left">11dp</dimen>
     <dimen name="offer_padding_right">6dp</dimen>
-    <dimen name="offer_flatoff_size">19dp</dimen>
-    <dimen name="offer_buffet_size">26dp</dimen>
-    <dimen name="offer_custom_size">15dp</dimen>
-    <dimen name="offer_all_size">26dp</dimen>
-    <dimen name="offer_reduced_size">19dp</dimen>
+    <dimen name="offer_flatoff_size">25dp</dimen>
+    <dimen name="offer_buffet_size">32dp</dimen>
+    <dimen name="offer_custom_size">20dp</dimen>
+    <dimen name="offer_all_size">32dp</dimen>
+    <dimen name="offer_reduced_size">22dp</dimen>
     <dimen name="offer_detail_size">10dp</dimen>
     <dimen name="offer_date_size">6dp</dimen>
-    <dimen name="discover_plan_ahead_size">10dp</dimen>
+    <dimen name="discover_plan_ahead_size">12dp</dimen>
     <dimen name="discover_plan_ahead_padding">8dp</dimen>
     <dimen name="discover_plan_ahead_text_size">11dp</dimen>
 
@@ -46,7 +47,7 @@
     <dimen name="offer_detail_text1">12dp</dimen>
     <dimen name="offer_detail_like_margin">14dp</dimen>
     <dimen name="offer_detail_button_size">42dp</dimen>
-    <dimen name="offer_detail_button_text">16dp</dimen>
+    <dimen name="offer_detail_button_text">16sp</dimen>
     <dimen name="offer_detail_margin_top">8.5dp</dimen>
     <dimen name="offer_detail_image_height">71dp</dimen>
     <dimen name="offer_detail_report_padding_bottom">8dp</dimen>

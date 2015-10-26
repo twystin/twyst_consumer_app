@@ -155,7 +155,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:background="@drawable/icon_discover_offer_buck"
-                android:textSize="10sp"
+                android:textSize="10dp"
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
                 android:layout_marginRight="4dp"

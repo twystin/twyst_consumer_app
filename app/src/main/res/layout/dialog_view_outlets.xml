@@ -21,7 +21,7 @@
             android:padding="16dp"
             android:text="Pick Location"
             android:textColor="@android:color/white"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -65,7 +65,7 @@
                         android:paddingRight="10dp"
                         android:text="CANCEL"
                         android:textColor="#959595"
-                        android:textSize="12sp" />
+                        android:textSize="12dp" />
                 </com.balysv.materialripple.MaterialRippleLayout>
 
                 <com.balysv.materialripple.MaterialRippleLayout

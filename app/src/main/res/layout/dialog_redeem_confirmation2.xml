@@ -52,7 +52,7 @@
                 android:textAllCaps="true"
                 android:textStyle="bold"
                 android:gravity="bottom"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 android:visibility="gone"
                 android:textColor="#f85439"/>
 

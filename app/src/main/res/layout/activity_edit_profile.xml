@@ -78,7 +78,7 @@
                             android:id="@+id/profileName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="14dp"
                             android:text="John Doe"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
@@ -128,7 +128,7 @@
                             android:paddingRight="16dp"
                             android:text="@string/account"
                             android:textColor="@color/edit_profile_text_color"
-                            android:textSize="18sp" />
+                            android:textSize="18dp" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -155,7 +155,7 @@
                                 android:hint="Mobile number"
                                 android:textColorHint="@color/edit_profile_text_color"
                                 android:textColor="@color/edit_profile_text_color"
-                                android:textSize="14sp" />
+                                android:textSize="14dp" />
 
                             <ImageView
                                 android:layout_width="match_parent"
@@ -192,7 +192,7 @@
                                 android:hint="Email Id"
                                 android:textColorHint="@color/edit_profile_text_color"
                                 android:textColor="@color/edit_profile_text_color"
-                                android:textSize="14sp" />
+                                android:textSize="14dp" />
 
 
                             <ImageView
@@ -239,7 +239,7 @@
                                 android:text="Date of Birth"
                                 android:background="@null"
                                 android:textColor="@color/edit_profile_text_color"
-                                android:textSize="14sp" />
+                                android:textSize="14dp" />
 
 
                             <ImageView
@@ -286,7 +286,7 @@
                                 android:text="Anniversary"
                                 android:background="@null"
                                 android:textColor="@color/edit_profile_text_color"
-                                android:textSize="14sp" />
+                                android:textSize="14dp" />
 
 
                             <ImageView
@@ -335,7 +335,7 @@
                                 android:hint="City"
                                 android:textColorHint="@color/edit_profile_text_color"
                                 android:textColor="@color/edit_profile_text_color"
-                                android:textSize="14sp" />
+                                android:textSize="14dp" />
 
 
                             <ImageView
@@ -381,7 +381,7 @@
                             android:text="@string/connected_account"
                             android:textAllCaps="true"
                             android:textColor="@color/edit_profile_text_color"
-                            android:textSize="18sp" />
+                            android:textSize="18dp" />
 
                         <ImageView
                             android:layout_width="match_parent"
@@ -415,14 +415,14 @@
                                     android:text="Connect"
                                     android:gravity="center"
                                     android:textColor="@color/edit_profile_text_color"
-                                    android:textSize="12sp" />
+                                    android:textSize="12dp" />
 
                                 <android.support.v7.widget.SwitchCompat
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:id="@+id/facebookSwitchBTn"
                                     android:checked="false"
-                                    android:textSize="12sp"
+                                    android:textSize="12dp"
                                     android:layout_centerVertical="true"
                                     android:layout_alignParentRight="true"
                                     android:layout_alignParentEnd="true"
@@ -467,14 +467,14 @@
                                     android:text="Connect"
                                     android:gravity="center"
                                     android:textColor="@color/edit_profile_text_color"
-                                    android:textSize="12sp" />
+                                    android:textSize="12dp" />
 
                                 <android.support.v7.widget.SwitchCompat
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:id="@+id/googlePlusSwitchIcon"
                                     android:checked="false"
-                                    android:textSize="12sp"
+                                    android:textSize="12dp"
                                     android:layout_centerVertical="true"
                                     android:layout_alignParentEnd="true"
                                     android:layout_alignParentRight="true"
@@ -518,7 +518,7 @@
                             android:text="@string/notification"
                             android:textAllCaps="true"
                             android:textColor="@color/edit_profile_text_color"
-                            android:textSize="18sp" />
+                            android:textSize="18dp" />
 
                         <ImageView
                             android:layout_width="match_parent"
@@ -546,7 +546,7 @@
                                 android:drawablePadding="15dp"
                                 android:text="Push Notification"
                                 android:textColor="@color/edit_profile_hint_color"
-                                android:textSize="12sp" />
+                                android:textSize="12dp" />
 
 
                             <android.support.v7.widget.SwitchCompat
@@ -554,7 +554,7 @@
                                 android:layout_height="wrap_content"
                                 android:id="@+id/pushNotificationSwitch"
                                 android:checked="false"
-                                android:textSize="12sp"
+                                android:textSize="12dp"
                                 android:layout_alignParentEnd="true"
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
@@ -583,7 +583,7 @@
                         android:background="@drawable/button_red"
                         android:text="Update"
                         android:textColor="@android:color/white"
-                        android:textSize="18sp" />
+                        android:textSize="18dp" />
                 </com.balysv.materialripple.MaterialRippleLayout>
 
             </LinearLayout>
