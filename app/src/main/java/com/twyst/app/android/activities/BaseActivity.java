@@ -23,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -702,6 +703,14 @@ public abstract class BaseActivity extends ActionBarActivity
     protected void onPostResume() {
         super.onPostResume();
         updateDrawer();
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            return true;
+        }
+        return super.onKeyUp(keyCode, event);
     }
 
     public void handleRetrofitError(RetrofitError error) {
