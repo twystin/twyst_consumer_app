@@ -27,7 +27,7 @@ public class TwystApplication extends Application {
         super.onCreate();
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                        .setDefaultFontPath("fonts/Roboto-Medium.ttf")
+                        .setDefaultFontPath("fonts/Roboto-Regular.ttf")
                         .addCustomStyle(AppCompatTextView.class, android.R.attr.textViewStyle)
                         .setFontAttrId(R.attr.fontPath)
                         .build()

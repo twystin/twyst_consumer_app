@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/offerLayout"
     android:layout_width="@dimen/outlet_offer_width"
     android:layout_height="@dimen/outlet_offer_height"
@@ -96,7 +96,8 @@
                 android:text="20% off"
                 android:textColor="#e9573f"
                 android:textSize="@dimen/offer_all_size"
-                android:textStyle="bold"
+                tools:ignore="MissingPrefix"
+                fontPath="fonts/Roboto-Medium.ttf"
                 android:layout_marginBottom="3dp" />
 
             <TextView
