@@ -32,6 +32,7 @@
             android:background="#fafafa"
             android:hint="Enter your location"
             android:singleLine="true"
+            android:completionThreshold="1"
             android:textSize="@dimen/dialog_content_text"
             android:textColorHint="#ccc"
             android:paddingBottom="3dp" />
