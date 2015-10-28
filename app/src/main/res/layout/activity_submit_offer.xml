@@ -54,7 +54,7 @@
                 android:background="@drawable/edittext_shape"
                 android:gravity="top"
                 android:padding="4dp"
-                android:singleLine="false"
+                android:singleLine="true"
                 android:textCursorDrawable="@null"
                 android:textColor="#2E2E2E"
                 android:textColorHint="#2E2E2E"
