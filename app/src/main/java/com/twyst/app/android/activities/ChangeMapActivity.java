@@ -244,9 +244,17 @@ public class ChangeMapActivity extends FragmentActivity implements GoogleApiClie
                 }
 
                 Log.v("ADAPTER LIST", addressArrayList.toString());
-                arrayAdapter = new ArrayAdapter<CustomisedAddress>(ChangeMapActivity.this, R.layout.location_dropdown_item, addressArrayList);
-                et_location.setAdapter(arrayAdapter);
-                arrayAdapter.notifyDataSetChanged();
+                if (et_location.getAdapter() == null) {
+                    arrayAdapter = new ArrayAdapter<CustomisedAddress>(ChangeMapActivity.this, R.layout.location_dropdown_item, addressArrayList);
+                    et_location.setAdapter(arrayAdapter);
+                } else {
+                    arrayAdapter.setNotifyOnChange(false); // Prevents 'clear()' from clearing/resetting the listview
+                    arrayAdapter.clear();
+                    arrayAdapter.addAll(addressArrayList);
+                    // note that a call to notifyDataSetChanged() implicitly sets the setNotifyOnChange back to 'true'!
+                    // That's why the call 'setNotifyOnChange(false) should be called first every time (see call before 'clear()').
+                    arrayAdapter.notifyDataSetChanged();
+                }
 
             }
         }
