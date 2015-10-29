@@ -94,7 +94,6 @@
     <dimen name="dialog_content_text">11dp</dimen>
     <dimen name="discover_offer_padding_right">15dp</dimen>
     <dimen name="phone_verification_edittext_size">14dp</dimen>
-    <dimen name="notification_item_height">95dp</dimen>
 
     <dimen name="invite_friend_text">12dp</dimen>
     <dimen name="invite_friend_padding">8dp</dimen>
@@ -114,4 +113,7 @@
     <dimen name="wallet_bucks_header_text">13.5dp</dimen>
     <dimen name="wallet_bucks_text">11.5dp</dimen>
 
+    <dimen name="notification_item_height">95dp</dimen>
+    <dimen name="notification_header_text">12dp</dimen>
+    <dimen name="notification_detail_text">9dp</dimen>
 </resources>

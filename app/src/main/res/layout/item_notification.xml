@@ -51,7 +51,7 @@
                 android:lines="1"
                 android:text="Voucher Available"
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/invite_friend_button_text"
+                android:textSize="@dimen/notification_header_text"
                 tools:ignore="MissingPrefix"
                 fontPath="fonts/Roboto-Medium.ttf"
                 />
@@ -64,7 +64,7 @@
                 android:lines="6"
                 android:text="Your voucher for free Briyani with an order of Rs 400 Briyani Paradise, Sec 31 is now available!"
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/dialog_content_text"
+                android:textSize="@dimen/notification_detail_text"
                 android:textStyle="normal" />
         </LinearLayout>
     </RelativeLayout>
