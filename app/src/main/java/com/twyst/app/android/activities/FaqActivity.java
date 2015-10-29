@@ -1,7 +1,10 @@
 package com.twyst.app.android.activities;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.MailTo;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.text.Html;
@@ -69,9 +72,34 @@ public class FaqActivity extends BaseActivity {
 //                Toast.makeText(FaqActivity.this, description, Toast.LENGTH_SHORT).show();
             }
 
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url.startsWith("mailto:")) {
+                        MailTo mt = MailTo.parse(url);
+                        Intent i = newEmailIntent(FaqActivity.this, mt.getTo(), mt.getSubject(), mt.getBody(), mt.getCc());
+                        FaqActivity.this.startActivity(i);
+                        view.reload();
+                        return true;
+
+                } else {
+                    view.loadUrl(url);
+                }
+                return true;
+            }
+
         });
 
         webView .loadUrl(AppConstants.HOST + "/api/v4/faq");
+    }
+
+    private Intent newEmailIntent(Context context, String address, String subject, String body, String cc) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[] { address });
+        intent.putExtra(Intent.EXTRA_TEXT, body);
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(Intent.EXTRA_CC, cc);
+        intent.setType("message/rfc822");
+        return intent;
     }
 
     @Override
