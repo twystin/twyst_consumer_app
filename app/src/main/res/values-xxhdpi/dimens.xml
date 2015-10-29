@@ -113,4 +113,7 @@
     <dimen name="submit_offer_image_height">70dp</dimen>
     <dimen name="submit_offer_image_width">55dp</dimen>
 
+    <dimen name="wallet_bucks_header_text">16dp</dimen>
+    <dimen name="wallet_bucks_text">14dp</dimen>
+
 </resources>

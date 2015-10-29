@@ -28,6 +28,7 @@
     <dimen name="outlet_details_coupon_margin_right">15dp</dimen>
     <dimen name="outlet_details_coupon_margin_top">10dp</dimen>
 
-
+    <dimen name="wallet_bucks_header_text">15dp</dimen>
+    <dimen name="wallet_bucks_text">13dp</dimen>
 
 </resources>

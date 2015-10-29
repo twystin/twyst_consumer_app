@@ -21,8 +21,8 @@
     <dimen name="offer_detail_size">10dp</dimen>
     <dimen name="offer_date_size">6dp</dimen>
     <dimen name="discover_plan_ahead_size">10dp</dimen>
-    <dimen name="discover_plan_ahead_padding">8dp</dimen>
-    <dimen name="discover_plan_ahead_text_size">11dp</dimen>
+    <dimen name="discover_plan_ahead_padding">6dp</dimen>
+    <dimen name="discover_plan_ahead_text_size">9dp</dimen>
 
     <dimen name="discover_offer_detail">8dp</dimen>
 
@@ -59,7 +59,6 @@
     <dimen name="redeem_button_width">45dp</dimen>
     <dimen name="redeem_button_height">24dp</dimen>
     <dimen name="redeem_button_text">13dp</dimen>
-
 
     <dimen name="outlet_detail_padding_left">12dp</dimen>
     <dimen name="outlet_detail_padding_right">8dp</dimen>
@@ -111,5 +110,8 @@
     <dimen name="submit_offer_margin_top">16dp</dimen>
     <dimen name="submit_offer_image_height">70dp</dimen>
     <dimen name="submit_offer_image_width">55dp</dimen>
+
+    <dimen name="wallet_bucks_header_text">13.5dp</dimen>
+    <dimen name="wallet_bucks_text">11.5dp</dimen>
 
 </resources>
