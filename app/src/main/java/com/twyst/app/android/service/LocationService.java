@@ -143,16 +143,18 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                         locationData.setLat(String.valueOf(currentLocation.getLatitude()));
                         locationData.setLng(String.valueOf(currentLocation.getLongitude()));
 
-                        HttpService.getInstance().postLocation(getUserToken(), locationData, new Callback<BaseResponse>() {
-                            @Override
-                            public void success(BaseResponse baseResponse, Response response) {
+                        if (!getUserToken().equals("")){
+                            HttpService.getInstance().postLocation(getUserToken(), locationData, new Callback<BaseResponse>() {
+                                @Override
+                                public void success(BaseResponse baseResponse, Response response) {
 //                                Toast.makeText(LocationService.this,"Location posted successfully to server",Toast.LENGTH_LONG).show();
-                            }
+                                }
 
-                            @Override
-                            public void failure(RetrofitError error) {
-                            }
-                        });
+                                @Override
+                                public void failure(RetrofitError error) {
+                                }
+                            });
+                        }
 
                         getAddress(currentLocation);
 
