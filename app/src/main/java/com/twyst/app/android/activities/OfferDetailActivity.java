@@ -1739,8 +1739,8 @@ public class OfferDetailActivity extends BaseActivity {
 
     private void outletDetail(String outletId, final String offerId){
         SharedPreferences preferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        String appLocationLatiude = preferences.getString(AppConstants.PREFERENCE_CURRENT_LAT, "");
-        String appLocationLongitude = preferences.getString(AppConstants.PREFERENCE_CURRENT_LNG, "");
+        String appLocationLatiude = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, "");
+        String appLocationLongitude = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, "");
         HttpService.getInstance().getOutletDetails(outletId, getUserToken(), appLocationLatiude, appLocationLongitude, new Callback<BaseResponse<OutletDetailData>>() {
 
             @Override
