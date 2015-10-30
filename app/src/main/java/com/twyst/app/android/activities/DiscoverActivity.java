@@ -1129,7 +1129,9 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 longitudeStrSelectedAndUsed = String.valueOf(longitude);
 
                 sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, latitudeStrSelectedAndUsed);
+                sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_LAT, longitudeStrSelectedAndUsed);
                 sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, longitudeStrSelectedAndUsed);
+                sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_LNG, longitudeStrSelectedAndUsed);
                 sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, placeNameSelectedAndUsed);
                 sharedPreferences.commit();
 
@@ -1391,8 +1393,8 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
     public void refreshDateTimeLoc() {
         SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
         searchedItem = prefs.getString(AppConstants.PREFERENCE_PARAM_SEARCH_QUERY, "");
-        lat = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, "");
-        lng = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, "");
+        lat = prefs.getString(AppConstants.PREFERENCE_CURRENT_LAT, "");
+        lng = prefs.getString(AppConstants.PREFERENCE_CURRENT_LNG, "");
         Calendar calendar = Calendar.getInstance();
         Date currentDateTime = calendar.getTime();
         date = (String) DateFormat.format("MM-dd-yyyy", currentDateTime);
