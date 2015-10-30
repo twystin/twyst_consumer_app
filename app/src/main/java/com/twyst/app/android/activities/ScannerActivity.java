@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appsflyer.AppsFlyerLib;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.zxing.BarcodeFormat;
@@ -60,12 +61,14 @@ public class ScannerActivity extends ActionBarActivity implements ZXingScannerVi
         super.onResume();
         mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
         mScannerView.startCamera();          // Start camera on resume
+        AppsFlyerLib.onActivityResume(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mScannerView.stopCamera();           // Stop camera on pause
+        AppsFlyerLib.onActivityPause(this);
     }
 
     @Override

@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appsflyer.AppsFlyerLib;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -415,6 +416,17 @@ public class EditProfileActivity extends BaseActivity implements GoogleApiClient
         city = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).getString(AppConstants.PREFERENCE_LOCALITY_SHOWN_DRAWER, "");
         editProfileCity.setText(city);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        AppsFlyerLib.onActivityResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppsFlyerLib.onActivityPause(this);
     }
 
     @Override

@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.appsflyer.AppsFlyerLib;
 import com.twyst.app.android.R;
 import com.twyst.app.android.model.BaseResponse;
 import com.twyst.app.android.model.OutletList;
@@ -315,6 +316,16 @@ public class UploadBillActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        AppsFlyerLib.onActivityResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppsFlyerLib.onActivityPause(this);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

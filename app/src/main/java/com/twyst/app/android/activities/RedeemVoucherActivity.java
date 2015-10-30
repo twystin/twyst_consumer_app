@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appsflyer.AppsFlyerLib;
 import com.squareup.picasso.Picasso;
 
 import com.twyst.app.android.R;
@@ -358,6 +359,17 @@ public class RedeemVoucherActivity extends BaseActivity{
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        AppsFlyerLib.onActivityResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppsFlyerLib.onActivityPause(this);
     }
 
     @Override

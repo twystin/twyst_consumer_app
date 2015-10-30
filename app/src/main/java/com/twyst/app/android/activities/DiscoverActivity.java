@@ -37,6 +37,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appsflyer.AppsFlyerLib;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.android.gms.common.ConnectionResult;
@@ -1277,6 +1278,13 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
             }
             updateSocialFriendList();
         }
+        AppsFlyerLib.onActivityResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppsFlyerLib.onActivityPause(this);
     }
 
     public void expand(final View v) {

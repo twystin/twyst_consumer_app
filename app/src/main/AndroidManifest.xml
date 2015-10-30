@@ -81,6 +81,15 @@
             </intent-filter>
 
             <intent-filter>
+                <action   android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data     android:scheme="appsflyer" />
+                <!--<data android:scheme="http"-->
+                <!--android:host="sometest.com"  />-->
+            </intent-filter>
+
+            <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
 
@@ -260,6 +269,13 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
         <receiver
             android:name=".sms.ReferrerReceiver"
             android:exported="true"
@@ -268,6 +284,15 @@
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name="com.appsflyer.AppsFlyerLib">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+                <data android:scheme="package"/>
+            </intent-filter>
+        </receiver>
+        <meta-data android:name="AppsFlyerDevKey" android:value="yezoub3j6KZJt3VPyKoJ2Z"/>
+
         <receiver android:name=".alarm.NotificationPublisherReceiver" />
         <service android:name=".gcm.GcmIntentService" />
         <service android:name=".service.LocationService" />

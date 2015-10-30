@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import com.appsflyer.AppsFlyerLib;
 import com.twyst.app.android.R;
 import com.twyst.app.android.model.BaseResponse;
 import com.twyst.app.android.model.Profile;
@@ -104,6 +105,16 @@ public class InviteFriendsActivity extends BaseActivity {
         hideProgressHUDInLayout();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        AppsFlyerLib.onActivityResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppsFlyerLib.onActivityPause(this);
+    }
 
     @Override
     public void onBackPressed() {

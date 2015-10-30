@@ -21,6 +21,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.appsflyer.AppsFlyerLib;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -375,6 +376,7 @@ public class ChangeMapActivity extends FragmentActivity implements GoogleApiClie
         if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) {
             startLocationUpdates();
         }
+        AppsFlyerLib.onActivityResume(this);
     }
 
     @Override
@@ -389,6 +391,7 @@ public class ChangeMapActivity extends FragmentActivity implements GoogleApiClie
     protected void onPause() {
         super.onPause();
         stopLocationUpdates();
+        AppsFlyerLib.onActivityPause(this);
     }
 
     /**

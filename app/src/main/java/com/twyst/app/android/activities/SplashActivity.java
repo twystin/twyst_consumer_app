@@ -24,6 +24,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.appsflyer.*;
 
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -90,6 +91,9 @@ public class SplashActivity extends Activity {
             getKey();
             generateHashKey();
         }
+
+        setupAppsFlyer();
+
         SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, MODE_PRIVATE);
         if (prefs.getBoolean(AppConstants.PREFERENCE_IS_FIRST_RUN,true)){
             // Do first run stuff here then set 'firstrun' as false
@@ -141,6 +145,44 @@ public class SplashActivity extends Activity {
                 Log.i(getClass().getSimpleName(), "Splash killed.");
             }
         }, SPLASH_TIME_OUT);
+    }
+
+    private void setupAppsFlyer() {
+        // Set the Currency
+        AppsFlyerLib.setCurrencyCode("USD");
+
+        AppsFlyerLib.setAppsFlyerKey("yezoub3j6KZJt3VPyKoJ2Z");
+        AppsFlyerLib.sendTracking(this);
+
+        final String LOG_TAG ="AppsFlyer";
+        AppsFlyerLib.registerConversionListener(this, new AppsFlyerConversionListener() {
+            public void onInstallConversionDataLoaded(Map<String, String> conversionData) {
+                DebugLogQueue.getInstance().push("\nGot conversion data from server");
+                for (String attrName : conversionData.keySet()) {
+                    Log.d(LOG_TAG, "attribute: " + attrName + " = " + conversionData.get(attrName));
+                }
+            }
+
+            public void onInstallConversionFailure(String errorMessage) {
+                Log.d(LOG_TAG, "error getting conversion data: " + errorMessage);
+            }
+
+            public void onAppOpenAttribution(Map<String, String> attributionData) {
+                printMap(attributionData);
+            }
+
+            public void onAttributionFailure(String errorMessage) {
+                Log.d(LOG_TAG, "error onAttributionFailure : " + errorMessage);
+
+            }
+
+            private void printMap(Map<String, String> map) {
+                for (String key : map.keySet()) {
+                    Log.d(LOG_TAG, key + "="+map.get(key));
+                }
+
+            }
+        });
     }
 
     private void saveOutletsList() {
@@ -404,6 +446,13 @@ public class SplashActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
+        AppsFlyerLib.onActivityResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppsFlyerLib.onActivityPause(this);
     }
 
     public class FetchContact extends AsyncTask<Void, Void, Void> {
