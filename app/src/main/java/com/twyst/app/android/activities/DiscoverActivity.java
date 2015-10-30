@@ -311,9 +311,6 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                     editTextView.setVisibility(View.VISIBLE);
                     closeBtn.setVisibility(View.GONE);
                 }
-//                if (planAheadChanged) {
-//                    refreshDateTimeLoc();
-//                }
                 if (closeBtn.getVisibility() == View.VISIBLE) {
                     editTextView.setVisibility(View.VISIBLE);
                     closeBtn.setVisibility(View.GONE);
@@ -387,6 +384,9 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                     refreshDateTimeLoc();
                     fetchOutlets(1, lat, lng, date, time, true);
 
+                } else if(search){
+                    editTextView.setVisibility(View.VISIBLE);
+                    closeBtn.setVisibility(View.GONE);
                 }
             }
         });
@@ -1015,6 +1015,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         String lat = prefs.getString(AppConstants.PREFERENCE_CURRENT_LAT, "");
         String lng = prefs.getString(AppConstants.PREFERENCE_CURRENT_LNG, "");
         selectedLocationTxt.setText("Showing results for '" + searchedItem + "'");
+        closeBtn.setVisibility(View.VISIBLE);
 
         Calendar calendar = Calendar.getInstance();
         Date currentDateTime = calendar.getTime();
@@ -1390,8 +1391,8 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
     public void refreshDateTimeLoc() {
         SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
         searchedItem = prefs.getString(AppConstants.PREFERENCE_PARAM_SEARCH_QUERY, "");
-        lat = prefs.getString(AppConstants.PREFERENCE_CURRENT_LAT, "");
-        lng = prefs.getString(AppConstants.PREFERENCE_CURRENT_LNG, "");
+        lat = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, "");
+        lng = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, "");
         Calendar calendar = Calendar.getInstance();
         Date currentDateTime = calendar.getTime();
         date = (String) DateFormat.format("MM-dd-yyyy", currentDateTime);
