@@ -194,7 +194,7 @@ public abstract class BaseActivity extends ActionBarActivity
         localityDrawer = (TextView) list_header.findViewById(R.id.localityDrawer);
 
         SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        String locality = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, "");
+        String locality = prefs.getString(AppConstants.PREFERENCE_CURRENT_USED_LOCATION_NAME, "");
         localityDrawer.setText(locality);
 
         updatePicName();
@@ -1080,6 +1080,10 @@ public abstract class BaseActivity extends ActionBarActivity
 
         }
         return outletID;
+    }
+
+    public SharedPreferences getPrefs(){
+       return getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
     }
 
 }

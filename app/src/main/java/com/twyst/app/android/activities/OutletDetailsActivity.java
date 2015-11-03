@@ -114,8 +114,8 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
         super.onCreate(savedInstanceState);
 
         SharedPreferences preferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        final String appLocationLatiude = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, "");
-        final String appLocationLongitude = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, "");
+        final String appLocationLatiude = preferences.getString(AppConstants.PREFERENCE_CURRENT_USED_LAT, "");
+        final String appLocationLongitude = preferences.getString(AppConstants.PREFERENCE_CURRENT_USED_LNG, "");
 
         Intent intent = getIntent();
         final String outletid = intent.getStringExtra(AppConstants.INTENT_PARAM_OUTLET_ID);

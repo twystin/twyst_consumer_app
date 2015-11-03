@@ -84,7 +84,6 @@ public class ChangeMapActivity extends FragmentActivity implements GoogleApiClie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_map);
         // First we need to check availability of play services
-        // First we need to check availability of play services
         if (checkPlayServices()) {
 
             // Building the GoogleApi client
@@ -279,9 +278,9 @@ public class ChangeMapActivity extends FragmentActivity implements GoogleApiClie
             latLng = new LatLng(latitude, longitude);
         } else {
             SharedPreferences preferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-            String lastLatitude = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, "");
-            String lastLongitude = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, "");
-            addressTitle = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, "");
+            String lastLatitude = preferences.getString(AppConstants.PREFERENCE_CURRENT_USED_LAT, "");
+            String lastLongitude = preferences.getString(AppConstants.PREFERENCE_CURRENT_USED_LNG, "");
+            addressTitle = preferences.getString(AppConstants.PREFERENCE_CURRENT_USED_LOCATION_NAME, "");
 
             latitude = Double.parseDouble(lastLatitude);
             longitude = Double.parseDouble(lastLongitude);
@@ -382,7 +381,7 @@ public class ChangeMapActivity extends FragmentActivity implements GoogleApiClie
     @Override
     protected void onStop() {
         super.onStop();
-        if (mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
     }

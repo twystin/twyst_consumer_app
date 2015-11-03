@@ -143,12 +143,12 @@ public class MapViewActivity extends FragmentActivity implements OnMapReadyCallb
             } else {
 
                 SharedPreferences preferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-                String lastLatitude = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, "");
-                String lastLongitude = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, "");
+                String lastLatitude = preferences.getString(AppConstants.PREFERENCE_CURRENT_USED_LAT, "");
+                String lastLongitude = preferences.getString(AppConstants.PREFERENCE_CURRENT_USED_LNG, "");
 
                 latlng = new LatLng(Double.parseDouble(lastLatitude), Double.parseDouble(lastLongitude));
 
-                String locationName = preferences.getString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, "");
+                String locationName = preferences.getString(AppConstants.PREFERENCE_CURRENT_USED_LOCATION_NAME, "");
                 if (map != null) {
                     map.addMarker(new MarkerOptions()
                             .position(latlng)

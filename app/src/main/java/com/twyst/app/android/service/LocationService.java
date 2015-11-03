@@ -156,10 +156,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                             });
                         }
 
-                        getAddress(currentLocation);
-
-
-
                         if(prefs.edit().putString(AppConstants.PREFERENCE_LAST_SAVED_LOCATIONS_LIST, "").commit())
                             break;
                     }
@@ -178,6 +174,9 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 //        Toast.makeText(LocationService.this, "Location changed", Toast.LENGTH_LONG).show();
 
         final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+        prefs.edit().putString(AppConstants.PREFERENCE_UPDATED_LAT,String.valueOf(location.getLatitude())).apply();
+        prefs.edit().putString(AppConstants.PREFERENCE_UPDATED_LNG,String.valueOf(location.getLongitude())).apply();
 
         String locationOfflineListString = prefs.getString(AppConstants.PREFERENCE_LAST_SAVED_LOCATIONS_LIST,"");
         Gson gson = new Gson();
@@ -200,86 +199,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         handler.removeCallbacks(timedTask);
         handler.postDelayed(timedTask, prefs.getInt(AppConstants.PREFERENCE_USER_ONE_LOCATION_CHECK_TIME,USER_ONE_LOCATION_CHECK_TIME));
 
-    }
-
-    private void getAddress(Location mCurrentLocation) {
-
-        String errorMessage = "";
-
-        if (mCurrentLocation == null) {
-            Log.wtf(TAG, "errorMessage");
-            return;
-        }
-
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        List<Address> addresses = null;
-
-        try {
-            addresses = geocoder.getFromLocation(
-                    mCurrentLocation.getLatitude(),
-                    mCurrentLocation.getLongitude(),
-                    1);
-        } catch (IOException ioException) {
-            // Catch network or other I/O problems.
-            Log.e(TAG, "service_not_available", ioException);
-        } catch (IllegalArgumentException illegalArgumentException) {
-            // Catch invalid latitude or longitude values.
-            Log.e(TAG, "invalid_lat_long_used" + ". " +
-                    "Latitude = " + mCurrentLocation.getLatitude() +
-                    ", Longitude = " + mCurrentLocation.getLongitude(), illegalArgumentException);
-        }
-
-        // Handle case where no address was found.
-        if (addresses == null || addresses.size() == 0) {
-            if (errorMessage.isEmpty()) {
-                errorMessage = "no_address_found";
-                Log.e(TAG, errorMessage);
-            }
-        } else {
-            Address address = addresses.get(0);
-            ArrayList<String> addressFragments = new ArrayList<String>();
-
-            for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-                addressFragments.add(address.getAddressLine(i));
-            }
-            SharedPreferences.Editor sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
-            sharedPreferences.putString(AppConstants.PREFERENCE_LOCALITY_SHOWN_DRAWER, address.getLocality());
-            sharedPreferences.putString(AppConstants.PREFERENCE_PREVIOUS_LOCALITY_SHOWN_DRAWER, String.valueOf(addressFragments));
-            sharedPreferences.commit();
-
-            SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-
-            String launched = prefs.getString(AppConstants.PREFERENCE_CHECK_FIRST_LAUNCH,"");
-
-
-            if(launched.equalsIgnoreCase("Yes")){
-                String loc = prefs.getString(AppConstants.PREFERENCE_PREVIOUS_LOCALITY_SHOWN_DRAWER, "");
-                if(loc.equalsIgnoreCase(String.valueOf(addressFragments))){
-                    sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
-                    sharedPreferences.putString(AppConstants.PREFERENCE_LOCALITY_SHOWN_DRAWER, address.getLocality());
-                    sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_LAT, String.valueOf(mCurrentLocation.getLatitude()));
-                    sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_LNG, String.valueOf(mCurrentLocation.getLongitude()));
-                    sharedPreferences.commit();
-                }else {
-                    sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
-                    sharedPreferences.putString(AppConstants.PREFERENCE_PREVIOUS_LOCALITY_SHOWN_DRAWER, String.valueOf(addressFragments));
-                    sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_LAT, String.valueOf(mCurrentLocation.getLatitude()));
-                    sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_LNG, String.valueOf(mCurrentLocation.getLongitude()));
-                    sharedPreferences.commit();
-                }
-            }else {
-                sharedPreferences.putString(AppConstants.PREFERENCE_LOCALITY_SHOWN_DRAWER, address.getLocality());
-                sharedPreferences.putString(AppConstants.PREFERENCE_PREVIOUS_LOCALITY_SHOWN_DRAWER, String.valueOf(addressFragments));
-                sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_LAT, String.valueOf(mCurrentLocation.getLatitude()));
-                sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_LNG, String.valueOf(mCurrentLocation.getLongitude()));
-                sharedPreferences.commit();
-            }
-
-
-            Log.i(TAG, "" + addressFragments + address.getLocality());
-
-
-        }
     }
 
     public String getUserToken() {

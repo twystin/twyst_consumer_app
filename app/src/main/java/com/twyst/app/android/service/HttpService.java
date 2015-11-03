@@ -2,6 +2,7 @@ package com.twyst.app.android.service;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 import android.util.LruCache;
 
 import com.google.android.gms.analytics.Tracker;
@@ -109,6 +110,10 @@ public class HttpService {
 
     public void getRecommendedOutlets(String userToken, int start,String lat, String lng, String date, String time, Callback<BaseResponse<DiscoverData>> callback) {
 
+        if (TextUtils.isEmpty(date) && TextUtils.isEmpty(time)){
+            date = null;
+            time = null;
+        }
         int end = start + AppConstants.DISCOVER_LIST_PAGESIZE - 1;
         twystService.getRecommendedOutlets(userToken, start, end, lat, lng, date, time, callback);
     }

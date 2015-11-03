@@ -74,9 +74,6 @@ public class AppConstants {
     public static final String PREFERENCE_TUTORIAL_SKIPPED = "tutorial_skipped";
     public static final String PREFERENCE_USER_TOKEN = "token_user";
     public static final String PREFERENCE_SMS_BODY = "sms_body";
-    public static final String PREFERENCE_LAST_LOCATION_NAME = "last_location_name";
-    public static final String PREFERENCE_LAST_LOCATION_LATITUDE = "last_location_latitude";
-    public static final String PREFERENCE_LAST_LOCATION_LONGITUDE = "last_location_longitude";
     public static final String PREFERENCE_LAST_DRAWERITEM_CLICKED = "last_drawer_item";
     public static final String PREFERENCE_LAST_TWYST_BUCK = "twyst_buck";
     public static final String PREFERENCE_USER_PIC = "user_pic";
@@ -85,9 +82,6 @@ public class AppConstants {
     public static final String PREFERENCE_USER_PHONE= "user_phone";
     public static final String PREFERENCE_USER_REFERRAL = "user_referral";
     public static final String PREFERENCE_NOTIFICATION_COUNT = "notification_count";
-    public static final String PREFERENCE_CHANGE_LOCATION_NAME = "change_location_name";
-    public static final String PREFERENCE_CHANGE_LOCATION_LATITUDE = "change_location_latitude";
-    public static final String PREFERENCE_CHANGE_LOCATION_LONGITUDE = "change_location_longitude";
     public static final String PREFERENCE_IS_FRIEND_LIST_UPDATED = "is_friend_list_updated";
     public static final String PREFERENCE_FRIEND_LIST = "friend_list";
     public static final String PREFERENCE_LAST_SAVED_LOCATIONS_LIST = "last_saved_location_list";
@@ -134,9 +128,15 @@ public class AppConstants {
     public static final String INTENT_PARAM_UPLOAD_BILL_OUTLET_NAME ="upload_bill_outlet_name" ;
     public static final String PREFERENCE_LOCALITY_SHOWN_DRAWER = "locality";
     public static final String PREFERENCE_PREVIOUS_LOCALITY_SHOWN_DRAWER = "previous_locality";
-    public static final String PREFERENCE_CURRENT_LAT = "current_lat";
-    public static final String PREFERENCE_CURRENT_LNG = "current_lng";
     public static final String PREFERENCE_CHECK_FIRST_LAUNCH = "check_first_launch";
 
     public static final String PREFERENCE_OUTLETS_LIST = "outlet_list";
+
+    public static final String PREFERENCE_UPDATED_LAT = "updated_lat";
+    public static final String PREFERENCE_UPDATED_LNG = "updated_lng";
+
+    public static final String PREFERENCE_CURRENT_USED_LAT = "current_used_lat";
+    public static final String PREFERENCE_CURRENT_USED_LNG = "current_used_lng";
+    public static final String PREFERENCE_CURRENT_USED_LOCATION_NAME = "current_used_location_name";
+
 }

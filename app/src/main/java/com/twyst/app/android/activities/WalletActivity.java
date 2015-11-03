@@ -92,7 +92,7 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
 
         mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeRefreshLayout);
 
-        mSwipeRefreshLayout.setColorScheme(R.color.button_orange);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.button_orange);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -130,12 +130,12 @@ public class WalletActivity extends BaseActivity implements ObservableScrollView
 
     private void fetchCoupons() {
         SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        String lat = prefs.getString(AppConstants.PREFERENCE_CURRENT_LAT, "");
-        String lng = prefs.getString(AppConstants.PREFERENCE_CURRENT_LNG, "");
+        String lat = prefs.getString(AppConstants.PREFERENCE_CURRENT_USED_LAT, "");
+        String lng = prefs.getString(AppConstants.PREFERENCE_CURRENT_USED_LNG, "");
 
         if (TextUtils.isEmpty(lat) || TextUtils.isEmpty(lng)){
-            lat = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, "");
-            lng = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, "");
+            lat = prefs.getString(AppConstants.PREFERENCE_UPDATED_LAT, "");
+            lng = prefs.getString(AppConstants.PREFERENCE_UPDATED_LNG, "");
         }
 
         HttpService.getInstance().getCoupons(getUserToken(),lat,lng, new Callback<BaseResponse<WalletData>>() {

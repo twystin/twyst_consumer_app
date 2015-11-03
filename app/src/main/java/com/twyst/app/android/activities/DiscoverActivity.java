@@ -1,41 +1,21 @@
 package com.twyst.app.android.activities;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -45,53 +25,64 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.location.places.Places;
+import com.twyst.app.android.R;
+import com.twyst.app.android.adapters.DiscoverOutletAdapter;
+import com.twyst.app.android.model.LocationData;
+import com.twyst.app.android.util.AppConstants;
 
 import java.util.ArrayList;
+import java.util.Date;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.os.Handler;
+import android.support.v4.view.GravityCompat;
+import android.text.Html;
+import android.text.format.DateFormat;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.SeekBar;
+
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import com.google.gson.Gson;
-import com.twyst.app.android.R;
-import com.twyst.app.android.adapters.DiscoverOutletAdapter;
 import com.twyst.app.android.model.BaseResponse;
 import com.twyst.app.android.model.DiscoverData;
 import com.twyst.app.android.model.Friend;
-import com.twyst.app.android.model.LocationData;
 import com.twyst.app.android.model.Outlet;
 import com.twyst.app.android.model.ProfileUpdate;
 import com.twyst.app.android.service.HttpService;
-import com.twyst.app.android.util.AppConstants;
-import com.twyst.app.android.util.TwystProgressHUD;
 import com.twyst.app.android.util.Utils;
+
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+public class DiscoverActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<LocationSettingsResult> {
 
-public class DiscoverActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<LocationSettingsResult> {
-
-    private GoogleApiClient mGoogleApiClient;
-    private static final int REQUEST_CHECK_SETTINGS = 0x1;
-    private static final int PLACE_PICKER_REQUEST = 2;
     private ArrayAdapter<LocationData> mAdapter;
     private boolean fetchingOutlets;
     private boolean outletsNotFound;
     private DiscoverOutletAdapter discoverAdapter;
-    private String placeNameSelected;
-    private String latitudeStrSelected;
-    private String longitudeStrSelected;
-    private String placeNameSelectedAndUsed;
-    private String latitudeStrSelectedAndUsed;
-    private String longitudeStrSelectedAndUsed;
     private FloatingActionsMenu fabMenu;
     private RelativeLayout obstructor;
     private RelativeLayout planAheadObstructor;
@@ -102,47 +93,53 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
     private FloatingActionButton submitFab;
     private FloatingActionButton checkinFab;
     private View planAheadContent;
-    private String date;
-    private String time;
+    private String mDate;
+    private String mTime;
     private boolean dateSelected;
     TextView planAheadTime;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     int autoCompleteFlag;
     private String searchedItem;
-    protected boolean search;
     private Date selectedDate;
-    private ArrayList<LocationData> locations = new ArrayList<>(0);
     private LocationData selectedLocation;
     TextView day1;
     private boolean clearDateTime, planAheadChanged, fromchangeLoc, planAheadChangeConfirm;
     private ImageView closeBtn;
     private TextView planAheadLocation;
-    private String lat, lng;
 
-    @Override
-    protected String getTagName() {
-        return this.getClass().getSimpleName();
-    }
+    private static final int GPS_TRY_AGAIN_TIME = 2000;
 
-    @Override
-    protected int getLayoutResource() {
-        return R.layout.activity_discover;
-    }
+    private String mSelectedLat, mSelectedLng, mSelectedLocationName;
+    private static final int LOCATION_CURRENT = 0;
+    private static final int LOCATION_SELECTED = 1;
+    private static final int LOCATION_SELECTED_PLAN_AHEAD = 2;
+    private static final int LOCATION_LAST_KNOWN = 3;
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
+    private static final String LOCATION_CURRENT_HTML = " <b><font color=\"#ffffff\">(Current)</font></b>";
+    private static final String LOCATION_CURRENT_HTML_PLAN_AHEAD = " <b><font color=\"#636363\">(Current)</font></b>";
+    private static final String LOCATION_SELECTED_HTML = " <b><font color=\"#ffffff\">(Selected)</font></b>";
+    private static final String LOCATION_SELECTED_HTML_PLAN_AHEAD = " <b><font color=\"#636363\">(Selected)</font></b>";
+    private static final String LOCATION_LAST_KNOWN_HTML = " <b><font color=\"#ffffff\">(Last Known)</font></b>";
+    private static final String LOCATION_LAST_KNOWN_HTML_PLAN_AHEAD = " <b><font color=\"#636363\">(Last Known)</font></b>";
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-    }
+    private boolean isAskedToTurnOnGPS = false;
 
+    private static final int REQUEST_CHECK_SETTINGS = 0x1;
+    private static final int PLACE_PICKER_REQUEST = 2;
+
+    private ArrayList<LocationData> mLocationList = new ArrayList<>(0);
+
+    // Google client to interact with Google API
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+
+    // Location updates intervals in sec
+    private static int UPDATE_INTERVAL = 10000; // 10 sec
+    private static int FATEST_INTERVAL = 5000; // 5 sec
+    private static int DISPLACEMENT = 10; // 10 meters
+
+    protected boolean search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,37 +149,23 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
             setupAsChild = false;
         }
         super.onCreate(savedInstanceState);
+        // First we need to check availability of play services
+        if (checkPlayServices()) {
+
+            // Building the GoogleApi client
+            buildGoogleApiClient();
+            createLocationRequest();
+        }
+
         if (!search) {
-            HttpService.getInstance().getLocations(new Callback<BaseResponse<ArrayList<LocationData>>>() {
-                @Override
-                public void success(BaseResponse<ArrayList<LocationData>> arrayListBaseResponse, Response response) {
-
-                    locations = arrayListBaseResponse.getData();
-
-                    mGoogleApiClient = new GoogleApiClient.Builder(DiscoverActivity.this)
-                            .addConnectionCallbacks(DiscoverActivity.this)
-                            .addOnConnectionFailedListener(DiscoverActivity.this)
-                            .addApi(Places.GEO_DATA_API)
-                            .addApi(Places.PLACE_DETECTION_API)
-                            .addApi(LocationServices.API)
-                            .build();
-
-                    if (mGoogleApiClient != null) {
-                        mGoogleApiClient.connect();
-                    }
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    hideProgressHUDInLayout();
-                    handleRetrofitError(error);
-                }
-            });
+            getLocationList();
+            updateSocialFriendList();
         }
 
         mRecyclerView = (RecyclerView) findViewById(R.id.outletRecyclerView);
         mRecyclerView.setHasFixedSize(true);
 
+        //Assigning resources
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         selectedLocationTxt = (TextView) findViewById(R.id.selectedLocationTxt);
@@ -199,138 +182,37 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         submitFab = (FloatingActionButton) findViewById(R.id.submitFab);
         checkinFab = (FloatingActionButton) findViewById(R.id.checkinFab);
 
-        findViewById(R.id.changeOnMapBtn).setOnClickListener(new View.OnClickListener() {
+        setupSwipeRefresh();
+        setupDiscoverAdapter();
+        setOnClickListeners();
+
+
+    }
+
+    private void getLocationList() {
+        HttpService.getInstance().getLocations(new Callback<BaseResponse<ArrayList<LocationData>>>() {
             @Override
-            public void onClick(View view) {
-                // showPlacesPicker();
-                Intent intent = new Intent(DiscoverActivity.this, ChangeMapActivity.class);
-                startActivityForResult(intent, PLACE_PICKER_REQUEST);
-                fromchangeLoc = true;
-            }
-        });
-
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-
-        mSwipeRefreshLayout.setColorScheme(R.color.button_orange);
-
-        mSwipeRefreshLayout.setEnabled(false);
-
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (search) {
-                    fetchSearchedOutlets();
-                } else {
-                    if (selectedLocationTxt.getText().toString().contains("(Last Known)")) {
-                        retrieveLocation(true);
-                    }else{
-                        if (TextUtils.isEmpty(date) && TextUtils.isEmpty(time)) {
-                            fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, null, null, true);
-                        } else {
-                            fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
-                        }
-                    }
-
+            public void success(BaseResponse<ArrayList<LocationData>> arrayListBaseResponse, Response response) {
+                mLocationList = arrayListBaseResponse.getData();
+                if (mGoogleApiClient != null) {
+                    mGoogleApiClient.connect();
                 }
             }
-        });
 
-        findViewById(R.id.planAheadSubmitBtn).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                selectedLocationTxt.setVisibility(View.VISIBLE);
-                if (planAheadChanged) {
-                    closeBtn.setVisibility(View.VISIBLE);
-                    editTextView.setVisibility(View.GONE);
-                    clearDateTime = true;
-                    SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-                    if (TextUtils.isEmpty(prefs.getString(AppConstants.PREFERENCE_CHANGE_LOCATION_NAME, ""))) {
-                        if (!TextUtils.isEmpty(placeNameSelected) || !TextUtils.isEmpty(latitudeStrSelected) || !TextUtils.isEmpty(longitudeStrSelected)) {
-                            placeNameSelectedAndUsed = placeNameSelected;
-                            latitudeStrSelectedAndUsed = latitudeStrSelected;
-                            longitudeStrSelectedAndUsed = longitudeStrSelected;
-                        }
-                    } else {
-                        if (!TextUtils.isEmpty(placeNameSelected) || !TextUtils.isEmpty(latitudeStrSelected) || !TextUtils.isEmpty(longitudeStrSelected)) {
-                            placeNameSelectedAndUsed = placeNameSelected;
-                            latitudeStrSelectedAndUsed = latitudeStrSelected;
-                            longitudeStrSelectedAndUsed = longitudeStrSelected;
-                        } else {
-                            placeNameSelectedAndUsed = prefs.getString(AppConstants.PREFERENCE_CHANGE_LOCATION_NAME, "");
-                            latitudeStrSelectedAndUsed = prefs.getString(AppConstants.PREFERENCE_CHANGE_LOCATION_LATITUDE, "");
-                            longitudeStrSelectedAndUsed = prefs.getString(AppConstants.PREFERENCE_CHANGE_LOCATION_LONGITUDE, "");
-                        }
-                    }
-
-                    planAheadChangeConfirm = true;
-
-                } else {
-                    editTextView.setVisibility(View.VISIBLE);
-                    closeBtn.setVisibility(View.GONE);
-
-                    if (!TextUtils.isEmpty(placeNameSelected) || !TextUtils.isEmpty(latitudeStrSelected) || !TextUtils.isEmpty(longitudeStrSelected)) {
-                        placeNameSelectedAndUsed = placeNameSelected;
-                        latitudeStrSelectedAndUsed = latitudeStrSelected;
-                        longitudeStrSelectedAndUsed = longitudeStrSelected;
-                    }
-
-                }
-
-                if (planAheadLocation.getText().toString().contains("(current)")) {
-                    selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
-                } else {
-                    selectedLocationTxt.setText(placeNameSelectedAndUsed);
-                }
-                localityDrawer.setText(placeNameSelectedAndUsed);
-                collapse(planAheadContent);
-                locationText.setVisibility(View.GONE);
-                fabMenu.setVisibility(View.VISIBLE);
-                fabMenu.setEnabled(true);
-
-                findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
-                Log.i("selected date", "= " + date + " time " + time);
-
-                if (TextUtils.isEmpty(date) && TextUtils.isEmpty(time)) {
-                    fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, null, null, true);
-                } else {
-                    fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
-                }
-
+            public void failure(RetrofitError error) {
+                hideProgressHUDInLayout();
+                handleRetrofitError(error);
             }
         });
+    }
 
+    private void refreshDiscoverAdapter() {
 
-        findViewById(R.id.planAheadCancelBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                collapse(planAheadContent);
-                if (clearDateTime) {
-                    closeBtn.setVisibility(View.VISIBLE);
-                    editTextView.setVisibility(View.GONE);
-                } else {
-                    editTextView.setVisibility(View.VISIBLE);
-                    closeBtn.setVisibility(View.GONE);
-                }
-                if (closeBtn.getVisibility() == View.VISIBLE) {
-                    editTextView.setVisibility(View.VISIBLE);
-                    closeBtn.setVisibility(View.GONE);
-                }
-                locationText.setVisibility(View.GONE);
-                selectedLocationTxt.setVisibility(View.VISIBLE);
+    }
 
-                fabMenu.setVisibility(View.VISIBLE);
-                fabMenu.setEnabled(true);
-//                if (planAheadLocation.getText().toString().contains("(current)")) {
-//                    selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
-//                } else {
-//                    selectedLocationTxt.setText(placeNameSelectedAndUsed);
-//                }
-
-            }
-        });
-
+    private void setupDiscoverAdapter() {
         discoverAdapter = new DiscoverOutletAdapter();
-
         mRecyclerView.setAdapter(discoverAdapter);
 
         if (search) {
@@ -360,18 +242,98 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 public void onRequestedLastItem() {
                     if (!fetchingOutlets && !outletsNotFound) {
                         List<Outlet> outlets = discoverAdapter.getItems();
-
-                        if (!TextUtils.isEmpty(date) && !TextUtils.isEmpty(time)) {
-                            fetchOutlets(outlets.size() + 1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, false);
-                        } else {
-                            fetchOutlets(outlets.size() + 1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, null, null, true);
-                        }
-
+                        fetchOutlets(outlets.size() + 1);
                     }
                 }
             });
             setupAsPlanAheadView();
         }
+    }
+
+    private void setupSwipeRefresh() {
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.button_orange);
+        mSwipeRefreshLayout.setEnabled(false);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (search) {
+                    fetchSearchedOutlets();
+                } else {
+                    if (selectedLocationTxt.getText().toString().contains("(Selected)")) {
+                        fetchOutlets(1);
+                    } else {
+                        getLocationFetch(true, false);
+                    }
+
+                }
+            }
+        });
+    }
+
+    private void setOnClickListeners() {
+        //Change Map onClick
+        findViewById(R.id.changeOnMapBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // showPlacesPicker();
+                Intent intent = new Intent(DiscoverActivity.this, ChangeMapActivity.class);
+                startActivityForResult(intent, PLACE_PICKER_REQUEST);
+                fromchangeLoc = true;
+            }
+        });
+
+
+        findViewById(R.id.planAheadSubmitBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectedLocationTxt.setVisibility(View.VISIBLE);
+                if (planAheadChanged) {
+                    closeBtn.setVisibility(View.VISIBLE);
+                    editTextView.setVisibility(View.GONE);
+                    clearDateTime = true;
+
+                    setTextLocationFetch(LOCATION_SELECTED, null, null);
+                    planAheadChangeConfirm = true;
+
+                } else {
+                    editTextView.setVisibility(View.VISIBLE);
+                    closeBtn.setVisibility(View.GONE);
+                }
+
+                collapse(planAheadContent);
+                locationText.setVisibility(View.GONE);
+                fabMenu.setVisibility(View.VISIBLE);
+                fabMenu.setEnabled(true);
+            }
+        });
+
+
+        findViewById(R.id.planAheadCancelBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                collapse(planAheadContent);
+                if (clearDateTime) {
+                    closeBtn.setVisibility(View.VISIBLE);
+                    editTextView.setVisibility(View.GONE);
+                } else {
+                    editTextView.setVisibility(View.VISIBLE);
+                    closeBtn.setVisibility(View.GONE);
+                }
+                if (closeBtn.getVisibility() == View.VISIBLE) {
+                    editTextView.setVisibility(View.VISIBLE);
+                    closeBtn.setVisibility(View.GONE);
+                }
+                locationText.setVisibility(View.GONE);
+                selectedLocationTxt.setVisibility(View.VISIBLE);
+
+                fabMenu.setVisibility(View.VISIBLE);
+                fabMenu.setEnabled(true);
+
+            }
+        });
+
 
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -381,12 +343,9 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                     editTextView.setVisibility(View.VISIBLE);
                     closeBtn.setVisibility(View.GONE);
 
-                    refreshDateTimeLoc();
-                    fetchOutlets(1, lat, lng, date, time, true);
+                    refreshDateTime();
+                    getLocationFetch(true, false);
 
-                } else if(search){
-                    editTextView.setVisibility(View.VISIBLE);
-                    closeBtn.setVisibility(View.GONE);
                 }
             }
         });
@@ -488,35 +447,31 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                     intent.setAction("setChildYes");
                     startActivity(intent);
                     fabMenu.collapse();
-
                 }
             }
         });
-
 
     }
 
     private void updateSocialFriendList() {
 
-        final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-
-        if (prefs.getBoolean(AppConstants.PREFERENCE_IS_FRIEND_LIST_UPDATED,false)){
+        if (getPrefs().getBoolean(AppConstants.PREFERENCE_IS_FRIEND_LIST_UPDATED, false)) {
             return;
         }
 
-        String friendString = prefs.getString(AppConstants.PREFERENCE_FRIEND_LIST,"");
+        String friendString = getPrefs().getString(AppConstants.PREFERENCE_FRIEND_LIST, "");
         Gson gson = new Gson();
-        Friend friend = gson.fromJson(friendString,Friend.class);
+        Friend friend = gson.fromJson(friendString, Friend.class);
 
-        if (friend==null) return;
+        if (friend == null) return;
 
         HttpService.getInstance().updateSocialFriends(getUserToken(), friend, new Callback<BaseResponse<ProfileUpdate>>() {
             @Override
             public void success(BaseResponse<ProfileUpdate> profileUpdateBaseResponse, Response response) {
                 if (profileUpdateBaseResponse.isResponse()) {
                     Log.d(getTagName(), "" + profileUpdateBaseResponse.getMessage());
-                    prefs.edit().putBoolean(AppConstants.PREFERENCE_IS_FRIEND_LIST_UPDATED, true).apply();
-                    prefs.edit().putString(AppConstants.PREFERENCE_FRIEND_LIST, "").apply();
+                    getPrefs().edit().putBoolean(AppConstants.PREFERENCE_IS_FRIEND_LIST_UPDATED, true).apply();
+                    getPrefs().edit().putString(AppConstants.PREFERENCE_FRIEND_LIST, "").apply();
                 } else {
                     Log.d(getTagName(), "" + profileUpdateBaseResponse.getMessage());
                 }
@@ -529,8 +484,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         });
     }
 
-    void onItemsLoadComplete() {
-
+    private void onItemsLoadComplete() {
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
@@ -570,7 +524,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         day1.setText("today");
         final Date currentDateTime = calendar.getTime();
         day1.setTag(currentDateTime);
-        date = (String) DateFormat.format("MM-dd-yyyy", currentDateTime);
+        mDate = (String) DateFormat.format("MM-dd-yyyy", currentDateTime);
         selectedDate = currentDateTime;
 
         day1.setOnClickListener(new View.OnClickListener() {
@@ -579,7 +533,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 deselectDays();
                 day1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 day1.setTextColor(Color.WHITE);
-                date = (String) DateFormat.format("MM-dd-yyyy", currentDateTime);
+                mDate = (String) DateFormat.format("MM-dd-yyyy", currentDateTime);
                 dateSelected = true;
                 selectedDate = (Date) day1.getTag();
                 planAheadChanged = true;
@@ -596,7 +550,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 deselectDays();
                 day2.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 day2.setTextColor(Color.WHITE);
-                date = (String) DateFormat.format("MM-dd-yyyy", (Date) day2.getTag());
+                mDate = (String) DateFormat.format("MM-dd-yyyy", (Date) day2.getTag());
                 dateSelected = true;
                 selectedDate = (Date) day2.getTag();
                 planAheadChanged = true;
@@ -613,7 +567,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 deselectDays();
                 day3.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 day3.setTextColor(Color.WHITE);
-                date = (String) DateFormat.format("MM-dd-yyyy", (Date) day3.getTag());
+                mDate = (String) DateFormat.format("MM-dd-yyyy", (Date) day3.getTag());
                 dateSelected = true;
                 planAheadChanged = true;
                 selectedDate = (Date) day3.getTag();
@@ -630,7 +584,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 deselectDays();
                 day4.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 day4.setTextColor(Color.WHITE);
-                date = (String) DateFormat.format("MM-dd-yyyy", (Date) day4.getTag());
+                mDate = (String) DateFormat.format("MM-dd-yyyy", (Date) day4.getTag());
                 dateSelected = true;
                 selectedDate = (Date) day4.getTag();
                 planAheadChanged = true;
@@ -647,7 +601,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 deselectDays();
                 day5.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 day5.setTextColor(Color.WHITE);
-                date = (String) DateFormat.format("MM-dd-yyyy", (Date) day5.getTag());
+                mDate = (String) DateFormat.format("MM-dd-yyyy", (Date) day5.getTag());
                 dateSelected = true;
                 selectedDate = (Date) day5.getTag();
                 planAheadChanged = true;
@@ -664,7 +618,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 deselectDays();
                 day6.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 day6.setTextColor(Color.WHITE);
-                date = (String) DateFormat.format("MM-dd-yyyy", (Date) day6.getTag());
+                mDate = (String) DateFormat.format("MM-dd-yyyy", (Date) day6.getTag());
                 dateSelected = true;
                 selectedDate = (Date) day6.getTag();
                 planAheadChanged = true;
@@ -681,7 +635,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 deselectDays();
                 day7.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 day7.setTextColor(Color.WHITE);
-                date = (String) DateFormat.format("MM-dd-yyyy", (Date) day7.getTag());
+                mDate = (String) DateFormat.format("MM-dd-yyyy", (Date) day7.getTag());
                 dateSelected = true;
                 selectedDate = (Date) day7.getTag();
                 planAheadChanged = true;
@@ -695,7 +649,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
 
         int ampm = calendar.get(Calendar.AM_PM);
 
-        time = convertHoursToString(hoursIn) + ":" + convertMinutesToString(minutes);
+        mTime = convertHoursToString(hoursIn) + ":" + convertMinutesToString(minutes);
 
         planAheadTime.setText(convertHoursToString(hours) + ":" + convertMinutesToString((minutes > 30) ? 0 : 30) + ((ampm == 0) ? "am" : "pm"));
 
@@ -714,7 +668,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 int hours = progress / 2;
                 int minutes = (progress % 2) * 30;
 
-                time = convertHoursToString(hours) + ":" + convertMinutesToString(minutes);
+                mTime = convertHoursToString(hours) + ":" + convertMinutesToString(minutes);
                 if (!dateSelected) {
                     selectedDate = (Date) day1.getTag();
                     dateSelected = true;
@@ -736,7 +690,6 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
             }
         });
     }
-
 
     private String convertHoursToString(int hours) {
         String hoursStr = "";
@@ -831,10 +784,8 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
             }
         });
 
-        mAdapter = new ArrayAdapter<LocationData>(this, R.layout.location_dropdown_item, locations);
-
+        mAdapter = new ArrayAdapter<LocationData>(this, R.layout.location_dropdown_item, mLocationList);
         mAutocompleteView.setAdapter(mAdapter);
-
         builder.setView(dialogView);
 
         final AlertDialog dialog = builder.create();
@@ -854,6 +805,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                     SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
                     String launched = prefs.getString(AppConstants.PREFERENCE_CHECK_FIRST_LAUNCH, "");
                     if (launched.equalsIgnoreCase("Yes")) {
+                        setTextLocationFetch(LOCATION_LAST_KNOWN, null, null);
                         dialog.dismiss();
                     } else {
 //                        DiscoverActivity.this.finish();
@@ -878,6 +830,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
                 String launched = prefs.getString(AppConstants.PREFERENCE_CHECK_FIRST_LAUNCH, "");
                 if (launched.equalsIgnoreCase("Yes")) {
+                    setTextLocationFetch(LOCATION_LAST_KNOWN, null, null);
                     dialog.dismiss();
                 } else {
 //                    DiscoverActivity.this.finish();
@@ -888,26 +841,12 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         dialogView.findViewById(R.id.customLocationSubmitBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (autoCompleteFlag == 1) {
-
-                    placeNameSelectedAndUsed = selectedLocation.toString();
-                    latitudeStrSelectedAndUsed = selectedLocation.getLat();
-                    longitudeStrSelectedAndUsed = selectedLocation.getLng();
-
-                    sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, latitudeStrSelectedAndUsed);
-                    sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, longitudeStrSelectedAndUsed);
-                    sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, placeNameSelectedAndUsed);
-                    sharedPreferences.commit();
-
-                    selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
-                    localityDrawer.setText(placeNameSelectedAndUsed);
-                    planAheadLocation.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#636363\">(current)</font></b>"));
-
-                    findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
-                    fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelected, date, time, true);
-
-
+                    mSelectedLat = selectedLocation.getLat();
+                    mSelectedLng = selectedLocation.getLng();
+                    mSelectedLocationName = selectedLocation.toString();
+                    planAheadLocation.setText(Html.fromHtml(mSelectedLocationName + LOCATION_SELECTED_HTML_PLAN_AHEAD));
+                    setTextLocationFetch(LOCATION_SELECTED, null, null);
                     dialog.dismiss();
                 } else {
                     mAutocompleteView.setError("Address required");
@@ -916,35 +855,15 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         });
     }
 
-    private void fetchOutlets(final int start, String latitude, String longitude, final String date,final String time, final boolean clear) {
-        if ((latitude==null) || (longitude==null)){
-            final SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-            latitude = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE,null);
-            longitude = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, null);
-            if ((latitude==null) || (longitude==null)){
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        retrieveLocation(true);
-                    }
-                }, 1000);
+    private void fetchOutlets(final int start) {
+        String latitude = getPrefs().getString(AppConstants.PREFERENCE_CURRENT_USED_LAT, null);
+        String longitude = getPrefs().getString(AppConstants.PREFERENCE_CURRENT_USED_LNG, null);
 
-            }else{
-                String lastSavedLocation = prefs.getString((AppConstants.PREFERENCE_LAST_LOCATION_NAME),"");
-                selectedLocationTxt.setText(Html.fromHtml(lastSavedLocation + " <b><font color=\"#ffffff\">(Last Known)</font></b>"));
-                localityDrawer.setText(lastSavedLocation);
-
-                planAheadLocation.setText(Html.fromHtml(lastSavedLocation + " <b><font color=\"#636363\">(Last Known)</font></b>"));
-                fetchOutlets(start, latitude, longitude, date, time, clear);
-            }
-            return;
-        }
-
-        Log.d(getTagName(), "Going to fetch outlets with, start: " + start + ", lat " + latitude + ", long: " + longitude + ", date: " + date + ", time: " + time);
+        Log.d(getTagName(), "Going to fetch outlets with, start: " + start + ", lat " + latitude + ", long: " + longitude + ", date: " + mDate + ", time: " + mTime);
         fetchingOutlets = true;
         mSwipeRefreshLayout.setEnabled(true);
 
-        HttpService.getInstance().getRecommendedOutlets(getUserToken(), start, latitude, longitude, date, time, new Callback<BaseResponse<DiscoverData>>() {
+        HttpService.getInstance().getRecommendedOutlets(getUserToken(), start, latitude, longitude, mDate, mTime, new Callback<BaseResponse<DiscoverData>>() {
             @Override
             public void success(BaseResponse<DiscoverData> arrayListBaseResponse, Response response) {
                 fetchingOutlets = false;
@@ -964,7 +883,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                         outletsNotFound = true;
                         discoverAdapter.setOutletsNotFound(true);
                     } else {
-                        if (clear) {
+                        if (start == 1) {//Clear the items in adapter, fresh download
                             Log.d(getTagName(), "clearing outlets on discover screen");
                             discoverAdapter.getItems().clear();
                         }
@@ -1008,12 +927,12 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
 
     }
 
-    public void fetchSearchedOutlets() {
+    private void fetchSearchedOutlets() {
         mSwipeRefreshLayout.setEnabled(true);
         SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
         searchedItem = prefs.getString(AppConstants.PREFERENCE_PARAM_SEARCH_QUERY, "");
-        String lat = prefs.getString(AppConstants.PREFERENCE_CURRENT_LAT, "");
-        String lng = prefs.getString(AppConstants.PREFERENCE_CURRENT_LNG, "");
+        String lat = prefs.getString(AppConstants.PREFERENCE_CURRENT_USED_LAT, "");
+        String lng = prefs.getString(AppConstants.PREFERENCE_CURRENT_USED_LNG, "");
         selectedLocationTxt.setText("Showing results for '" + searchedItem + "'");
         closeBtn.setVisibility(View.VISIBLE);
 
@@ -1088,82 +1007,120 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
 
     }
 
-    @Override
-    public void onConnected(Bundle bundle) {
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(5000);
-        mLocationRequest.setFastestInterval(1000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    private void getLocationFetch(final boolean tryAgain, final boolean isOnCreate) {
+        Log.i(getTagName(), "getLocationFetch called isConnected: " + mGoogleApiClient.isConnected());
+        Location mLastLocation = null;
+        if (mGoogleApiClient != null) {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        }
+        if (mLastLocation != null) {
+            // Got current location
+            String lat = String.valueOf(mLastLocation.getLatitude());
+            String lng = String.valueOf(mLastLocation.getLongitude());
+            setTextLocationFetch(LOCATION_CURRENT, lat, lng);
+        } else {
 
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(mLocationRequest)
-                .setAlwaysShow(true);
-
-        LocationSettingsRequest locationSettingsRequest = builder.build();
-        PendingResult<LocationSettingsResult> result =
-                LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, locationSettingsRequest);
-        result.setResultCallback(this);
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        mGoogleApiClient.connect();
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.i(getTagName(), "Connection failed: ConnectionResult.getErrorCode() = " + connectionResult.getErrorCode());
-    }
-
-    private void retrieveLocation(boolean tryAgain) {
-        if (mGoogleApiClient == null) return;
-        Log.i(getTagName(), "retrieveLocation called isConnected: " + mGoogleApiClient.isConnected());
-        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
-            if (mLastLocation != null) {
-                double latitude = mLastLocation.getLatitude();
-                double longitude = mLastLocation.getLongitude();
-
-                placeNameSelectedAndUsed = findNearestOutletName(latitude, longitude);
-                latitudeStrSelectedAndUsed = String.valueOf(latitude);
-                longitudeStrSelectedAndUsed = String.valueOf(longitude);
-
-                sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, latitudeStrSelectedAndUsed);
-                sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_LAT, longitudeStrSelectedAndUsed);
-                sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, longitudeStrSelectedAndUsed);
-                sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_LNG, longitudeStrSelectedAndUsed);
-                sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, placeNameSelectedAndUsed);
-                sharedPreferences.commit();
-
-                selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
-                localityDrawer.setText(placeNameSelectedAndUsed);
-
-                planAheadLocation.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#636363\">(current)</font></b>"));
-
-                findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
-                fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
-
+            //If location fetch is to be tried again
+            if (tryAgain) {
+                // Execute some code after 2 seconds have passed
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        getLocationFetch(false, isOnCreate);
+                        onItemsLoadComplete();
+                    }
+                }, GPS_TRY_AGAIN_TIME);
             } else {
-                if (tryAgain) {
-//            findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
-                    // Execute some code after 2 seconds have passed
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            retrieveLocation(false);
-                            onItemsLoadComplete();
-                        }
-                    }, 2000);
-                } else {
+                //If first time created, prompt to get location, otherwise use last known location
+                if (isOnCreate) {
                     askLocationFromUser();
                     onItemsLoadComplete();
+                } else {
+                    setTextLocationFetch(LOCATION_LAST_KNOWN, null, null);
                 }
             }
+
+        }
+    }
+
+    private void setTextLocationFetch(final int locationCase, String lat, String lng) {
+        String locationName;
+        switch (locationCase) {
+            case LOCATION_CURRENT:
+                locationName = findNearestOutletName(Double.valueOf(lat), Double.valueOf(lng));
+                sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_USED_LAT, lat);
+                sharedPreferences.putString(AppConstants.PREFERENCE_UPDATED_LAT, lat);
+                sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_USED_LNG, lng);
+                sharedPreferences.putString(AppConstants.PREFERENCE_UPDATED_LNG, lng);
+                sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_USED_LOCATION_NAME, locationName);
+                sharedPreferences.commit();
+
+                selectedLocationTxt.setText(Html.fromHtml(locationName + LOCATION_CURRENT_HTML));
+                localityDrawer.setText(locationName);
+                planAheadLocation.setText(Html.fromHtml(locationName + LOCATION_CURRENT_HTML_PLAN_AHEAD));
+
+                findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
+                fetchOutlets(1);
+                break;
+
+            case LOCATION_LAST_KNOWN:
+                lat = getPrefs().getString(AppConstants.PREFERENCE_UPDATED_LAT, "");
+                lng = getPrefs().getString(AppConstants.PREFERENCE_UPDATED_LNG, "");
+                if (lat.equals("") || lng.equals("")) {
+                    locationName = getPrefs().getString(AppConstants.PREFERENCE_CURRENT_USED_LOCATION_NAME, "");
+                } else {
+                    locationName = findNearestOutletName(Double.valueOf(lat), Double.valueOf(lng));
+                    sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_USED_LAT, lat);
+                    sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_USED_LNG, lng);
+                    sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_USED_LOCATION_NAME, locationName);
+                    sharedPreferences.commit();
+                }
+
+                selectedLocationTxt.setText(Html.fromHtml(locationName + LOCATION_LAST_KNOWN_HTML));
+                localityDrawer.setText(locationName);
+                planAheadLocation.setText(Html.fromHtml(locationName + LOCATION_LAST_KNOWN_HTML_PLAN_AHEAD));
+
+                findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
+                fetchOutlets(1);
+                break;
+
+            case LOCATION_SELECTED:
+                if (planAheadLocation.getText().toString().contains("(Selected)")) {
+                    sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_USED_LAT, mSelectedLat);
+                    sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_USED_LNG, mSelectedLng);
+                    sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_USED_LOCATION_NAME, mSelectedLocationName);
+                    sharedPreferences.commit();
+
+                    selectedLocationTxt.setText(Html.fromHtml(mSelectedLocationName + LOCATION_SELECTED_HTML));
+                    localityDrawer.setText(mSelectedLocationName);
+                    planAheadLocation.setText(Html.fromHtml(mSelectedLocationName + LOCATION_SELECTED_HTML_PLAN_AHEAD));
+                }
+                findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
+                fetchOutlets(1);
+                break;
+
+            case LOCATION_SELECTED_PLAN_AHEAD:
+                locationName = findNearestOutletName(Double.valueOf(lat), Double.valueOf(lng));
+
+                String lastSavedLocationName = getPrefs().getString(AppConstants.PREFERENCE_CURRENT_USED_LOCATION_NAME, "");
+                if (lastSavedLocationName.equalsIgnoreCase(locationName)) {
+                    planAheadChanged = false;
+                } else {
+                    planAheadLocation.setText(Html.fromHtml(locationName + LOCATION_SELECTED_HTML_PLAN_AHEAD));
+                    mSelectedLat = lat;
+                    mSelectedLng = lng;
+                    mSelectedLocationName = locationName;
+                    planAheadChanged = true;
+                }
+                break;
         }
 
 
+    }
+
+
     private LocationData findNearestOutletLocation(double latitude, double longitude) {
-        ArrayList<LocationData> locations2 = new ArrayList<>(locations);
+        ArrayList<LocationData> locations2 = new ArrayList<>(mLocationList);
         for (LocationData locationData : locations2) {
             double distance = Utils.distance(latitude, longitude, Double.valueOf(locationData.getLat()), Double.valueOf(locationData.getLng()), 'K');
             locationData.setDistance(distance);
@@ -1187,110 +1144,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
     }
 
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(getTagName(), "onActivityResult: requestCode: " + requestCode + ", resultcode: " + resultCode);
-
-        if (requestCode == PLACE_PICKER_REQUEST) {
-            if (resultCode == RESULT_OK) {
-
-                Bundle extras = data.getExtras();
-                LocationData locationData = (LocationData) extras.getSerializable("locationData");
-                Double lat = Double.valueOf(locationData.getLat());
-                Double lng = Double.valueOf(locationData.getLng());
-                LocationData nearestOutletLocation = findNearestOutletLocation(lat, lng);
-                String locationName = nearestOutletLocation.toString();
-
-                placeNameSelected = locationName;
-                latitudeStrSelected = nearestOutletLocation.getLat();
-                longitudeStrSelected = nearestOutletLocation.getLng();
-
-                Log.d(getTagName(), "onActivityResult.. places picker: placeName: " + locationName);
-
-                SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
-                searchedItem = prefs.getString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, "");
-                if (searchedItem.equalsIgnoreCase(locationName)) {
-                    planAheadLocation.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#636363\">(current)</font></b>"));
-                    planAheadChanged = false;
-                } else {
-                    planAheadLocation.setText(locationName);
-                    placeNameSelectedAndUsed = locationName;
-                    sharedPreferences.putString(AppConstants.PREFERENCE_CHANGE_LOCATION_LATITUDE, latitudeStrSelected);
-                    sharedPreferences.putString(AppConstants.PREFERENCE_CHANGE_LOCATION_LONGITUDE, longitudeStrSelected);
-                    sharedPreferences.putString(AppConstants.PREFERENCE_CHANGE_LOCATION_NAME, placeNameSelectedAndUsed);
-                    sharedPreferences.commit();
-                    planAheadChanged = true;
-                }
-            }
-        }
-
-        if (requestCode == REQUEST_CHECK_SETTINGS) {
-            switch (resultCode) {
-                case Activity.RESULT_OK:
-                    Log.i(getTagName(), "User agreed to make required location settings changes.");
-                    retrieveLocation(true);
-                    break;
-                case Activity.RESULT_CANCELED:
-                    Log.i(getTagName(), "User chose not to make required location settings changes.");
-                    //buildAndShowSnackbarWithMessage("Please enable location services and retry again.");
-                    askLocationFromUser();
-                    break;
-            }
-        }
-
-    }
-
-
-    @Override
-    public void onResult(LocationSettingsResult locationSettingsResult) {
-        final Status status = locationSettingsResult.getStatus();
-        switch (status.getStatusCode()) {
-            case LocationSettingsStatusCodes.SUCCESS:
-                Log.i(getTagName(), "All location settings are satisfied.");
-                if (!search) {
-                    retrieveLocation(true);
-                    break;
-                }
-
-                break;
-            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                Log.i(getTagName(), "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
-
-                try {
-                    // Show the dialog by calling startResolutionForResult(), and check the result
-                    // in onActivityResult().
-                    status.startResolutionForResult(DiscoverActivity.this, REQUEST_CHECK_SETTINGS);
-                } catch (IntentSender.SendIntentException e) {
-                    Log.i(getTagName(), "PendingIntent unable to execute request.");
-                }
-                break;
-            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                Log.i(getTagName(), "Location settings are inadequate, and cannot be fixed here. Dialog not created.");
-                buildAndShowSnackbarWithMessage("Please enable location services and retry again.");
-                break;
-        }
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (!search) {
-            if (!TextUtils.isEmpty(date) && !TextUtils.isEmpty(time) && !fromchangeLoc) {
-                fetchOutlets(1, latitudeStrSelectedAndUsed, longitudeStrSelectedAndUsed, date, time, true);
-            }
-            updateSocialFriendList();
-        }
-        AppsFlyerLib.onActivityResume(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        AppsFlyerLib.onActivityPause(this);
-    }
-
-    public void expand(final View v) {
+    private void expand(final View v) {
         v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         final int targetHeight = v.getMeasuredHeight();
 
@@ -1326,7 +1180,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         v.startAnimation(a);
     }
 
-    public void collapse(final View v) {
+    private void collapse(final View v) {
         final int initialHeight = v.getMeasuredHeight();
         final AlphaAnimation animation1 = new AlphaAnimation(0.7f, 0.0f);
         animation1.setDuration(75);
@@ -1357,78 +1211,21 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         v.startAnimation(a);
     }
 
-    @Override
-    public void onBackPressed() {
-        if (obstructor.getVisibility() == View.VISIBLE) {
-            fabMenu.collapse();
-
-        } else if (findViewById(R.id.checkinObstructor).getVisibility() == View.VISIBLE) {
-            fabMenu.collapse();
-            findViewById(R.id.checkinObstructor).setVisibility(View.GONE);
-            findViewById(R.id.checkinObstructor2).setVisibility(View.GONE);
-
-        } else if (drawerOpened) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setTitle("Are you sure you want to exit ?")
-//                    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//
-//                            finish();
-//                        }
-//                    })
-//                    .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int id) {
-//                            // User cancelled the dialog
-//                        }
-//                    });
-//            builder.create().show();
-            finish();
-        }
-
-    }
-
-    public void refreshDateTimeLoc() {
+    private void refreshDateTime() {
         SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
         searchedItem = prefs.getString(AppConstants.PREFERENCE_PARAM_SEARCH_QUERY, "");
-        lat = prefs.getString(AppConstants.PREFERENCE_CURRENT_LAT, "");
-        lng = prefs.getString(AppConstants.PREFERENCE_CURRENT_LNG, "");
         Calendar calendar = Calendar.getInstance();
         Date currentDateTime = calendar.getTime();
-        date = (String) DateFormat.format("MM-dd-yyyy", currentDateTime);
+        mDate = (String) DateFormat.format("MM-dd-yyyy", currentDateTime);
         int hoursIn = calendar.get(Calendar.HOUR_OF_DAY);
         int minutes = calendar.get(Calendar.MINUTE);
-        time = convertHoursToString(hoursIn) + ":" + convertMinutesToString(minutes);
+        mTime = convertHoursToString(hoursIn) + ":" + convertMinutesToString(minutes);
 
         clearDateTime = false;
         deselectDays();
         day1.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         day1.setTextColor(Color.WHITE);
         dateSelected = true;
-
-        if (lat!=null && !TextUtils.isEmpty(lat) && lng!=null && !TextUtils.isEmpty(lng)){
-            Double latitude = Double.valueOf(lat);
-            Double longitude = Double.valueOf(lng);
-            placeNameSelectedAndUsed = findNearestOutletName(latitude, longitude);
-            latitudeStrSelectedAndUsed = String.valueOf(latitude);
-            longitudeStrSelectedAndUsed = String.valueOf(longitude);
-        }
-        placeNameSelected = placeNameSelectedAndUsed;
-        latitudeStrSelected = latitudeStrSelectedAndUsed;
-        longitudeStrSelected = longitudeStrSelectedAndUsed;
-
-        sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_LATITUDE, latitudeStrSelectedAndUsed);
-        sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_LONGITUDE, longitudeStrSelectedAndUsed);
-        sharedPreferences.putString(AppConstants.PREFERENCE_LAST_LOCATION_NAME, placeNameSelectedAndUsed);
-        sharedPreferences.commit();
-
-        selectedLocationTxt.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#ffffff\">(current)</font></b>"));
-        localityDrawer.setText(placeNameSelectedAndUsed);
-
-        planAheadLocation.setText(Html.fromHtml(placeNameSelectedAndUsed + " <b><font color=\"#636363\">(current)</font></b>"));
-
 
         selectedDate = (Date) day1.getTag();
 
@@ -1450,7 +1247,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 int hours = progress / 2;
                 int minutes = (progress % 2) * 30;
 
-                time = convertHoursToString(hours) + ":" + convertMinutesToString(minutes);
+                mTime = convertHoursToString(hours) + ":" + convertMinutesToString(minutes);
                 if (!dateSelected) {
                     selectedDate = (Date) day1.getTag();
                     dateSelected = true;
@@ -1472,4 +1269,201 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
 
     }
 
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(getTagName(), "onActivityResult: requestCode: " + requestCode + ", resultcode: " + resultCode);
+
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+
+                Bundle extras = data.getExtras();
+                LocationData locationData = (LocationData) extras.getSerializable("locationData");
+                if (locationData != null) {
+                    setTextLocationFetch(LOCATION_SELECTED_PLAN_AHEAD, locationData.getLat(), locationData.getLng());
+                }
+            }
+        }
+
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    Log.i(getTagName(), "User agreed to make required location settings changes.");
+                    getLocationFetch(true, true);
+                    break;
+                case Activity.RESULT_CANCELED:
+                    Log.i(getTagName(), "User chose not to make required location settings changes.");
+                    //buildAndShowSnackbarWithMessage("Please enable location services and retry again.");
+                    getLocationFetch(false, true);
+                    break;
+            }
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (obstructor.getVisibility() == View.VISIBLE) {
+            fabMenu.collapse();
+
+        } else if (findViewById(R.id.checkinObstructor).getVisibility() == View.VISIBLE) {
+            fabMenu.collapse();
+            findViewById(R.id.checkinObstructor).setVisibility(View.GONE);
+            findViewById(R.id.checkinObstructor2).setVisibility(View.GONE);
+
+        } else if (drawerOpened) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            DiscoverActivity.this.finish();
+        }
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mGoogleApiClient != null && !mLocationList.isEmpty()) {
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkPlayServices();
+
+        // Resuming the periodic location updates
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            startLocationUpdates();
+        }
+        AppsFlyerLib.onActivityResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            stopLocationUpdates();
+        }
+        AppsFlyerLib.onActivityPause(this);
+    }
+
+    /**
+     * Creating google api client object
+     */
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API).build();
+    }
+
+    /**
+     * Creating location request object
+     */
+    protected void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FATEST_INTERVAL);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setSmallestDisplacement(DISPLACEMENT);
+    }
+
+    /**
+     * Starting the location updates
+     */
+    protected void startLocationUpdates() {
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                mGoogleApiClient, mLocationRequest, this);
+
+    }
+
+    /**
+     * Stopping location updates
+     */
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                mGoogleApiClient, this);
+    }
+
+    @Override
+    protected String getTagName() {
+        return DiscoverActivity.class.getSimpleName();
+    }
+
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_discover;
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        startLocationUpdates();
+
+        if (!isAskedToTurnOnGPS) {
+            LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                    .addLocationRequest(mLocationRequest)
+                    .setAlwaysShow(true);
+
+            LocationSettingsRequest locationSettingsRequest = builder.build();
+            PendingResult<LocationSettingsResult> result =
+                    LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, locationSettingsRequest);
+            result.setResultCallback(this);
+            isAskedToTurnOnGPS = true;
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        getPrefs().edit().putString(AppConstants.PREFERENCE_UPDATED_LAT, String.valueOf(location.getLatitude())).apply();
+        getPrefs().edit().putString(AppConstants.PREFERENCE_UPDATED_LNG, String.valueOf(location.getLongitude())).apply();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.i(getTagName(), "Connection failed: ConnectionResult.getErrorCode() = "
+                + connectionResult.getErrorCode());
+    }
+
+    @Override
+    public void onResult(LocationSettingsResult locationSettingsResult) {
+        final Status status = locationSettingsResult.getStatus();
+        switch (status.getStatusCode()) {
+            case LocationSettingsStatusCodes.SUCCESS:
+                Log.i(getTagName(), "All location settings are satisfied.");
+                if (!search) {
+                    getLocationFetch(true, true);
+                    break;
+                }
+
+                break;
+            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                Log.i(getTagName(), "Location settings are not satisfied. Show the user a dialog to upgrade location settings ");
+
+                try {
+                    // Show the dialog by calling startResolutionForResult(), and check the result
+                    // in onActivityResult().
+                    status.startResolutionForResult(DiscoverActivity.this, REQUEST_CHECK_SETTINGS);
+                } catch (IntentSender.SendIntentException e) {
+                    Log.i(getTagName(), "PendingIntent unable to execute request.");
+                }
+                break;
+            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                Log.i(getTagName(), "Location settings are inadequate, and cannot be fixed here. Dialog not created.");
+                buildAndShowSnackbarWithMessage("Please enable location services and retry again.");
+                break;
+        }
+    }
 }
