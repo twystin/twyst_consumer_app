@@ -122,7 +122,7 @@ public class DiscoverOutletAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 @Override
                 public void onClick(View view) {
                     Intent intent= new Intent(view.getContext(), OutletDetailsActivity.class);
-                    intent.putExtra(AppConstants.INTENT_PARAM_OUTLET_ID, outlet.get_id());
+                    intent.putExtra(AppConstants.INTENT_PARAM_OUTLET_OBJECT, outlet);
                     view.getContext().startActivity(intent);
                 }
             });

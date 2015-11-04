@@ -53,6 +53,7 @@ import com.twyst.app.android.model.BaseResponse;
 import com.twyst.app.android.model.Data;
 import com.twyst.app.android.model.Feedback;
 import com.twyst.app.android.model.FeedbackMeta;
+import com.twyst.app.android.model.Offer;
 import com.twyst.app.android.model.Outlet;
 import com.twyst.app.android.model.OutletDetailData;
 import com.twyst.app.android.model.ShareOutlet;
@@ -96,8 +97,6 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
     private Button submitBtn;
     private TextView editImageBtn;
 
-
-
     @Override
     protected String getTagName() {
         return this.getClass().getSimpleName();
@@ -113,13 +112,46 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
         setupAsChild = true;
         super.onCreate(savedInstanceState);
 
+        if (getIntent().getStringExtra(AppConstants.INTENT_PARAM_OUTLET_ID) != null) {
+            String outletId = getIntent().getStringExtra(AppConstants.INTENT_PARAM_OUTLET_ID);
+            fetchOutlet(outletId);
+        } else {
+            outlet = (Outlet) getIntent().getExtras().getSerializable(AppConstants.INTENT_PARAM_OUTLET_OBJECT);
+            setup();
+        }
+
+    }
+
+    private void fetchOutlet(String outletId) {
         SharedPreferences preferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
         final String appLocationLatiude = preferences.getString(AppConstants.PREFERENCE_CURRENT_USED_LAT, "");
         final String appLocationLongitude = preferences.getString(AppConstants.PREFERENCE_CURRENT_USED_LNG, "");
 
-        Intent intent = getIntent();
-        final String outletid = intent.getStringExtra(AppConstants.INTENT_PARAM_OUTLET_ID);
 
+        HttpService.getInstance().getOutletDetails(outletId, getUserToken(), appLocationLatiude, appLocationLongitude, new Callback<BaseResponse<OutletDetailData>>() {
+
+            @Override
+            public void success(BaseResponse<OutletDetailData> outletBaseResponse, Response response) {
+                outlet = outletBaseResponse.getData().getOutlet();
+
+                String twystBucks = outletBaseResponse.getData().getTwystBucks();
+
+                sharedPreferences.putInt(AppConstants.PREFERENCE_LAST_TWYST_BUCK, Integer.parseInt(twystBucks));
+                sharedPreferences.commit();
+                Log.d("Response", outletBaseResponse.toString());
+
+                setup();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                hideProgressHUDInLayout();
+                handleRetrofitError(error);
+            }
+        });
+    }
+
+    private void setup() {
         outletAddress = (TextView) findViewById(R.id.outletAddress);
         outletDistance = (TextView) findViewById(R.id.outletDistance);
         outletName = (TextView) findViewById(R.id.outletName);
@@ -261,7 +293,7 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
                         meta.setPhoto(imagePat);
                     }
 
-                    feedback.setOutletId(outletid);
+                    feedback.setOutletId(outlet.get_id());
                     feedback.setFeedbackMeta(meta);
 
 
@@ -617,65 +649,49 @@ public class OutletDetailsActivity extends BaseActivity implements ObservableScr
             }
         });
 
-        HttpService.getInstance().getOutletDetails(outletid, getUserToken(), appLocationLatiude, appLocationLongitude, new Callback<BaseResponse<OutletDetailData>>() {
+        setupPage();
 
-            @Override
-            public void success(BaseResponse<OutletDetailData> outletBaseResponse, Response response) {
-                outlet = outletBaseResponse.getData().getOutlet();
+    }
 
-                String twystBucks = outletBaseResponse.getData().getTwystBucks();
+    private void setupPage() {
+        if (outlet.isFollowing()) {
+            followOutletBtn.setImageResource(R.drawable.icon_discover_follow_outlet);
+        } else {
+            followOutletBtn.setImageResource(R.drawable.icon_discover_follow_outlet_no);
+        }
 
-                sharedPreferences.putInt(AppConstants.PREFERENCE_LAST_TWYST_BUCK, Integer.parseInt(twystBucks));
-                sharedPreferences.commit();
+        if (!TextUtils.isEmpty(outlet.getAddress())) {
+            outletAddress.setText(outlet.getAddress());
+            placeIcon.setVisibility(View.VISIBLE);
+        } else {
+            outletAddress.setText("");
+            placeIcon.setVisibility(View.INVISIBLE);
+        }
 
-                if (outlet.isFollowing()) {
-                    followOutletBtn.setImageResource(R.drawable.icon_discover_follow_outlet);
-                } else {
-                    followOutletBtn.setImageResource(R.drawable.icon_discover_follow_outlet_no);
-                }
+        outletName.setText(outlet.getName());
+        Picasso picasso = Picasso.with(getApplicationContext());
+        picasso.setIndicatorsEnabled(AppConstants.DEGUG_PICASSO);
+        picasso.setLoggingEnabled(AppConstants.DEGUG_PICASSO);
+        picasso.load(outlet.getBackground())
+                .noFade()
+                .fit()
+                .centerCrop()
+                .into(outletBgImage);
 
+        if (TextUtils.isEmpty(outlet.getDistance())) {
+            outletDistance.setText("");
+            outletDistance.setVisibility(View.INVISIBLE);
+        } else {
+            outletDistance.setText(outlet.getDistance() + " Km");
+            outletDistance.setVisibility(View.VISIBLE);
+        }
 
-                if (!TextUtils.isEmpty(outlet.getAddress())) {
-                    outletAddress.setText(outlet.getAddress());
-                    placeIcon.setVisibility(View.VISIBLE);
-                } else {
-                    outletAddress.setText("");
-                    placeIcon.setVisibility(View.INVISIBLE);
-                }
-
-                outletName.setText(outlet.getName());
-                Picasso picasso = Picasso.with(getApplicationContext());
-                picasso.setIndicatorsEnabled(AppConstants.DEGUG_PICASSO);
-                picasso.setLoggingEnabled(AppConstants.DEGUG_PICASSO);
-                picasso.load(outlet.getBackground())
-                        .noFade()
-                        .fit()
-                        .centerCrop()
-                        .into(outletBgImage);
-
-                if (TextUtils.isEmpty(outlet.getDistance())) {
-                    outletDistance.setText("");
-                    outletDistance.setVisibility(View.INVISIBLE);
-                } else {
-                    outletDistance.setText(outlet.getDistance() + " Km");
-                    outletDistance.setVisibility(View.VISIBLE);
-                }
-
-                Log.d("Response", outletBaseResponse.toString());
-                hideProgressHUDInLayout();
-                fabMenu.setVisibility(View.VISIBLE);
-                outletDetailsRecyclerView.setVisibility(View.VISIBLE);
-                layout.setVisibility(View.VISIBLE);
-                outletAdapter.setItems(outlet.getOffers(),outlet.getName(),outlet.getAddress(),outlet.get_id());
-                outletAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                hideProgressHUDInLayout();
-                handleRetrofitError(error);
-            }
-        });
+        hideProgressHUDInLayout();
+        fabMenu.setVisibility(View.VISIBLE);
+        outletDetailsRecyclerView.setVisibility(View.VISIBLE);
+        layout.setVisibility(View.VISIBLE);
+        outletAdapter.setItems(outlet.getOffers(), outlet.getName(), outlet.getAddress(), outlet.get_id());
+        outletAdapter.notifyDataSetChanged();
     }
 
     @Override

@@ -113,16 +113,14 @@ public class OfferDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setupAsChild = true;
         super.onCreate(savedInstanceState);
-        Bundle data = getIntent().getExtras();
 
-        if(getIntent().getStringExtra(AppConstants.INTENT_PARAM_OUTLET_ID)!=null && getIntent().getStringExtra(AppConstants.INTENT_PARAM_OFFER_ID)!=null){
+        if (getIntent().getStringExtra(AppConstants.INTENT_PARAM_OUTLET_ID) != null && getIntent().getStringExtra(AppConstants.INTENT_PARAM_OFFER_ID) != null) {
             String outletId = getIntent().getStringExtra(AppConstants.INTENT_PARAM_OUTLET_ID);
             String offerId = getIntent().getStringExtra(AppConstants.INTENT_PARAM_OFFER_ID);
-            outletDetail(outletId,offerId);
-        }else {
-
-            offer = (Offer) data.getSerializable(AppConstants.INTENT_PARAM_OFFER_OBJECT);
-            outlet = (Outlet) data.getSerializable(AppConstants.INTENT_PARAM_OUTLET_OBJECT);
+            outletDetail(outletId, offerId);
+        } else {
+            offer = (Offer) getIntent().getExtras().getSerializable(AppConstants.INTENT_PARAM_OFFER_OBJECT);
+            outlet = (Outlet) getIntent().getExtras().getSerializable(AppConstants.INTENT_PARAM_OUTLET_OBJECT);
             setup();
         }
     }
@@ -362,7 +360,7 @@ public class OfferDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(OfferDetailActivity.this, OutletDetailsActivity.class);
-                intent.putExtra(AppConstants.INTENT_PARAM_OUTLET_ID, outlet.get_id());
+                intent.putExtra(AppConstants.INTENT_PARAM_OUTLET_OBJECT, outlet);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
 
@@ -681,11 +679,6 @@ public class OfferDetailActivity extends BaseActivity {
 
                                 }
 
-//                            if(locationText.length()!=0) {
-//                                redeemConfirmationCoupon(idValue);
-//                            }else {
-//                                Toast.makeText(OfferDetailActivity.this,"Please pick a location before proceeding!",Toast.LENGTH_SHORT).show();
-//                            }
                         }
                     }
                 });
@@ -1059,29 +1052,6 @@ public class OfferDetailActivity extends BaseActivity {
                 viewMoreDialog(getFormattedTermsConditions(offer.getTerms()));
             }
         });
-
-//        RelativeLayout relativeLayoutPicLoc = (RelativeLayout)findViewById(R.id.relativeLayoutPicLoc);
-//        relativeLayoutPicLoc.setVisibility(View.GONE);
-
-//        if("coupon".equalsIgnoreCase(offer.getType())){
-//            if(offer.getOutletList()!=null){
-//                relativeLayoutPicLoc.setVisibility(View.VISIBLE);
-//
-//                findViewById(R.id.locationView).setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        List<Offer.OutletList> outletList = offer.getOutletList();
-//
-//                        values.clear();
-//                        outletID.clear();
-//
-//                        pickLocDialog(outletList);
-//
-//                    }
-//                });
-//            }
-//        }
-
 
         if (!TextUtils.isEmpty(outlet.getDistance())) {
             distance.setText(outlet.getDistance() + " Km");

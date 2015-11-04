@@ -492,7 +492,7 @@ public class DiscoverOfferPagerAdapter extends PagerAdapter {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(v.getContext(), OutletDetailsActivity.class);
-                        intent.putExtra(AppConstants.INTENT_PARAM_OUTLET_ID, outlet.get_id());
+                        intent.putExtra(AppConstants.INTENT_PARAM_OUTLET_OBJECT, outlet);
                         v.getContext().startActivity(intent);
                     }
                 });
