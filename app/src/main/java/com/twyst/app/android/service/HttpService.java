@@ -108,13 +108,12 @@ public class HttpService {
         twystService.updateProfile(token, updateProfile, callback);
     }
 
-    public void getRecommendedOutlets(String userToken, int start,String lat, String lng, String date, String time, Callback<BaseResponse<DiscoverData>> callback) {
+    public void getRecommendedOutlets(String userToken, int start,int end, String lat, String lng, String date, String time, Callback<BaseResponse<DiscoverData>> callback) {
 
         if (TextUtils.isEmpty(date) && TextUtils.isEmpty(time)){
             date = null;
             time = null;
         }
-        int end = start + AppConstants.DISCOVER_LIST_PAGESIZE - 1;
         twystService.getRecommendedOutlets(userToken, start, end, lat, lng, date, time, callback);
     }
 

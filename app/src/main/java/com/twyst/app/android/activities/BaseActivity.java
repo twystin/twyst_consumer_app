@@ -754,6 +754,10 @@ public abstract class BaseActivity extends ActionBarActivity
         SnackbarManager.show(snackbar, this);
     }
 
+    public void hideSnackbar() {
+        SnackbarManager.dismiss();
+    }
+
 
     /**
      * Check the device to make sure it has the Google Play Services APK. If

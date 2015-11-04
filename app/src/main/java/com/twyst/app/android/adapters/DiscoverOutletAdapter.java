@@ -63,6 +63,12 @@ public class DiscoverOutletAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.onViewHolderListener = onViewHolderListener;
     }
 
+    public void updateList(ArrayList<Outlet> outlets) {
+        items.clear();
+        items.addAll(outlets);
+        this.notifyDataSetChanged();
+    }
+
     public interface OnViewHolderListener {
         void onRequestedLastItem();
     }

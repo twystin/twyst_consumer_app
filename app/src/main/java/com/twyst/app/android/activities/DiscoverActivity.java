@@ -208,7 +208,9 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
     }
 
     private void refreshDiscoverAdapter() {
-
+        if (discoverAdapter!=null && discoverAdapter.getItems().size()>0){
+            refreshOutletsBackground();
+        }
     }
 
     private void setupDiscoverAdapter() {
@@ -863,7 +865,9 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         fetchingOutlets = true;
         mSwipeRefreshLayout.setEnabled(true);
 
-        HttpService.getInstance().getRecommendedOutlets(getUserToken(), start, latitude, longitude, mDate, mTime, new Callback<BaseResponse<DiscoverData>>() {
+        int end = start + AppConstants.DISCOVER_LIST_PAGESIZE - 1;
+
+        HttpService.getInstance().getRecommendedOutlets(getUserToken(), start, end, latitude, longitude, mDate, mTime, new Callback<BaseResponse<DiscoverData>>() {
             @Override
             public void success(BaseResponse<DiscoverData> arrayListBaseResponse, Response response) {
                 fetchingOutlets = false;
@@ -903,6 +907,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
 
                 onItemsLoadComplete();
                 hideProgressHUDInLayout();
+                hideSnackbar();
 
                 if (planAheadContent.getVisibility() == View.VISIBLE) {
                     fabMenu.setVisibility(View.GONE);
@@ -916,12 +921,48 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
             @Override
             public void failure(RetrofitError error) {
                 fetchingOutlets = false;
-
-//                error.getCause().printStackTrace();
-                Log.i(getTagName(), "Error: error while trying to fetch outlets  :-" + error.getStackTrace().toString());
                 hideProgressHUDInLayout();
                 onItemsLoadComplete();
                 handleRetrofitError(error);
+            }
+        });
+
+    }
+
+    private void refreshOutletsBackground() {
+        String latitude = getPrefs().getString(AppConstants.PREFERENCE_CURRENT_USED_LAT, null);
+        String longitude = getPrefs().getString(AppConstants.PREFERENCE_CURRENT_USED_LNG, null);
+
+        mSwipeRefreshLayout.setRefreshing(true);
+        fetchingOutlets = true;
+        int end = discoverAdapter.getItems().size();
+
+        HttpService.getInstance().getRecommendedOutlets(getUserToken(), 1, end, latitude, longitude, mDate, mTime, new Callback<BaseResponse<DiscoverData>>() {
+            @Override
+            public void success(BaseResponse<DiscoverData> arrayListBaseResponse, Response response) {
+                fetchingOutlets = false;
+                ArrayList<Outlet> outlets = arrayListBaseResponse.getData().getOutlets();
+                String twystBucks = arrayListBaseResponse.getData().getTwystBucks();
+                if (!TextUtils.isEmpty(twystBucks)) {
+
+                    sharedPreferences.putInt(AppConstants.PREFERENCE_LAST_TWYST_BUCK, Integer.parseInt(twystBucks));
+                    sharedPreferences.apply();
+                }
+                onItemsLoadComplete();
+                hideProgressHUDInLayout();
+                hideSnackbar();
+
+                if (outlets != null) {
+                    discoverAdapter.updateList(outlets);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                fetchingOutlets = false;
+                handleRetrofitError(error);
+                onItemsLoadComplete();
+                hideProgressHUDInLayout();
             }
         });
 
@@ -978,22 +1019,21 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                             }
                         }
 
-                        onItemsLoadComplete();
-                        hideProgressHUDInLayout();
-
                         fabMenu.setVisibility(View.VISIBLE);
                         findViewById(R.id.planAhead).setVisibility(View.VISIBLE);
 
                         findViewById(R.id.blankDataLayout).setVisibility(View.GONE);
 
                     } else {
-                        onItemsLoadComplete();
-                        hideProgressHUDInLayout();
                         findViewById(R.id.ivNoData).setBackgroundResource(R.drawable.no_search);
                         ((TextView) findViewById(R.id.tvNoData)).setText("Sorry - we couldn't find anything for that query. Please try a different search term");
                         findViewById(R.id.blankDataLayout).setVisibility(View.VISIBLE);
 //                        Toast.makeText(DiscoverActivity.this, discoverDataBaseResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
+
+                    onItemsLoadComplete();
+                    hideProgressHUDInLayout();
+                    hideSnackbar();
                 }
 
                 @Override
@@ -1059,7 +1099,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 localityDrawer.setText(locationName);
                 planAheadLocation.setText(Html.fromHtml(locationName + LOCATION_CURRENT_HTML_PLAN_AHEAD));
 
-                findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
+//                findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
                 fetchOutlets(1);
                 break;
 
@@ -1338,6 +1378,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
     protected void onResume() {
         super.onResume();
         checkPlayServices();
+        refreshDiscoverAdapter();
 
         // Resuming the periodic location updates
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
