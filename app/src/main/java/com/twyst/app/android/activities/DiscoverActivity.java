@@ -295,10 +295,8 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                     closeBtn.setVisibility(View.VISIBLE);
                     editTextView.setVisibility(View.GONE);
                     clearDateTime = true;
-
                     setTextLocationFetch(LOCATION_SELECTED, null, null);
                     planAheadChangeConfirm = true;
-
                 } else {
                     editTextView.setVisibility(View.VISIBLE);
                     closeBtn.setVisibility(View.GONE);
@@ -849,6 +847,10 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                     mSelectedLocationName = selectedLocation.toString();
                     planAheadLocation.setText(Html.fromHtml(mSelectedLocationName + LOCATION_SELECTED_HTML_PLAN_AHEAD));
                     setTextLocationFetch(LOCATION_SELECTED, null, null);
+                    closeBtn.setVisibility(View.VISIBLE);
+                    editTextView.setVisibility(View.GONE);
+                    clearDateTime = true;
+                    planAheadChanged = true;
                     dialog.dismiss();
                 } else {
                     mAutocompleteView.setError("Address required");
