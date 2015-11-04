@@ -75,7 +75,7 @@
                 android:gravity="center_vertical|center_horizontal"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="CANCEL"
+                android:text="Use Last Known"
                 android:textColor="#959595"
                 android:textSize="@dimen/dialog_button_text" />
         </com.balysv.materialripple.MaterialRippleLayout>
