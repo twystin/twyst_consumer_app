@@ -5,6 +5,10 @@ android {
     buildToolsVersion "23.0.1"
     useLibrary 'org.apache.http.legacy'
 
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
     defaultConfig {
         applicationId "com.twyst.app.android"
         minSdkVersion 16
