@@ -128,7 +128,7 @@ public class AppConstants {
     public static final String INTENT_PARAM_UPLOAD_BILL_OUTLET_NAME ="upload_bill_outlet_name" ;
     public static final String PREFERENCE_LOCALITY_SHOWN_DRAWER = "locality";
     public static final String PREFERENCE_PREVIOUS_LOCALITY_SHOWN_DRAWER = "previous_locality";
-    public static final String PREFERENCE_CHECK_FIRST_LAUNCH = "check_first_launch";
+    public static final String PREFERENCE_CHECK_FIRST_LAUNCH = "first_launch";
 
     public static final String PREFERENCE_OUTLETS_LIST = "outlet_list";
 
