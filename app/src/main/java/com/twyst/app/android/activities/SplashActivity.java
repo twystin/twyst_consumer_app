@@ -3,6 +3,7 @@ package com.twyst.app.android.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -14,15 +15,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.appsflyer.*;
 
@@ -34,17 +36,16 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tagmanager.Container;
 import com.google.android.gms.tagmanager.ContainerHolder;
 import com.google.android.gms.tagmanager.TagManager;
 import com.google.gson.Gson;
 import com.twyst.app.android.R;
+import com.twyst.app.android.asynctask.FetchOutletsTask;
 import com.twyst.app.android.model.BaseResponse;
 import com.twyst.app.android.model.ContainerHolderSingleton;
-import com.twyst.app.android.model.LocationOffline;
-import com.twyst.app.android.model.LocationOfflineList;
-import com.twyst.app.android.model.OutletDetailData;
-import com.twyst.app.android.model.UserLocation;
 import com.twyst.app.android.service.HttpService;
 import com.twyst.app.android.util.AppConstants;
 import com.twyst.app.android.util.PhoneBookContacts;
@@ -56,8 +57,15 @@ import retrofit.client.Response;
 /**
  * Created by satish on 23/12/14.
  */
-public class SplashActivity extends Activity {
+public class SplashActivity extends Activity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener{
+
+    private static String TAG = "SplashActivity";
     private static final long TIMEOUT_FOR_CONTAINER_OPEN_MILLISECONDS = 2000;
+
+    private boolean fromSplashScreenDownloading = false;
+    // Google client to interact with Google API
+    private GoogleApiClient mGoogleApiClient;
 
     private static final String CONTAINER_ID = "GTM-PNRJQ9";
     private static Handler handler  = new Handler();
@@ -110,6 +118,7 @@ public class SplashActivity extends Activity {
         new FetchContact().execute();
 
         if (checkPlayServices()) {
+            buildGoogleApiClient();
             googleCloudMessaging = GoogleCloudMessaging.getInstance(this);
             registerInBackground();
             downloadContainer();
@@ -135,6 +144,7 @@ public class SplashActivity extends Activity {
                     Intent intent = new Intent(SplashActivity.this, DiscoverActivity.class);
                     intent.setAction("setChildNo");
                     intent.putExtra("Search", false);
+                    intent.putExtra(AppConstants.INTENT_FROM_SPLASH_DOWNLOADING, fromSplashScreenDownloading);
                     startActivity(intent);
                 } else {
                     SharedPreferences.Editor editor = prefs.edit();
@@ -455,6 +465,7 @@ public class SplashActivity extends Activity {
         AppsFlyerLib.onActivityPause(this);
     }
 
+
     public class FetchContact extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
@@ -561,5 +572,78 @@ private static class CustomTagCallback implements Container.FunctionCallTagCallb
         Log.i("SplashActivity", "Custom function call tag :" + tagName + " is fired.");
     }
 }
+
+    private void tryFetchCurrentLocationStartDownload() {
+        Location mLastLocation = null;
+        if (mGoogleApiClient != null) {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        }
+        if (mLastLocation != null) {
+            // Got current location
+            String lat = String.valueOf(mLastLocation.getLatitude());
+            String lng = String.valueOf(mLastLocation.getLongitude());
+            SharedPreferences.Editor sharedPreferences = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
+            sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_USED_LAT, lat);
+            sharedPreferences.putString(AppConstants.PREFERENCE_CURRENT_USED_LNG, lng);
+            if (sharedPreferences.commit()){
+                new FetchOutletsTask(getApplicationContext()).fetch();
+                fromSplashScreenDownloading = true;
+            }
+        }
+        }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        tryFetchCurrentLocationStartDownload();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = "
+                + connectionResult.getErrorCode());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    /**
+     * Creating google api client object
+     */
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API).build();
+    }
+
+//    @Override
+//    public void onResult(LocationSettingsResult locationSettingsResult) {
+//        final Status status = locationSettingsResult.getStatus();
+//        switch (status.getStatusCode()) {
+//            case LocationSettingsStatusCodes.SUCCESS:
+//                Log.i(TAG, "All location settings are satisfied.");
+////                getLocationFetch(true, true);
+//                break;
+//        }
+//    }
+
 }
 

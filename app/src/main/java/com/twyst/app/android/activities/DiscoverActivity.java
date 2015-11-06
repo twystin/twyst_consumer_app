@@ -1,11 +1,14 @@
 package com.twyst.app.android.activities;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -100,6 +103,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     int autoCompleteFlag;
+    private boolean mLocationsFetched = false;
     private String searchedItem;
     private Date selectedDate;
     private LocationData selectedLocation;
@@ -107,6 +111,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
     private boolean clearDateTime, planAheadChanged, fromchangeLoc, planAheadChangeConfirm;
     private ImageView closeBtn;
     private TextView planAheadLocation;
+    private boolean fromSplashScreenDownloading = false;
 
     private static final int GPS_TRY_AGAIN_TIME = 2500;
 
@@ -148,6 +153,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         } else {
             setupAsChild = false;
         }
+        fromSplashScreenDownloading = getIntent().getBooleanExtra(AppConstants.INTENT_FROM_SPLASH_DOWNLOADING,false);
         super.onCreate(savedInstanceState);
         // First we need to check availability of play services
         if (checkPlayServices()) {
@@ -197,6 +203,11 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 if (mGoogleApiClient != null) {
                     mGoogleApiClient.connect();
                 }
+                if (fromSplashScreenDownloading){
+                    registerReceiver();
+                    sendBroadCastToSplashDownload();
+                }
+                mLocationsFetched = true;
             }
 
             @Override
@@ -208,7 +219,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
     }
 
     private void refreshDiscoverAdapter() {
-        if (discoverAdapter!=null && discoverAdapter.getItems().size()>0){
+        if (discoverAdapter != null && discoverAdapter.getItems().size() > 0) {
             refreshOutletsBackground();
         }
     }
@@ -295,7 +306,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                     closeBtn.setVisibility(View.VISIBLE);
                     editTextView.setVisibility(View.GONE);
                     clearDateTime = true;
-                    setTextLocationFetch(LOCATION_SELECTED, null, null);
+                    setTextLocationFetch(LOCATION_SELECTED, null, null,true);
                     planAheadChangeConfirm = true;
                 } else {
                     editTextView.setVisibility(View.VISIBLE);
@@ -805,7 +816,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                     SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
                     String launched = prefs.getString(AppConstants.PREFERENCE_CHECK_FIRST_LAUNCH, "");
                     if (launched.equalsIgnoreCase("Yes")) {
-                        setTextLocationFetch(LOCATION_LAST_KNOWN, null, null);
+                        setTextLocationFetch(LOCATION_LAST_KNOWN, null, null, true);
                         dialog.dismiss();
                     } else {
 //                        DiscoverActivity.this.finish();
@@ -830,7 +841,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 SharedPreferences prefs = getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
                 String launched = prefs.getString(AppConstants.PREFERENCE_CHECK_FIRST_LAUNCH, "");
                 if (launched.equalsIgnoreCase("Yes")) {
-                    setTextLocationFetch(LOCATION_LAST_KNOWN, null, null);
+                    setTextLocationFetch(LOCATION_LAST_KNOWN, null, null,true);
                     dialog.dismiss();
                 } else {
 //                    DiscoverActivity.this.finish();
@@ -846,7 +857,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                     mSelectedLng = selectedLocation.getLng();
                     mSelectedLocationName = selectedLocation.toString();
                     planAheadLocation.setText(Html.fromHtml(mSelectedLocationName + LOCATION_SELECTED_HTML_PLAN_AHEAD));
-                    setTextLocationFetch(LOCATION_SELECTED, null, null);
+                    setTextLocationFetch(LOCATION_SELECTED, null, null, true);
                     closeBtn.setVisibility(View.VISIBLE);
                     editTextView.setVisibility(View.GONE);
                     clearDateTime = true;
@@ -1059,7 +1070,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
             // Got current location
             String lat = String.valueOf(mLastLocation.getLatitude());
             String lng = String.valueOf(mLastLocation.getLongitude());
-            setTextLocationFetch(LOCATION_CURRENT, lat, lng);
+            setTextLocationFetch(LOCATION_CURRENT, lat, lng, true);
         } else {
 
             //If location fetch is to be tried again
@@ -1078,14 +1089,14 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                     askLocationFromUser();
                     onItemsLoadComplete();
                 } else {
-                    setTextLocationFetch(LOCATION_LAST_KNOWN, null, null);
+                    setTextLocationFetch(LOCATION_LAST_KNOWN, null, null, true);
                 }
             }
 
         }
     }
 
-    private void setTextLocationFetch(final int locationCase, String lat, String lng) {
+    private void setTextLocationFetch(final int locationCase, String lat, String lng, boolean toFetch) {
         String locationName;
         switch (locationCase) {
             case LOCATION_CURRENT:
@@ -1102,7 +1113,9 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 planAheadLocation.setText(Html.fromHtml(locationName + LOCATION_CURRENT_HTML_PLAN_AHEAD));
 
 //                findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
-                fetchOutlets(1);
+                if (toFetch){
+                    fetchOutlets(1);
+                }
                 break;
 
             case LOCATION_LAST_KNOWN:
@@ -1123,7 +1136,9 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 planAheadLocation.setText(Html.fromHtml(locationName + LOCATION_LAST_KNOWN_HTML_PLAN_AHEAD));
 
                 findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
-                fetchOutlets(1);
+                if (toFetch){
+                    fetchOutlets(1);
+                }
                 break;
 
             case LOCATION_SELECTED:
@@ -1138,7 +1153,9 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                     planAheadLocation.setText(Html.fromHtml(mSelectedLocationName + LOCATION_SELECTED_HTML_PLAN_AHEAD));
                 }
                 findViewById(R.id.circularProgressBar).setVisibility(View.VISIBLE);
-                fetchOutlets(1);
+                if (toFetch){
+                    fetchOutlets(1);
+                }
                 break;
 
             case LOCATION_SELECTED_PLAN_AHEAD:
@@ -1321,7 +1338,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 Bundle extras = data.getExtras();
                 LocationData locationData = (LocationData) extras.getSerializable("locationData");
                 if (locationData != null) {
-                    setTextLocationFetch(LOCATION_SELECTED_PLAN_AHEAD, locationData.getLat(), locationData.getLng());
+                    setTextLocationFetch(LOCATION_SELECTED_PLAN_AHEAD, locationData.getLat(), locationData.getLng(), true);
                 }
             }
         }
@@ -1382,6 +1399,10 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         checkPlayServices();
         refreshDiscoverAdapter();
 
+        if (fromSplashScreenDownloading && mLocationsFetched){
+            registerReceiver();
+            sendBroadCastToSplashDownload();
+        }
         // Resuming the periodic location updates
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             startLocationUpdates();
@@ -1394,6 +1415,9 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         super.onPause();
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             stopLocationUpdates();
+        }
+        if (fromSplashScreenDownloading){
+            unRegisterReceiver();
         }
         AppsFlyerLib.onActivityPause(this);
     }
@@ -1450,7 +1474,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
     public void onConnected(Bundle bundle) {
         startLocationUpdates();
 
-        if (!isAskedToTurnOnGPS) {
+        if (!isAskedToTurnOnGPS && !fromSplashScreenDownloading) {
             LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                     .addLocationRequest(mLocationRequest)
                     .setAlwaysShow(true);
@@ -1486,7 +1510,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
         switch (status.getStatusCode()) {
             case LocationSettingsStatusCodes.SUCCESS:
                 Log.i(getTagName(), "All location settings are satisfied.");
-                if (!search) {
+                if (!search && !fromSplashScreenDownloading) {
                     getLocationFetch(true, true);
                     break;
                 }
@@ -1508,5 +1532,69 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
                 buildAndShowSnackbarWithMessage("Please enable location services and retry again.");
                 break;
         }
+    }
+
+    private void onSuccessDownload(ArrayList<Outlet> outlets) {
+        if (outlets != null) { //success
+            if (outlets.isEmpty()) {
+                outletsNotFound = true;
+                discoverAdapter.setOutletsNotFound(true);
+            } else {
+                if (outlets.size() < AppConstants.DISCOVER_LIST_PAGESIZE) {
+                    outletsNotFound = true;
+                    discoverAdapter.setOutletsNotFound(true);
+                } else {
+                    outletsNotFound = false;
+                    discoverAdapter.setOutletsNotFound(false);
+                }
+
+                discoverAdapter.getItems().addAll(outlets);
+                discoverAdapter.notifyDataSetChanged();
+            }
+
+            if (planAheadContent.getVisibility() == View.VISIBLE) {
+                fabMenu.setVisibility(View.GONE);
+            } else {
+                fabMenu.setVisibility(View.VISIBLE);
+            }
+
+            findViewById(R.id.planAhead).setVisibility(View.VISIBLE);
+
+            String lat = getPrefs().getString(AppConstants.PREFERENCE_CURRENT_USED_LAT,"");
+            String lng = getPrefs().getString(AppConstants.PREFERENCE_CURRENT_USED_LNG,"");
+            setTextLocationFetch(LOCATION_CURRENT, lat, lng, false);
+
+        } else {
+//            handleRetrofitError(new RetrofitError);
+        }
+
+        onItemsLoadComplete();
+        hideProgressHUDInLayout();
+    }
+
+    private void unRegisterReceiver() {
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mReceiver);
+    }
+
+    private void registerReceiver() {
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mReceiver, mIntentFilter);
+    }
+
+    private IntentFilter mIntentFilter = new IntentFilter(AppConstants.INTENT_SPLASH_RECO_DOWNLOADED);
+
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            ArrayList<Outlet> outletList = (ArrayList<Outlet>) bundle.getSerializable(AppConstants.INTENT_SPLASH_OUTLET_LIST);
+            onSuccessDownload(outletList);
+            fromSplashScreenDownloading = false;
+            unRegisterReceiver();
+        }
+    };
+
+    private void sendBroadCastToSplashDownload() {
+        Intent intent = new Intent(AppConstants.INTENT_DISCOVER_STARTED);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 }

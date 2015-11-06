@@ -139,4 +139,9 @@ public class AppConstants {
     public static final String PREFERENCE_CURRENT_USED_LNG = "current_used_lng";
     public static final String PREFERENCE_CURRENT_USED_LOCATION_NAME = "current_used_location_name";
 
+    public static final String INTENT_SPLASH_RECO_DOWNLOADED = "intent_splash_reco_downloaded";
+    public static final String INTENT_DISCOVER_STARTED = "intent_discover_started";
+    public static final String INTENT_SPLASH_OUTLET_LIST = "intent_splash_outlet_list";
+    public static final String INTENT_FROM_SPLASH_DOWNLOADING = "intent_from_splash_downloading";
+
 }
