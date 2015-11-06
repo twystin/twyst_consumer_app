@@ -108,7 +108,7 @@ public class DiscoverActivity extends BaseActivity implements GoogleApiClient.Co
     private ImageView closeBtn;
     private TextView planAheadLocation;
 
-    private static final int GPS_TRY_AGAIN_TIME = 2000;
+    private static final int GPS_TRY_AGAIN_TIME = 2500;
 
     private String mSelectedLat, mSelectedLng, mSelectedLocationName;
     private static final int LOCATION_CURRENT = 0;
