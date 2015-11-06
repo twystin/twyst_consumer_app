@@ -66,23 +66,4 @@
                 android:textStyle="normal" />
         </LinearLayout>
     </RelativeLayout>
-    <!--
-                <LinearLayout
-                    android:id="@+id/notifyClick"
-                    android:layout_width="0dp"
-                    android:layout_weight="8"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/notification_arrow_icon"
-                        android:layout_gravity="center"
-                        android:padding="5dp"/>
-
-                </LinearLayout>
-    -->
-
 </LinearLayout>

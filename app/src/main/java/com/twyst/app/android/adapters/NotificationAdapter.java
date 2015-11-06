@@ -253,7 +253,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         } else if(notificationData.getIcon().equalsIgnoreCase("submit_offer/report_problem on success")){
             background.setColor(resources.getColor(R.color.notification_light_red));
             holder.notifyCircle.setBackground(background);
-            holder.notificationBtn.setImageDrawable(resources.getDrawable(R.drawable.notification_offer_icon));
+            holder.notificationBtn.setImageDrawable(resources.getDrawable(R.drawable.notification_specific_offer));
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -350,7 +350,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         ImageView notificationBtn;
         RelativeLayout notifyCircle;
-        LinearLayout notifyClick;
         TextView notifyHeader;
         TextView notifyDetail;
 
@@ -358,7 +357,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             super(itemView);
             notifyCircle =(RelativeLayout)itemView.findViewById(R.id.notifyCircle);
             notificationBtn = (ImageView) itemView.findViewById(R.id.notificationBtn);
-//            notifyClick = (LinearLayout) itemView.findViewById(R.id.notifyClick);
             notifyHeader = (TextView) itemView.findViewById(R.id.notifyHeader);
             notifyDetail = (TextView) itemView.findViewById(R.id.notifyDetail);
 
