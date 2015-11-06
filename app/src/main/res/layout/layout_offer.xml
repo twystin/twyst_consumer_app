@@ -97,8 +97,7 @@
                 android:textColor="#e9573f"
                 android:textSize="@dimen/offer_all_size"
                 tools:ignore="MissingPrefix"
-                android:textStyle="bold"
-                fontPath="fonts/Roboto-Medium.ttf"
+                fontPath="fonts/Roboto-Bold.ttf"
                 android:layout_marginBottom="3dp" />
 
             <TextView

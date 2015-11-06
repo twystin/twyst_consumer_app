@@ -53,7 +53,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/notification_header_text"
                 tools:ignore="MissingPrefix"
-                fontPath="fonts/Roboto-Medium.ttf"
+                fontPath="fonts/Roboto-Bold.ttf"
                 />
 
             <TextView
