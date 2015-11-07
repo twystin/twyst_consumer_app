@@ -13,6 +13,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.animation.Animation;
@@ -594,7 +595,11 @@ private static class CustomTagCallback implements Container.FunctionCallTagCallb
 
     @Override
     public void onConnected(Bundle bundle) {
-        tryFetchCurrentLocationStartDownload();
+        final SharedPreferences prefs = this.getSharedPreferences(AppConstants.PREFERENCE_SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        String userToken = prefs.getString(AppConstants.PREFERENCE_USER_TOKEN, "");
+        if (!TextUtils.isEmpty(userToken)){
+            tryFetchCurrentLocationStartDownload();
+        }
     }
 
     @Override
